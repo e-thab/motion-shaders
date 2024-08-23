@@ -23,7 +23,7 @@ renderer/rendering_method="gl_compatibility"
 
 noise={
 "type": "sampler2D",
-"value": ""
+"value": "res://out/noise.png"
 }
 last_frame={
 "type": "sampler2D",

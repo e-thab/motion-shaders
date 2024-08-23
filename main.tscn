@@ -9,18 +9,6 @@
 [ext_resource type="Shader" path="res://first_pass.gdshader" id="7_1lus8"]
 [ext_resource type="Texture2D" uid="uid://n7oxyoil0pqn" path="res://circle.png" id="7_x8fe1"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e261m"]
-shader = ExtResource("6_kacik")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivsdu"]
-shader = ExtResource("7_1lus8")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6cbj"]
-shader = ExtResource("6_bvn2r")
-shader_parameter/brightness = 1.0
-shader_parameter/contrast = 1.0
-shader_parameter/saturation = 1.0
-
 [sub_resource type="Environment" id="Environment_sp14e"]
 background_mode = 1
 ambient_light_source = 2
@@ -33,8 +21,51 @@ ambient_light_energy = 16.0
 radius = 0.01
 height = 3.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e261m"]
+shader = ExtResource("6_kacik")
+shader_parameter/WHITE = Vector4(255, 255, 255, 1)
+shader_parameter/BLACK = Vector4(0, 0, 0, 1)
+shader_parameter/RED = Vector4(255, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivsdu"]
+shader = ExtResource("7_1lus8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6cbj"]
+shader = ExtResource("6_bvn2r")
+shader_parameter/brightness = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/saturation = 1.0
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_1ii6h")
+
+[node name="StagingVPContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="StagingCamera" type="Camera3D" parent="StagingVPContainer/StagingViewport"]
+visible = false
+environment = SubResource("Environment_sp14e")
+current = true
+
+[node name="CubeMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
+mesh = SubResource("BoxMesh_nk3eq")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_aqhog")
+script = ExtResource("1_fu5ag")
+
+[node name="RodMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
+visible = false
+mesh = SubResource("CapsuleMesh_07ui4")
+skeleton = NodePath("../../..")
+surface_material_override/0 = ExtResource("2_aqhog")
 
 [node name="RenderVPContainer" type="SubViewportContainer" parent="."]
 offset_right = 1152.0
@@ -49,6 +80,7 @@ render_target_update_mode = 4
 material = SubResource("ShaderMaterial_e261m")
 offset_right = 1152.0
 offset_bottom = 648.0
+texture = ExtResource("5_fdeft")
 expand_mode = 1
 
 [node name="BackBufferCopy3" type="BackBufferCopy" parent="RenderVPContainer/RenderViewport"]
@@ -78,30 +110,3 @@ texture = ExtResource("7_x8fe1")
 [node name="RenderCamera" type="Camera3D" parent="RenderVPContainer/RenderViewport"]
 environment = SubResource("Environment_sp14e")
 current = true
-
-[node name="StagingVPContainer" type="SubViewportContainer" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
-handle_input_locally = false
-size = Vector2i(1152, 648)
-render_target_update_mode = 0
-
-[node name="StagingCamera" type="Camera3D" parent="StagingVPContainer/StagingViewport"]
-environment = SubResource("Environment_sp14e")
-current = true
-
-[node name="CubeMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
-mesh = SubResource("BoxMesh_nk3eq")
-skeleton = NodePath("../../..")
-surface_material_override/0 = ExtResource("2_aqhog")
-script = ExtResource("1_fu5ag")
-
-[node name="RodMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
-mesh = SubResource("CapsuleMesh_07ui4")
-skeleton = NodePath("../../..")
-surface_material_override/0 = ExtResource("2_aqhog")

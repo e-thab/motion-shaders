@@ -7,6 +7,8 @@ extends Node3D
 @onready var renderView : SubViewport = $RenderVPContainer/RenderViewport
 
 var time_elapsed = 0.0
+var frame_time = 2.0
+var snap = 0
 var prev_frame_texture
 
 # Wisdom: https://forum.gamemaker.io/index.php?threads/solved-issue-trying-to-imitate-visual-effect-with-shaders-and-surfaces.109391/
@@ -36,9 +38,13 @@ func _ready() -> void:
 	
 	# Assign image to texture
 	prev_frame_texture = ImageTexture.create_from_image(noise_img)
-	RenderingServer.global_shader_parameter_set("noise", prev_frame_texture)
-	RenderingServer.global_shader_parameter_set("last_frame", prev_frame_texture)
-	overlay.texture = prev_frame_texture
+	#RenderingServer.global_shader_parameter_set("noise", prev_frame_texture)
+	RenderingServer.global_shader_parameter_set(
+		"last_frame",
+		prev_frame_texture
+	)
+	#overlay.texture = prev_frame_texture
+	#noise_img.save_png("./out/noise.png")
 	
 	#print("Pixel (300, 300): ", noise_img.get_pixel(300, 300))
 	#print("Overlay texture size: ", overlay.texture.get_size())
@@ -53,8 +59,18 @@ func _process(delta: float) -> void:
 	rod.position.x = 3 * cos(time_elapsed)
 	time_elapsed += delta
 	
+	# Take a snapshot of the current frame, store
+	var frame_snapshot = get_viewport().get_texture().get_image()
+	var snapshot_tex = ImageTexture.create_from_image(frame_snapshot)
 	RenderingServer.global_shader_parameter_set(
 		"last_frame",
-		stagingView.get_texture().get_image()
+		snapshot_tex
 	)
 	
+	# Sanity check: snapshot of last frame every 2 seconds
+	if frame_time >= 2.0:
+		print('Snapshot ' + str(snap))
+		frame_snapshot.save_png("./out/frame-" + str(snap) + ".png")
+		frame_time = 0.0
+		snap += 1
+	frame_time += delta
