@@ -1,13 +1,18 @@
-[gd_scene load_steps=15 format=3 uid="uid://dk1bukb3csiid"]
+[gd_scene load_steps=17 format=3 uid="uid://dk1bukb3csiid"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_1ii6h"]
 [ext_resource type="Script" path="res://CubeMesh.gd" id="1_fu5ag"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="2_aqhog"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://solid-color-image.png" id="5_fdeft"]
 [ext_resource type="Shader" path="res://darken.gdshader" id="6_bvn2r"]
-[ext_resource type="Shader" path="res://param_test.gdshader" id="6_kacik"]
+[ext_resource type="Shader" path="res://pov.gdshader" id="6_kacik"]
 [ext_resource type="Shader" path="res://first_pass.gdshader" id="7_1lus8"]
 [ext_resource type="Texture2D" uid="uid://n7oxyoil0pqn" path="res://circle.png" id="7_x8fe1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_54jvf"]
+shader = ExtResource("6_kacik")
+shader_parameter/WHITE = Vector4(1, 1, 1, 1)
+shader_parameter/BLACK = Vector4(0, 0, 0, 1)
 
 [sub_resource type="Environment" id="Environment_sp14e"]
 background_mode = 1
@@ -17,6 +22,9 @@ ambient_light_energy = 16.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_kpu5m"]
+size = Vector3(0.02, 1.02, 0.02)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
 radius = 0.01
 height = 3.0
@@ -25,7 +33,6 @@ height = 3.0
 shader = ExtResource("6_kacik")
 shader_parameter/WHITE = Vector4(255, 255, 255, 1)
 shader_parameter/BLACK = Vector4(0, 0, 0, 1)
-shader_parameter/RED = Vector4(255, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ivsdu"]
 shader = ExtResource("7_1lus8")
@@ -38,10 +45,12 @@ shader_parameter/saturation = 1.0
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_1ii6h")
+pov_shader = SubResource("ShaderMaterial_54jvf")
 
 [node name="StagingVPContainer" type="SubViewportContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+visible = false
+offset_right = 1152.0
+offset_bottom = 648.0
 
 [node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
 handle_input_locally = false
@@ -55,14 +64,78 @@ current = true
 
 [node name="CubeMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
+visible = false
 mesh = SubResource("BoxMesh_nk3eq")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_aqhog")
 script = ExtResource("1_fu5ag")
 
+[node name="Node" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.325)
+script = ExtResource("1_fu5ag")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, -8.9407e-08, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport/Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
 [node name="RodMesh" type="MeshInstance3D" parent="StagingVPContainer/StagingViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
-visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("2_aqhog")
@@ -108,5 +181,6 @@ offset_bottom = 392.0
 texture = ExtResource("7_x8fe1")
 
 [node name="RenderCamera" type="Camera3D" parent="RenderVPContainer/RenderViewport"]
+visible = false
 environment = SubResource("Environment_sp14e")
 current = true
