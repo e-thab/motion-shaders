@@ -4,9 +4,8 @@ extends Node3D
 @export var simple_shader : ShaderMaterial
 
 @onready var overlay : TextureRect = $RenderVPContainer/RenderViewport/OverlayRect
-@onready var rod : MeshInstance3D = $StagingVPContainer/StagingViewport/RodMesh
+@onready var rod : MeshInstance3D = $RodMesh
 
-@onready var stagingView : SubViewportContainer = $StagingVPContainer
 @onready var renderView : SubViewportContainer = $RenderVPContainer
 
 var time_elapsed = 0.0
@@ -24,8 +23,8 @@ func _ready() -> void:
 	
 	# Generate noise texture
 	noise_texture = ImageTexture.new()
-	var width = $StagingVPContainer.get_viewport_rect().size.x
-	var height = $StagingVPContainer.get_viewport_rect().size.y
+	var width = renderView.get_viewport_rect().size.x
+	var height = renderView.get_viewport_rect().size.y
 	print(width, "x", height)
 	var noise_img = Image.create(width, height, false, Image.FORMAT_RGB8)
 	
@@ -44,7 +43,7 @@ func _ready() -> void:
 		"last_frame",
 		noise_texture
 	)
-	overlay.texture = noise_texture
+	#overlay.texture = noise_texture
 	#noise_img.save_png("./out/noise.png")
 	
 	#print("Pixel (300, 300): ", noise_img.get_pixel(300, 300))
@@ -63,27 +62,25 @@ func _process(delta: float) -> void:
 		RenderingServer.global_shader_parameter_set("paused", paused)
 	
 	if Input.is_action_just_pressed("render_swap"):
-		if renderView.visible:
-			renderView.hide()
+		if $RenderVPContainer/RenderViewport/TextureRectFirst.visible:
+			$RenderVPContainer/RenderViewport/TextureRectFirst.hide()
 		else:
-			renderView.show()
+			$RenderVPContainer/RenderViewport/TextureRectFirst.show()
 		#if overlay.material == pov_shader:
 			#overlay.material = simple_shader
 		#else:
 			#overlay.material = pov_shader
-		
 	
 	## Oscillate the rod
 	rod.position.x = 3 * cos(time_elapsed*PI/6)
 	time_elapsed += delta
 	
-	
-	if time_elapsed < 0.5:
+	if time_elapsed < 0.2:
 		return
 	
 	## Take a snapshot of the current frame, store
 	var render_snapshot = renderView.get_viewport().get_texture().get_image()
-	var staging_snapshot = stagingView.get_viewport().get_texture().get_image()
+	#var staging_snapshot = stagingView.get_viewport().get_texture().get_image()
 	
 	var snapshot_tex = ImageTexture.create_from_image(render_snapshot)
 	RenderingServer.global_shader_parameter_set(
@@ -92,10 +89,9 @@ func _process(delta: float) -> void:
 	)
 	
 	## Sanity check: snapshot of last frame every 2 seconds
-	#if frame_time >= 2.0:
-		#print('Snapshot ' + str(snap))
-		#render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
-		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
-		#frame_time = 0.0
-		#snap += 1
-	#frame_time += delta
+	if frame_time >= 2.0:
+		print('Snapshot ' + str(snap))
+		render_snapshot.save_png("./out/snap-" + str(snap) + ".png")
+		frame_time = 0.0
+		snap += 1
+	frame_time += delta
