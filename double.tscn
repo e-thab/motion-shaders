@@ -1,0 +1,212 @@
+[gd_scene load_steps=17 format=3 uid="uid://nm3boasyetbu"]
+
+[ext_resource type="Script" path="res://double.gd" id="1_g4vsj"]
+[ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="3_35l3j"]
+[ext_resource type="Script" path="res://CubeMesh.gd" id="4_kbr7f"]
+[ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://solid-color-image.png" id="5_bd80x"]
+[ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://noise.png" id="5_c0sec"]
+[ext_resource type="Shader" path="res://dupe.gdshader" id="5_f0has"]
+[ext_resource type="Shader" path="res://first_pass.gdshader" id="6_bmgh2"]
+[ext_resource type="Shader" path="res://darken.gdshader" id="7_yeuy4"]
+[ext_resource type="Texture2D" uid="uid://n7oxyoil0pqn" path="res://circle.png" id="8_0wo5f"]
+
+[sub_resource type="Environment" id="Environment_sp14e"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 16.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8od3i"]
+shader = ExtResource("5_f0has")
+shader_parameter/WHITE = Vector4(1, 1, 1, 1)
+shader_parameter/BLACK = Vector4(0, 0, 0, 1)
+shader_parameter/RED = Vector4(1, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivsdu"]
+shader = ExtResource("6_bmgh2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6cbj"]
+shader = ExtResource("7_yeuy4")
+shader_parameter/brightness = 1.0
+shader_parameter/contrast = 1.0
+shader_parameter/saturation = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kpu5m"]
+size = Vector3(0.02, 1.02, 0.02)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
+radius = 0.01
+height = 3.0
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_g4vsj")
+
+[node name="StagingVPContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="OverlayRect" type="TextureRect" parent="StagingVPContainer/StagingViewport"]
+visible = false
+self_modulate = Color(1.92523e-07, 0.7064, 0.7064, 1)
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("5_bd80x")
+expand_mode = 1
+
+[node name="StagingCamera" type="Camera3D" parent="StagingVPContainer/StagingViewport"]
+environment = SubResource("Environment_sp14e")
+current = true
+
+[node name="RenderVPContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RenderViewport" type="SubViewport" parent="RenderVPContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="BG" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("5_c0sec")
+expand_mode = 1
+
+[node name="OverlayRect" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+material = SubResource("ShaderMaterial_8od3i")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("5_c0sec")
+expand_mode = 1
+
+[node name="BackBufferCopy3" type="BackBufferCopy" parent="RenderVPContainer/RenderViewport"]
+visible = false
+copy_mode = 2
+
+[node name="TextureRectFirst" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+visible = false
+material = SubResource("ShaderMaterial_ivsdu")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("5_bd80x")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="RenderVPContainer/RenderViewport"]
+visible = false
+copy_mode = 2
+
+[node name="TextureRectSecond" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+visible = false
+material = SubResource("ShaderMaterial_n6cbj")
+offset_left = 576.0
+offset_top = 324.0
+offset_right = 644.0
+offset_bottom = 392.0
+texture = ExtResource("8_0wo5f")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+visible = false
+offset_right = 1156.0
+offset_bottom = 648.0
+theme_override_constants/separation = 0
+
+[node name="Divider" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.377991, 0.31005, 1)
+
+[node name="CubeMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
+visible = false
+mesh = SubResource("BoxMesh_nk3eq")
+surface_material_override/0 = ExtResource("3_35l3j")
+script = ExtResource("4_kbr7f")
+
+[node name="Node" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.325)
+skeleton = NodePath("../StagingVPContainer/StagingViewport")
+script = ExtResource("4_kbr7f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, -8.9407e-08, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Node"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../CubeMesh")
+
+[node name="RodMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
+mesh = SubResource("CapsuleMesh_07ui4")
+surface_material_override/0 = ExtResource("3_35l3j")

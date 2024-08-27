@@ -51,3 +51,15 @@ paused={
 "type": "bool",
 "value": false
 }
+last_stage={
+"type": "sampler2D",
+"value": ""
+}
+last_render={
+"type": "sampler2D",
+"value": "res://noise.png"
+}
+second_last_stage={
+"type": "sampler2D",
+"value": ""
+}
