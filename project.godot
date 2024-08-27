@@ -11,14 +11,12 @@ config_version=5
 [application]
 
 config/name="Noise"
-run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
 window/stretch/mode="viewport"
-window/vsync/vsync_mode=0
 
 [input]
 
@@ -36,21 +34,10 @@ render_swap={
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+2d/snap/snap_2d_transforms_to_pixel=true
 
 [shader_globals]
 
-noise={
-"type": "sampler2D",
-"value": ""
-}
-last_frame={
-"type": "sampler2D",
-"value": ""
-}
-paused={
-"type": "bool",
-"value": false
-}
 last_stage={
 "type": "sampler2D",
 "value": ""
