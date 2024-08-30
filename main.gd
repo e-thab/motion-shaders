@@ -22,11 +22,12 @@ func _ready() -> void:
 	#randomize()
 	
 	## Apply resolution scale factor
-	get_tree().root.content_scale_factor = resolution_scale
-	renderView.size.x = int(stagingView.size.x / resolution_scale)
-	renderView.size.y = int(stagingView.size.y / resolution_scale)
-	stagingView.size.x = int(stagingView.size.x / resolution_scale)
-	stagingView.size.y = int(stagingView.size.y / resolution_scale)
+	set_res_scale()
+	#get_tree().root.content_scale_factor = resolution_scale
+	#renderView.size.x = int(stagingView.size.x / resolution_scale)
+	#renderView.size.y = int(stagingView.size.y / resolution_scale)
+	#stagingView.size.x = int(stagingView.size.x / resolution_scale)
+	#stagingView.size.y = int(stagingView.size.y / resolution_scale)
 	
 	get_snapshots()
 
@@ -47,12 +48,29 @@ func _process(delta: float) -> void:
 		else:
 			$RenderVPContainer.show()
 	
+	#if Input.is_action_just_released("MWU"):
+		#resolution_scale += 1
+		#print(resolution_scale)
+		#set_res_scale()
+	#elif Input.is_action_just_released("MWD"):
+		#resolution_scale = max(resolution_scale-1, 0)
+		#print(resolution_scale)
+		#set_res_scale()
+	
 	## Oscillate the rod
 	rod.position.x = 3 * cos(time_elapsed*PI/6)
 	time_elapsed += delta
 	
 	#frame_time += delta
 	get_snapshots()
+
+
+func set_res_scale():
+	get_tree().root.content_scale_factor = resolution_scale
+	renderView.size.x = int(stagingView.size.x / resolution_scale)
+	renderView.size.y = int(stagingView.size.y / resolution_scale)
+	stagingView.size.x = int(stagingView.size.x / resolution_scale)
+	stagingView.size.y = int(stagingView.size.y / resolution_scale)
 
 
 func get_snapshots():
