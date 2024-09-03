@@ -18,7 +18,7 @@ void fragment() {
 	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0).rgba;
 	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0).rgba;
 	vec4 render_color = textureLod(last_render, SCREEN_UV, 0.0).rgba;
-	
+
 	if (stage_color == WHITE && last_stage_color == BLACK) {
 		if (render_color == COLOR_1) {
 			COLOR = COLOR_2;

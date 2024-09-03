@@ -83,7 +83,6 @@ script = ExtResource("6_ii5mm")
 
 [node name="FrameMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.325)
-skeleton = NodePath("../StagingVPContainer/StagingViewport")
 script = ExtResource("6_ii5mm")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="FrameMesh"]
