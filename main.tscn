@@ -1,17 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=14 format=3 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/noise-1152x648.png" id="2_a7dol"]
 [ext_resource type="Shader" path="res://shaders/pov.gdshader" id="3_1npqv"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://images/white-1152x648.png" id="4_2egnp"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="5_2nx5s"]
+[ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://vantablack.tres" id="5_27n1h"]
+[ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
 [ext_resource type="Script" path="res://CubeMesh.gd" id="6_ii5mm"]
-
-[sub_resource type="Environment" id="Environment_sp14e"]
-background_mode = 1
-ambient_light_source = 2
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 16.0
+[ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://fpc/character.tscn" id="8_8d5x8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8od3i"]
 shader = ExtResource("3_1npqv")
@@ -33,23 +30,17 @@ height = 3.0
 script = ExtResource("1_oeid1")
 resolution_scale = 2.0
 
-[node name="StagingVPContainer" type="SubViewportContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
-handle_input_locally = false
-size = Vector2i(1152, 648)
-render_target_update_mode = 4
-
-[node name="StagingCamera" type="Camera3D" parent="StagingVPContainer/StagingViewport"]
-environment = SubResource("Environment_sp14e")
-current = true
+[node name="Character" parent="." instance=ExtResource("8_8d5x8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.90698)
+default_reticle = "res://fpc/reticles/reticle_0.tscn"
+JUMP = "jump"
+LEFT = "move_left"
+RIGHT = "move_right"
+FORWARD = "move_forward"
+BACKWARD = "move_backward"
 
 [node name="RenderVPContainer" type="SubViewportContainer" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -59,26 +50,31 @@ grow_vertical = 2
 [node name="RenderViewport" type="SubViewport" parent="RenderVPContainer"]
 handle_input_locally = false
 size = Vector2i(1152, 648)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="BG" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("2_a7dol")
 expand_mode = 1
 
 [node name="OverlayRect" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+visible = false
 material = SubResource("ShaderMaterial_8od3i")
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("4_2egnp")
 expand_mode = 1
 
+[node name="StagingCamera" type="Camera3D" parent="."]
+visible = false
+environment = ExtResource("6_eemhp")
+
 [node name="CubeMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
-visible = false
 mesh = SubResource("BoxMesh_nk3eq")
-surface_material_override/0 = ExtResource("5_2nx5s")
+surface_material_override/0 = ExtResource("5_27n1h")
 script = ExtResource("6_ii5mm")
 
 [node name="FrameMesh" type="MeshInstance3D" parent="."]
@@ -147,6 +143,12 @@ skeleton = NodePath("../../CubeMesh")
 
 [node name="RodMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
-visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74488, 0)
+use_collision = true
+size = Vector3(12.31, 0.25, 11.57)

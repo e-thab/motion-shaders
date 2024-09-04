@@ -3,16 +3,20 @@ extends Node3D
 @export var resolution_scale : float = 1.0
 
 @onready var rod : MeshInstance3D = $RodMesh
-@onready var stagingView : SubViewport = $StagingVPContainer/StagingViewport
-@onready var renderView : SubViewport = $RenderVPContainer/RenderViewport
+@onready var stagingView : SubViewport = $Character/Head/HeadcamViewport
+@onready var renderViewContainer : SubViewportContainer = $Character/UserInterface/RenderVPContainer
+@onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
+
+#@onready var stagingCam : Camera3D = $StagingVPContainer/StagingViewport/StagingCamera
+@onready var charCam : Camera3D = $Character.CAMERA
 
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
 
-var initial_width = 1152
-var initial_height = 648
+var init_width = 1152
+var init_height = 648
 
 var stage_tex
 var last_stage_tex
@@ -21,18 +25,13 @@ var last_stage_tex
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Initialize RNG
+	## Initialize RNG
 	#randomize()
-	
 	## Apply resolution scale factor
 	set_res_scale()
-	#get_tree().root.content_scale_factor = resolution_scale
-	#renderView.size.x = int(stagingView.size.x / resolution_scale)
-	#renderView.size.y = int(stagingView.size.y / resolution_scale)
-	#stagingView.size.x = int(stagingView.size.x / resolution_scale)
-	#stagingView.size.y = int(stagingView.size.y / resolution_scale)
-	
+	## Take initial render snapshots
 	get_snapshots()
+	charCam.make_current()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,10 +45,10 @@ func _process(delta: float) -> void:
 			Engine.time_scale = 0.0
 	
 	if Input.is_action_just_pressed("render_swap"):
-		if $RenderVPContainer.visible:
-			$RenderVPContainer.hide()
+		if renderViewContainer.visible:
+			renderViewContainer.hide()
 		else:
-			$RenderVPContainer.show()
+			renderViewContainer.show()
 	
 	if Input.is_action_just_released("res_increase"):
 		resolution_scale += 1
@@ -64,21 +63,24 @@ func _process(delta: float) -> void:
 	rod.position.x = 3 * cos(time_elapsed*PI/6)
 	time_elapsed += delta
 	
-	#frame_time += delta
+	frame_time += delta
 	get_snapshots()
+	
+	#stagingCam.position = charCam.position
 
 
 func set_res_scale():
 	get_tree().root.content_scale_factor = resolution_scale
-	renderView.size.x = int(initial_width / resolution_scale)
-	renderView.size.y = int(initial_height / resolution_scale)
-	stagingView.size.x = int(initial_width / resolution_scale)
-	stagingView.size.y = int(initial_height / resolution_scale)
+	renderView.size.x = int(init_width / resolution_scale)
+	renderView.size.y = int(init_height / resolution_scale)
+	#stagingView.size.x = int(init_width / resolution_scale)
+	#stagingView.size.y = int(init_height / resolution_scale)
 
 
 func get_snapshots():
 	## Take a snapshot of the current 'stage' frame, assign to global shader param
 	var staging_snapshot = stagingView.get_texture().get_image()
+	#var staging_snapshot = get_tree().root.get_viewport().get_texture().get_image()
 	## Store last and second-to-last stage textures
 	last_stage_tex = stage_tex
 	stage_tex = ImageTexture.create_from_image(staging_snapshot)
@@ -99,9 +101,9 @@ func get_snapshots():
 		render_tex
 	)
 	
-	#if frame_time >= 2.0:
-		#print('Snapshot ' + str(snap))
-		#render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
-		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
-		#frame_time = 0.0
-		#snap += 1
+	if frame_time >= 2.0:
+		print('Snapshot ' + str(snap))
+		render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
+		staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
+		frame_time = 0.0
+		snap += 1
