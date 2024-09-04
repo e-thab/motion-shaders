@@ -3,7 +3,7 @@ extends Node3D
 @export var resolution_scale : float = 1.0
 
 @onready var rod : MeshInstance3D = $RodMesh
-@onready var stagingView : SubViewport = $Character/Head/HeadcamViewport
+@onready var charView : SubViewport = $Character/UserInterface/HeadcamVPContainer/HeadcamViewport
 @onready var renderViewContainer : SubViewportContainer = $Character/UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
 
@@ -22,6 +22,9 @@ var stage_tex
 var last_stage_tex
 
 # Wisdom: https://forum.gamemaker.io/index.php?threads/solved-issue-trying-to-imitate-visual-effect-with-shaders-and-surfaces.109391/
+
+func _init():
+	RenderingServer.set_debug_generate_wireframes(true)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,11 +47,14 @@ func _process(delta: float) -> void:
 			paused = true
 			Engine.time_scale = 0.0
 	
-	if Input.is_action_just_pressed("render_swap"):
+	if Input.is_action_just_pressed("overlay_toggle"):
 		if renderViewContainer.visible:
 			renderViewContainer.hide()
 		else:
 			renderViewContainer.show()
+	
+	if Input.is_action_just_pressed("wire_toggle"):
+		charView.debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 	
 	if Input.is_action_just_released("res_increase"):
 		resolution_scale += 1
@@ -79,7 +85,7 @@ func set_res_scale():
 
 func get_snapshots():
 	## Take a snapshot of the current 'stage' frame, assign to global shader param
-	var staging_snapshot = stagingView.get_texture().get_image()
+	var staging_snapshot = charView.get_texture().get_image()
 	#var staging_snapshot = get_tree().root.get_viewport().get_texture().get_image()
 	## Store last and second-to-last stage textures
 	last_stage_tex = stage_tex
@@ -101,9 +107,9 @@ func get_snapshots():
 		render_tex
 	)
 	
-	if frame_time >= 2.0:
-		print('Snapshot ' + str(snap))
-		render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
-		staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
-		frame_time = 0.0
-		snap += 1
+	#if frame_time >= 2.0:
+		#print('Snapshot ' + str(snap))
+		#render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
+		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
+		#frame_time = 0.0
+		#snap += 1

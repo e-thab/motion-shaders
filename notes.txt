@@ -7,3 +7,5 @@ Generate new random color
 
 Look into: Shadow mapping
 https://github.com/capnramses/antons_opengl_tutorials_book/tree/master/38_texture_shadows
+
+Look up: Optical illusions in games

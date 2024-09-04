@@ -387,12 +387,16 @@ libraries = {
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Head"]
+remote_path = NodePath("../HeadcamViewport/Camera")
+
 [node name="HeadcamViewport" type="SubViewport" parent="Head"]
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="Head/HeadcamViewport"]
 environment = ExtResource("2_36t3m")
+current = true
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Head"]
 libraries = {
