@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [display]
 
 window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
 
 [input]
 
@@ -95,11 +96,11 @@ last_stage={
 "type": "sampler2D",
 "value": ""
 }
-last_render={
+second_last_stage={
 "type": "sampler2D",
 "value": ""
 }
-second_last_stage={
+last_render={
 "type": "sampler2D",
 "value": ""
 }

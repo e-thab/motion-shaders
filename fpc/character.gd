@@ -89,6 +89,7 @@ var current_speed : float = 0.0
 var state : String = "normal"
 var low_ceiling : bool = false # This is for when the cieling is too low and the player needs to crouch.
 var was_on_floor : bool = true # Was the player on the floor last frame (for landing animation)
+var res_scale : int = 1
 
 # The reticle should always have a Control node as the root
 var RETICLE : Control
@@ -152,7 +153,7 @@ func change_reticle(reticle): # Yup, this function is kinda strange
 	
 	RETICLE = load(reticle).instantiate()
 	RETICLE.character = self
-	$UserInterface.add_child(RETICLE)
+	$UserInterface/Overlay.add_child(RETICLE)
 
 
 func _physics_process(delta):
@@ -384,8 +385,8 @@ func _process(delta):
 
 func _unhandled_input(event : InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		mouseInput.x += event.relative.x
-		mouseInput.y += event.relative.y
+		mouseInput.x += event.relative.x * res_scale
+		mouseInput.y += event.relative.y * res_scale
 	# Toggle debug menu
 	elif event is InputEventKey:
 		if event.is_released():

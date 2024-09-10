@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var resolution_scale : float = 1.0
+@export var resolution_scale : int = 1
 
 @onready var rod : MeshInstance3D = $RodMesh
 @onready var charView : SubViewport = $Character/UserInterface/HeadcamVPContainer/HeadcamViewport
@@ -71,16 +71,24 @@ func _process(delta: float) -> void:
 	
 	frame_time += delta
 	get_snapshots()
-	
-	#stagingCam.position = charCam.position
 
 
 func set_res_scale():
 	get_tree().root.content_scale_factor = resolution_scale
 	renderView.size.x = int(init_width / resolution_scale)
 	renderView.size.y = int(init_height / resolution_scale)
-	#stagingView.size.x = int(init_width / resolution_scale)
-	#stagingView.size.y = int(init_height / resolution_scale)
+	charView.size.x = int(init_width / resolution_scale)
+	charView.size.y = int(init_height / resolution_scale)
+	$Character.res_scale = resolution_scale
+	
+	#$Character/UserInterface/Overlay.size = renderView.size
+	#$Character/UserInterface/Overlay.scale = Vector2(resolution_scale, resolution_scale)
+	#$Character/UserInterface/Overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	#$Character/UserInterface/Overlay.set_anchor(SIDE_RIGHT, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay.set_anchor(SIDE_BOTTOM, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay/Reticle.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay/Reticle.position = Vector2(renderView.size.x/2.0, renderView.size.y/2.0)
 
 
 func get_snapshots():
