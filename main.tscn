@@ -378,13 +378,13 @@ radius = 0.01
 height = 3.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_tamp0"]
-size = Vector3(0.02, 0.27, 0.02)
+size = Vector3(0.02, 1.02, 0.02)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2ygx1"]
-size = Vector3(0.02, 1.02, 0.02)
+size = Vector3(0.02, 15.02, 0.02)
 
 [sub_resource type="BoxMesh" id="BoxMesh_h0axh"]
-size = Vector3(0.02, 1.02, 0.02)
+size = Vector3(0.02, 15.02, 0.02)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
@@ -517,6 +517,7 @@ grow_vertical = 2
 texture = ExtResource("7_sfkqm")
 
 [node name="DebugPanel" type="PanelContainer" parent="Character/UserInterface"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -547,7 +548,6 @@ script = ExtResource("8_260n1")
 
 [node name="CubeMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
-visible = false
 mesh = SubResource("BoxMesh_nk3eq")
 surface_material_override/0 = ExtResource("5_27n1h")
 script = ExtResource("6_ii5mm")
@@ -624,11 +624,13 @@ surface_material_override/0 = ExtResource("5_2nx5s")
 [node name="Node3D" type="Node3D" parent="."]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.74488, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
 use_collision = true
-size = Vector3(15, 0.25, 15)
+size = Vector3(15, 1, 15)
+material = ExtResource("5_27n1h")
 
 [node name="CSGFrameMeshWIP" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, 7.5)
@@ -651,41 +653,41 @@ mesh = SubResource("BoxMesh_tamp0")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, -0.500255, 0)
 mesh = SubResource("BoxMesh_2ygx1")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, -0.499915, 0)
 mesh = SubResource("BoxMesh_2ygx1")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_2ygx1")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D8" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_2ygx1")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D9" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 7.5)
 mesh = SubResource("BoxMesh_h0axh")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D10" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 7.5)
 mesh = SubResource("BoxMesh_h0axh")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D11" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -7.5)
 mesh = SubResource("BoxMesh_h0axh")
 skeleton = NodePath("../../../CubeMesh")
 
 [node name="MeshInstance3D12" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -7.5)
 mesh = SubResource("BoxMesh_h0axh")
 skeleton = NodePath("../../../CubeMesh")

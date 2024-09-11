@@ -1,5 +1,5 @@
 Experiment w/ color
-FPS contorller
+FPS controller
 Partial screen effect
 More complex objects
 Different noise pattern
@@ -9,3 +9,7 @@ Look into: Shadow mapping
 https://github.com/capnramses/antons_opengl_tutorials_book/tree/master/38_texture_shadows
 
 Look up: Optical illusions in games
+
+object material textures, potential application for occlusion. use colors to encode during processing rather than edge detection shader
+
+build project & share
