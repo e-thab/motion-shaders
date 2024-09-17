@@ -3,17 +3,20 @@ extends Node3D
 @export var resolution_scale : int = 1
 
 @onready var rod : MeshInstance3D = $RodMesh
+@onready var cube : Node3D = $Cube
+
+@onready var character : CharacterBody3D = $Character
 @onready var charView : SubViewport = $Character/UserInterface/HeadcamVPContainer/HeadcamViewport
+@onready var charCam : Camera3D = $Character.CAMERA
 @onready var renderViewContainer : SubViewportContainer = $Character/UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
-
-#@onready var stagingCam : Camera3D = $StagingVPContainer/StagingViewport/StagingCamera
-@onready var charCam : Camera3D = $Character.CAMERA
+@onready var spawnPos : Vector3 = $Character.position
 
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
+var occluding = true
 
 var init_width = 1152
 var init_height = 648
@@ -39,35 +42,50 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	## Toggle pause state
 	if Input.is_action_just_pressed("pause"):
 		if paused:
 			paused = false
-			Engine.time_scale = 1.0
 		else:
 			paused = true
-			Engine.time_scale = 0.0
 	
+	## Show/hide shader overlay
 	if Input.is_action_just_pressed("overlay_toggle"):
 		if renderViewContainer.visible:
 			renderViewContainer.hide()
 		else:
 			renderViewContainer.show()
 	
-	if Input.is_action_just_pressed("wire_toggle"):
-		charView.debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
-	
+	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
 		resolution_scale += 1
-		print(resolution_scale)
+		print("resolution scale: ", resolution_scale)
 		set_res_scale()
 	elif Input.is_action_just_released("res_decrease"):
 		resolution_scale = max(resolution_scale-1, 1)
-		print(resolution_scale)
+		print("resolution scale: ", resolution_scale)
 		set_res_scale()
 	
-	## Oscillate the rod
-	rod.position.x = 3 * cos(time_elapsed*PI/6)
-	time_elapsed += delta
+	## Show/hide objects in 'fill' group based on toggle
+	if Input.is_action_just_pressed("toggle_occlusion"):
+		if occluding:
+			occluding = false
+			get_tree().call_group("fill", "hide")
+			print("occlusion off")
+		else:
+			occluding = true
+			get_tree().call_group("fill", "show")
+			print("occlusion on")
+	
+	if !paused:
+		## Oscillate the rod & rotate the cube
+		rod.position.x = 3 * cos(time_elapsed*PI/6)
+		time_elapsed += delta
+		cube.rotate(Vector3.UP, delta*PI/4)
+	
+	## Respawn if char has fallen some distance
+	if character.position.y < -50.0:
+		character.position = spawnPos
 	
 	frame_time += delta
 	get_snapshots()

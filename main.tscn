@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=36 format=3 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/noise-1152x648.png" id="2_a7dol"]
@@ -8,7 +8,6 @@
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="5_2nx5s"]
 [ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://vantablack.tres" id="5_27n1h"]
 [ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
-[ext_resource type="Script" path="res://CubeMesh.gd" id="6_ii5mm"]
 [ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
 [ext_resource type="Script" path="res://fpc/debug.gd" id="7_y7c8x"]
 [ext_resource type="Script" path="res://fpc/EditorModule.gd" id="8_260n1"]
@@ -164,7 +163,7 @@ loop_mode = 1
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:position:x")
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -175,7 +174,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position:y")
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -191,7 +190,7 @@ loop_mode = 1
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:position:x")
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -202,7 +201,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position:y")
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -218,7 +217,7 @@ loop_mode = 1
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:position:x")
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -229,7 +228,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position:y")
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -250,7 +249,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:rotation")
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -262,7 +261,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position")
+tracks/1/path = NodePath("RemoteTransform3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -278,7 +277,7 @@ length = 3.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:rotation")
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -294,7 +293,7 @@ length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:rotation")
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -306,7 +305,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position")
+tracks/1/path = NodePath("RemoteTransform3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -322,7 +321,7 @@ length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HeadcamViewport/Camera:rotation")
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -334,7 +333,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("HeadcamViewport/Camera:position")
+tracks/1/path = NodePath("RemoteTransform3D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -368,10 +367,10 @@ MarginContainer/constants/margin_top = 10
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_k4wwl"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
-
 [sub_resource type="BoxMesh" id="BoxMesh_kpu5m"]
 size = Vector3(0.02, 1.02, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
 radius = 0.01
@@ -388,6 +387,7 @@ size = Vector3(0.02, 15.02, 0.02)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
+resolution_scale = 2
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.90698)
@@ -500,6 +500,7 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="Reticle" type="TextureRect" parent="Character/UserInterface/Overlay"]
+visible = false
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(2, 2)
 layout_mode = 1
@@ -546,148 +547,149 @@ target_position = Vector3(0, 0.5, 0)
 [node name="EditorModule" type="Node" parent="Character"]
 script = ExtResource("8_260n1")
 
-[node name="CubeMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
-mesh = SubResource("BoxMesh_nk3eq")
-surface_material_override/0 = ExtResource("5_27n1h")
-script = ExtResource("6_ii5mm")
+[node name="Cube" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08167e-17, -2.325)
 
-[node name="FrameMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.325)
-script = ExtResource("6_ii5mm")
+[node name="Frame" type="Node3D" parent="Cube"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, -8.9407e-08, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, 0, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D12" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
+
+[node name="Fill" type="MeshInstance3D" parent="Cube" groups=["fill"]]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, -2.08167e-17, 0.000339985)
+mesh = SubResource("BoxMesh_nk3eq")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_27n1h")
 
 [node name="RodMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Floor" type="Node3D" parent="."]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="Node3D"]
+[node name="Frame" type="Node3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, 7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, 7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, -7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, -7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, -0.500255, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, -0.499915, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Floor" groups=["fill"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
 use_collision = true
 size = Vector3(15, 1, 15)
 material = ExtResource("5_27n1h")
-
-[node name="CSGFrameMeshWIP" type="MeshInstance3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, 7.5)
-mesh = SubResource("BoxMesh_tamp0")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, 7.5)
-mesh = SubResource("BoxMesh_tamp0")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, -7.5)
-mesh = SubResource("BoxMesh_tamp0")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, -7.5)
-mesh = SubResource("BoxMesh_tamp0")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, -0.500255, 0)
-mesh = SubResource("BoxMesh_2ygx1")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, -0.499915, 0)
-mesh = SubResource("BoxMesh_2ygx1")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, 0.500085, 0)
-mesh = SubResource("BoxMesh_2ygx1")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, 0.500085, 0)
-mesh = SubResource("BoxMesh_2ygx1")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 7.5)
-mesh = SubResource("BoxMesh_h0axh")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 7.5)
-mesh = SubResource("BoxMesh_h0axh")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -7.5)
-mesh = SubResource("BoxMesh_h0axh")
-skeleton = NodePath("../../../CubeMesh")
-
-[node name="MeshInstance3D12" type="MeshInstance3D" parent="Node3D/CSGFrameMeshWIP"]
-transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -7.5)
-mesh = SubResource("BoxMesh_h0axh")
-skeleton = NodePath("../../../CubeMesh")
