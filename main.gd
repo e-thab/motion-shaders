@@ -24,7 +24,6 @@ var init_height = 648
 var stage_tex
 var last_stage_tex
 
-# Wisdom: https://forum.gamemaker.io/index.php?threads/solved-issue-trying-to-imitate-visual-effect-with-shaders-and-surfaces.109391/
 
 func _init():
 	RenderingServer.set_debug_generate_wireframes(true)
@@ -98,6 +97,7 @@ func set_res_scale():
 	charView.size.x = int(init_width / resolution_scale)
 	charView.size.y = int(init_height / resolution_scale)
 	$Character.res_scale = resolution_scale
+	$Character/UserInterface/RenderVPContainer/RenderViewport/OverlayVignette.size = charView.size
 	
 	#$Character/UserInterface/Overlay.size = renderView.size
 	#$Character/UserInterface/Overlay.scale = Vector2(resolution_scale, resolution_scale)

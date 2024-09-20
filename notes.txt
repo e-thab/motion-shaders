@@ -1,3 +1,5 @@
+Wisdom: https://forum.gamemaker.io/index.php?threads/solved-issue-trying-to-imitate-visual-effect-with-shaders-and-surfaces.109391/
+
 Experiment w/ color
 FPS controller
 Partial screen effect

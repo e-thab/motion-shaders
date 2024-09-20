@@ -107,3 +107,7 @@ last_render={
 "type": "sampler2D",
 "value": ""
 }
+vignette={
+"type": "sampler2D",
+"value": "res://images/vignette-invert-2.png"
+}

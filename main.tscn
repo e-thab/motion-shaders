@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=37 format=3 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/noise-1152x648.png" id="2_a7dol"]
@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="5_2nx5s"]
 [ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://vantablack.tres" id="5_27n1h"]
 [ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
+[ext_resource type="Texture2D" uid="uid://kk0ggrfyakdw" path="res://images/vignette-invert-2.png" id="7_2d7hi"]
 [ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
 [ext_resource type="Script" path="res://fpc/debug.gd" id="7_y7c8x"]
 [ext_resource type="Script" path="res://fpc/EditorModule.gd" id="8_260n1"]
@@ -483,14 +484,21 @@ offset_bottom = 648.0
 texture = ExtResource("2_a7dol")
 expand_mode = 1
 
-[node name="OverlayRect" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
+[node name="OverlayFull" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 material = SubResource("ShaderMaterial_t01ct")
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("4_2egnp")
 expand_mode = 1
 
+[node name="OverlayVignette" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("7_2d7hi")
+expand_mode = 1
+
 [node name="Overlay" type="Control" parent="Character/UserInterface"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
