@@ -14,4 +14,7 @@ Look up: Optical illusions in games
 
 object material textures, potential application for occlusion. use colors to encode during processing rather than edge detection shader
 
-build project & share
+wheres waldo - vision improvement test
+occupational therapy; try to find something paper-based
+book: persistence of vision in table of contents
+what it's like to see as an animal
