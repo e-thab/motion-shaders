@@ -1,84 +1,118 @@
 extends Node3D
 
-@export var resolution_scale : float = 1.0
+@export var resolution_scale : int = 1
 
 @onready var rod : MeshInstance3D = $RodMesh
-@onready var stagingView : SubViewport = $StagingVPContainer/StagingViewport
-@onready var renderView : SubViewport = $RenderVPContainer/RenderViewport
+@onready var cube : Node3D = $Cube
+
+@onready var character : CharacterBody3D = $Character
+@onready var charView : SubViewport = $Character/UserInterface/HeadcamVPContainer/HeadcamViewport
+@onready var charCam : Camera3D = $Character.CAMERA
+@onready var renderViewContainer : SubViewportContainer = $Character/UserInterface/RenderVPContainer
+@onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
+@onready var spawnPos : Vector3 = $Character.position
 
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
+var occluding = true
 
-var initial_width = 1152
-var initial_height = 648
+var init_width = 1152
+var init_height = 648
 
 var stage_tex
 var last_stage_tex
 
-# Wisdom: https://forum.gamemaker.io/index.php?threads/solved-issue-trying-to-imitate-visual-effect-with-shaders-and-surfaces.109391/
+
+func _init():
+	RenderingServer.set_debug_generate_wireframes(true)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Initialize RNG
+	## Initialize RNG
 	#randomize()
-	
 	## Apply resolution scale factor
 	set_res_scale()
-	#get_tree().root.content_scale_factor = resolution_scale
-	#renderView.size.x = int(stagingView.size.x / resolution_scale)
-	#renderView.size.y = int(stagingView.size.y / resolution_scale)
-	#stagingView.size.x = int(stagingView.size.x / resolution_scale)
-	#stagingView.size.y = int(stagingView.size.y / resolution_scale)
-	
+	## Take initial render snapshots
 	get_snapshots()
+	charCam.make_current()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	## Toggle pause state
 	if Input.is_action_just_pressed("pause"):
 		if paused:
 			paused = false
-			Engine.time_scale = 1.0
 		else:
 			paused = true
-			Engine.time_scale = 0.0
 	
-	if Input.is_action_just_pressed("render_swap"):
-		if $RenderVPContainer.visible:
-			$RenderVPContainer.hide()
+	## Show/hide shader overlay
+	if Input.is_action_just_pressed("overlay_toggle"):
+		if renderViewContainer.visible:
+			renderViewContainer.hide()
 		else:
-			$RenderVPContainer.show()
+			renderViewContainer.show()
 	
+	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
 		resolution_scale += 1
-		print(resolution_scale)
+		print("resolution scale: ", resolution_scale)
 		set_res_scale()
 	elif Input.is_action_just_released("res_decrease"):
 		resolution_scale = max(resolution_scale-1, 1)
-		print(resolution_scale)
+		print("resolution scale: ", resolution_scale)
 		set_res_scale()
 	
-	## Oscillate the rod
-	rod.position.x = 3 * cos(time_elapsed*PI/6)
-	time_elapsed += delta
+	## Show/hide objects in 'fill' group based on toggle
+	if Input.is_action_just_pressed("toggle_occlusion"):
+		if occluding:
+			occluding = false
+			get_tree().call_group("fill", "hide")
+			print("occlusion off")
+		else:
+			occluding = true
+			get_tree().call_group("fill", "show")
+			print("occlusion on")
 	
-	#frame_time += delta
+	if !paused:
+		## Oscillate the rod & rotate the cube
+		rod.position.x = 3 * cos(time_elapsed*PI/6)
+		time_elapsed += delta
+		cube.rotate(Vector3.UP, delta*PI/4)
+	
+	## Respawn if char has fallen some distance
+	if character.position.y < -50.0:
+		character.position = spawnPos
+	
+	frame_time += delta
 	get_snapshots()
 
 
 func set_res_scale():
 	get_tree().root.content_scale_factor = resolution_scale
-	renderView.size.x = int(initial_width / resolution_scale)
-	renderView.size.y = int(initial_height / resolution_scale)
-	stagingView.size.x = int(initial_width / resolution_scale)
-	stagingView.size.y = int(initial_height / resolution_scale)
+	renderView.size.x = int(init_width / resolution_scale)
+	renderView.size.y = int(init_height / resolution_scale)
+	charView.size.x = int(init_width / resolution_scale)
+	charView.size.y = int(init_height / resolution_scale)
+	$Character.res_scale = resolution_scale
+	$Character/UserInterface/RenderVPContainer/RenderViewport/OverlayVignette.size = charView.size
+	
+	#$Character/UserInterface/Overlay.size = renderView.size
+	#$Character/UserInterface/Overlay.scale = Vector2(resolution_scale, resolution_scale)
+	#$Character/UserInterface/Overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	#$Character/UserInterface/Overlay.set_anchor(SIDE_RIGHT, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay.set_anchor(SIDE_BOTTOM, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay/Reticle.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
+	#$Character/UserInterface/Overlay/Reticle.position = Vector2(renderView.size.x/2.0, renderView.size.y/2.0)
 
 
 func get_snapshots():
 	## Take a snapshot of the current 'stage' frame, assign to global shader param
-	var staging_snapshot = stagingView.get_texture().get_image()
+	var staging_snapshot = charView.get_texture().get_image()
+	#var staging_snapshot = get_tree().root.get_viewport().get_texture().get_image()
 	## Store last and second-to-last stage textures
 	last_stage_tex = stage_tex
 	stage_tex = ImageTexture.create_from_image(staging_snapshot)

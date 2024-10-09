@@ -1,152 +1,704 @@
-[gd_scene load_steps=12 format=3 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=37 format=3 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/noise-1152x648.png" id="2_a7dol"]
+[ext_resource type="Script" path="res://fpc/character.gd" id="2_fjshf"]
 [ext_resource type="Shader" path="res://shaders/pov.gdshader" id="3_1npqv"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://images/white-1152x648.png" id="4_2egnp"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="5_2nx5s"]
-[ext_resource type="Script" path="res://CubeMesh.gd" id="6_ii5mm"]
+[ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://vantablack.tres" id="5_27n1h"]
+[ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
+[ext_resource type="Texture2D" uid="uid://kk0ggrfyakdw" path="res://images/vignette-invert-2.png" id="7_2d7hi"]
+[ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
+[ext_resource type="Script" path="res://fpc/debug.gd" id="7_y7c8x"]
+[ext_resource type="Script" path="res://fpc/EditorModule.gd" id="8_260n1"]
 
-[sub_resource type="Environment" id="Environment_sp14e"]
-background_mode = 1
-ambient_light_source = 2
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 16.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
+albedo_color = Color(0.909804, 0.596078, 0, 1)
+clearcoat_enabled = true
+clearcoat_roughness = 0.2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8od3i"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
+material = SubResource("StandardMaterial3D_kp17n")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
+
+[sub_resource type="Animation" id="Animation_j8cx7"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Mesh:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Collision:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Mesh:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Collision:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Head:position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5ec5e"]
+resource_name = "crouch"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Mesh:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0.75, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Collision:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0.75, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Mesh:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Collision:position")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Head:position")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0), Vector3(0, 1.12508, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5e5t5"]
+_data = {
+"RESET": SubResource("Animation_j8cx7"),
+"crouch": SubResource("Animation_5ec5e")
+}
+
+[sub_resource type="Animation" id="Animation_gh776"]
+resource_name = "RESET"
+length = 0.001
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_8ku67"]
+resource_name = "sprint"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 1, 0, 1, 0),
+"points": PackedFloat32Array(0.06, -0.25, 0, 0.25, -0.01, 0, 0, 0, 0, 0, -0.06, -0.25, 0.01, 0.25, 0.01, 0, 0, 0, 0, 0, 0.06, -0.25, -0.01, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0, 0),
+"points": PackedFloat32Array(0.05, -0.25, 0, 0.2, -0.01, 0, -0.2, 0.000186046, 0.2, 0.000186046, 0.05, -0.2, -0.01, 0.2, -0.01, 0, -0.2, 0, 0.2, 0, 0.05, -0.2, -0.01, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
+}
+
+[sub_resource type="Animation" id="Animation_lrqmv"]
+resource_name = "walk"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 1, 0, 1, 0),
+"points": PackedFloat32Array(0.04, -0.25, 0, 0.25, 0, 0, 0, 0, 0, 0, -0.04, -0.25, 0, 0.25, 0, 0, 0, 0, 0, 0, 0.04, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0, 0),
+"points": PackedFloat32Array(-0.05, -0.25, 0, 0.2, 0.005, 0, -0.2, 0.000186046, 0.2, 0.000186046, -0.05, -0.2, 0.005, 0.2, 0.005, 0, -0.2, 0, 0.2, 0, -0.05, -0.2, 0.005, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o0unb"]
+_data = {
+"RESET": SubResource("Animation_gh776"),
+"sprint": SubResource("Animation_8ku67"),
+"walk": SubResource("Animation_lrqmv")
+}
+
+[sub_resource type="Animation" id="Animation_fvvjq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s07ye"]
+resource_name = "jump"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0349066, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_l1rph"]
+resource_name = "land_left"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.0349066, 0, 0.0174533), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vsknp"]
+resource_name = "land_right"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RemoteTransform3D:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.0349066, 0, -0.0174533), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RemoteTransform3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qeg5r"]
+_data = {
+"RESET": SubResource("Animation_fvvjq"),
+"jump": SubResource("Animation_s07ye"),
+"land_left": SubResource("Animation_l1rph"),
+"land_right": SubResource("Animation_vsknp")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t01ct"]
+resource_local_to_scene = true
 shader = ExtResource("3_1npqv")
 shader_parameter/WHITE = Vector4(1, 1, 1, 1)
 shader_parameter/BLACK = Vector4(0, 0, 0, 1)
 shader_parameter/COLOR_1 = Vector4(1, 1, 1, 1)
 shader_parameter/COLOR_2 = Vector4(0, 0, 0, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
+[sub_resource type="Theme" id="Theme_wdf0f"]
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_k4wwl"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_kpu5m"]
 size = Vector3(0.02, 1.02, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nk3eq"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
 radius = 0.01
 height = 3.0
 
+[sub_resource type="BoxMesh" id="BoxMesh_tamp0"]
+size = Vector3(0.02, 1.02, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2ygx1"]
+size = Vector3(0.02, 15.02, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h0axh"]
+size = Vector3(0.02, 15.02, 0.02)
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
-resolution_scale = 2.0
+resolution_scale = 2
 
-[node name="StagingVPContainer" type="SubViewportContainer" parent="."]
+[node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.90698)
+script = ExtResource("2_fjshf")
+HEAD = NodePath("Head")
+CAMERA = NodePath("UserInterface/HeadcamVPContainer/HeadcamViewport/Camera")
+HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
+JUMP_ANIMATION = NodePath("Head/JumpAnimation")
+CROUCH_ANIMATION = NodePath("CrouchAnimation")
+COLLISION_MESH = NodePath("Collision")
+JUMP = "jump"
+LEFT = "move_left"
+RIGHT = "move_right"
+FORWARD = "move_forward"
+BACKWARD = "move_backward"
+
+[node name="Mesh" type="MeshInstance3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jw1de")
+
+[node name="Collision" type="CollisionShape3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_uy03j")
+
+[node name="CrouchAnimation" type="AnimationPlayer" parent="Character"]
+libraries = {
+"": SubResource("AnimationLibrary_5e5t5")
+}
+
+[node name="Head" type="Node3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Character/Head"]
+remote_path = NodePath("../../UserInterface/HeadcamVPContainer/HeadcamViewport/Camera")
+
+[node name="HeadbobAnimation" type="AnimationPlayer" parent="Character/Head"]
+libraries = {
+"": SubResource("AnimationLibrary_o0unb")
+}
+blend_times = [&"RESET", &"RESET", 0.5, &"RESET", &"walk", 0.5, &"walk", &"RESET", 0.5]
+
+[node name="JumpAnimation" type="AnimationPlayer" parent="Character/Head"]
+libraries = {
+"": SubResource("AnimationLibrary_qeg5r")
+}
+speed_scale = 4.0
+
+[node name="UserInterface" type="Control" parent="Character"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="HeadcamVPContainer" type="SubViewportContainer" parent="Character/UserInterface"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StagingViewport" type="SubViewport" parent="StagingVPContainer"]
+[node name="HeadcamViewport" type="SubViewport" parent="Character/UserInterface/HeadcamVPContainer"]
 handle_input_locally = false
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="StagingCamera" type="Camera3D" parent="StagingVPContainer/StagingViewport"]
-environment = SubResource("Environment_sp14e")
+[node name="Camera" type="Camera3D" parent="Character/UserInterface/HeadcamVPContainer/HeadcamViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1.90698)
+environment = ExtResource("6_eemhp")
 current = true
 
-[node name="RenderVPContainer" type="SubViewportContainer" parent="."]
+[node name="RenderVPContainer" type="SubViewportContainer" parent="Character/UserInterface"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RenderViewport" type="SubViewport" parent="RenderVPContainer"]
+[node name="RenderViewport" type="SubViewport" parent="Character/UserInterface/RenderVPContainer"]
 handle_input_locally = false
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="BG" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
+[node name="BG" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("2_a7dol")
 expand_mode = 1
 
-[node name="OverlayRect" type="TextureRect" parent="RenderVPContainer/RenderViewport"]
-material = SubResource("ShaderMaterial_8od3i")
+[node name="OverlayFull" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
+material = SubResource("ShaderMaterial_t01ct")
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("4_2egnp")
 expand_mode = 1
 
-[node name="CubeMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, 0, -2.32466)
+[node name="OverlayVignette" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 visible = false
-mesh = SubResource("BoxMesh_nk3eq")
-surface_material_override/0 = ExtResource("5_2nx5s")
-script = ExtResource("6_ii5mm")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("7_2d7hi")
+expand_mode = 1
 
-[node name="FrameMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.325)
-script = ExtResource("6_ii5mm")
+[node name="Overlay" type="Control" parent="Character/UserInterface"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FrameMesh"]
+[node name="Reticle" type="TextureRect" parent="Character/UserInterface/Overlay"]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_sfkqm")
+
+[node name="DebugPanel" type="PanelContainer" parent="Character/UserInterface"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 65.0
+offset_top = 65.0
+offset_right = -644.0
+offset_bottom = -525.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = SubResource("Theme_wdf0f")
+script = ExtResource("7_y7c8x")
+
+[node name="MarginContainer" type="MarginContainer" parent="Character/UserInterface/DebugPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Character/UserInterface/DebugPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="CrouchCeilingDetection" type="ShapeCast3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_k4wwl")
+target_position = Vector3(0, 0.5, 0)
+
+[node name="EditorModule" type="Node" parent="Character"]
+script = ExtResource("8_260n1")
+
+[node name="Cube" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08167e-17, -2.325)
+
+[node name="Frame" type="Node3D" parent="Cube"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, -8.9407e-08, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, 0, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D8" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D9" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D10" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D11" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
 
-[node name="MeshInstance3D12" type="MeshInstance3D" parent="FrameMesh"]
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Cube/Frame"]
 transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
 mesh = SubResource("BoxMesh_kpu5m")
-skeleton = NodePath("../../CubeMesh")
+skeleton = NodePath("../../Fill")
+
+[node name="Fill" type="MeshInstance3D" parent="Cube" groups=["fill"]]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, -2.08167e-17, 0.000339985)
+mesh = SubResource("BoxMesh_nk3eq")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_27n1h")
 
 [node name="RodMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
-visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
+
+[node name="Floor" type="Node3D" parent="."]
+
+[node name="Frame" type="Node3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, 7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, 7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 7.5, 0, -7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -7.5, 0, -7.5)
+mesh = SubResource("BoxMesh_tamp0")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, -0.500255, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, -0.499915, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 7.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -7.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_2ygx1")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Floor/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -7.5)
+mesh = SubResource("BoxMesh_h0axh")
+skeleton = NodePath("../../../Cube/Fill")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Floor" groups=["fill"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+use_collision = true
+size = Vector3(15, 1, 15)
+material = ExtResource("5_27n1h")
