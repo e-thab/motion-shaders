@@ -1,0 +1,8 @@
+Model Information:
+* title:	Pond Pack
+* source:	https://sketchfab.com/3d-models/pond-pack-636ed9ffb832417bb2909c34f0447f63
+* author:	frankesalgado87 (https://sketchfab.com/frankesalgado87)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

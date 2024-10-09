@@ -1,0 +1,11 @@
+Model Information:
+* title:	[FREE] Lowpoly Small Pond [Asset pack]
+* source:	https://sketchfab.com/3d-models/free-lowpoly-small-pond-asset-pack-a03ae641dc644207b0ea37edbda93e63
+* author:	SimplePolygon (https://sketchfab.com/SimplePolygon)
+
+Model License:
+* license type:	CC-BY-ND-4.0 (http://creativecommons.org/licenses/by-nd/4.0/)
+* requirements:	Author must be credited. Modified versions can not be distributed. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "[FREE] Lowpoly Small Pond [Asset pack]" (https://sketchfab.com/3d-models/free-lowpoly-small-pond-asset-pack-a03ae641dc644207b0ea37edbda93e63) by SimplePolygon (https://sketchfab.com/SimplePolygon) licensed under CC-BY-ND-4.0 (http://creativecommons.org/licenses/by-nd/4.0/)

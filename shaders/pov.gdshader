@@ -21,7 +21,7 @@ void fragment() {
 	vec4 render_color = textureLod(last_render, SCREEN_UV, 0.0).rgba;
 	float v = textureLod(screen_texture, SCREEN_UV, 0.0).a;
 
-	if (stage_color == WHITE && last_stage_color == BLACK) {
+	if (stage_color != BLACK && last_stage_color == BLACK) {
 		if (render_color == COLOR_1) {
 			COLOR = COLOR_2;
 			//COLOR = vec4(COLOR_2.r, COLOR_2.g, COLOR_2.b, screen_color.a);
