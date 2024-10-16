@@ -24,6 +24,10 @@ var init_height = 648
 var stage_tex
 var last_stage_tex
 
+var objects = ["fish", "lily pad", "cat tails", "cube"]
+var to_find = ""
+var last_click = "none"
+
 
 func _init():
 	RenderingServer.set_debug_generate_wireframes(true)
@@ -31,12 +35,14 @@ func _init():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	## Initialize RNG
-	#randomize()
+	randomize()
 	## Apply resolution scale factor
 	set_res_scale()
 	## Take initial render snapshots
 	get_snapshots()
 	charCam.make_current()
+	## Set initial object to find
+	new_object()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -92,21 +98,20 @@ func _process(delta: float) -> void:
 
 func set_res_scale():
 	get_tree().root.content_scale_factor = resolution_scale
-	renderView.size.x = int(init_width / resolution_scale)
-	renderView.size.y = int(init_height / resolution_scale)
-	charView.size.x = int(init_width / resolution_scale)
-	charView.size.y = int(init_height / resolution_scale)
+	#get_tree().root.content_scale_size = Vector2i(1.0/resolution_scale, 1.0/resolution_scale)
+	
+	renderView.size.x = init_width / resolution_scale
+	renderView.size.y = init_height / resolution_scale
+	charView.size.x = init_width / resolution_scale
+	charView.size.y = init_height / resolution_scale
 	$Character.res_scale = resolution_scale
 	$Character/UserInterface/RenderVPContainer/RenderViewport/OverlayVignette.size = charView.size
 	
-	#$Character/UserInterface/Overlay.size = renderView.size
-	#$Character/UserInterface/Overlay.scale = Vector2(resolution_scale, resolution_scale)
-	#$Character/UserInterface/Overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-	#$Character/UserInterface/Overlay.set_anchor(SIDE_RIGHT, 1.0/resolution_scale)
-	#$Character/UserInterface/Overlay.set_anchor(SIDE_BOTTOM, 1.0/resolution_scale)
-	#$Character/UserInterface/Overlay.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
-	#$Character/UserInterface/Overlay/Reticle.scale = Vector2(1.0/resolution_scale, 1.0/resolution_scale)
-	#$Character/UserInterface/Overlay/Reticle.position = Vector2(renderView.size.x/2.0, renderView.size.y/2.0)
+	$Character/UserInterface/Overlay.pivot_offset.x = renderView.size.x / 2.0
+	$Character/UserInterface/Overlay.pivot_offset.y = renderView.size.y / 2.0
+	$Character/UserInterface/Overlay.scale = Vector2(1.0 / resolution_scale, 1.0 / resolution_scale)
+	#$Character/UserInterface/Overlay.position.x = (init_width / resolution_scale) - (renderView.size.x / 2)
+	#$Character/UserInterface/Overlay.position.y = (init_height / resolution_scale) - (renderView.size.y / 2)
 
 
 func get_snapshots():
@@ -139,3 +144,47 @@ func get_snapshots():
 		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
 		#frame_time = 0.0
 		#snap += 1
+
+
+func new_object():
+	var r = randi() % len(objects)
+	while objects[r] == to_find:
+		r = randi() % len(objects)
+	
+	to_find = objects[r]
+	print('setting to_find: ' + to_find)
+	update_label()
+
+
+func update_label():
+	$Character/UserInterface/Overlay/TextBG/Label.text = to_find + "\n" + last_click
+
+
+func object_click(id):
+	print(id + ' clicked')
+	last_click = id
+	if id == to_find:
+		$Character/UserInterface/Overlay/Match.display()
+		new_object()
+	else:
+		update_label()
+
+
+func _on_cube_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if Input.is_action_just_pressed("click"):
+		object_click('cube')
+
+
+func _on_fish_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if Input.is_action_just_pressed("click"):
+		object_click('fish')
+
+
+func _on_cattails_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if Input.is_action_just_pressed("click"):
+		object_click('cat tails')
+
+
+func _on_lilypad_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if Input.is_action_just_pressed("click"):
+		object_click('lily pad')
