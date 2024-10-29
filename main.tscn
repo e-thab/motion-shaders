@@ -1,12 +1,12 @@
 [gd_scene load_steps=78 format=4 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
-[ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/noise-1152x648.png" id="2_a7dol"]
 [ext_resource type="Script" path="res://fpc/character.gd" id="2_fjshf"]
-[ext_resource type="Shader" path="res://shaders/pov.gdshader" id="3_1npqv"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://images/white-1152x648.png" id="4_2egnp"]
+[ext_resource type="Texture2D" uid="uid://sbkmfpvldlga" path="res://images/linear_noise-1152x648.png" id="4_xk5gj"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://flat_material.tres" id="5_2nx5s"]
 [ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://vantablack.tres" id="5_27n1h"]
+[ext_resource type="Shader" path="res://shaders/pov_fade.gdshader" id="5_a8d52"]
 [ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
 [ext_resource type="Texture2D" uid="uid://kk0ggrfyakdw" path="res://images/vignette-invert-2.png" id="7_2d7hi"]
 [ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
@@ -361,11 +361,10 @@ _data = {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t01ct"]
 resource_local_to_scene = true
-shader = ExtResource("3_1npqv")
-shader_parameter/WHITE = Vector4(1, 1, 1, 1)
+shader = ExtResource("5_a8d52")
 shader_parameter/BLACK = Vector4(0, 0, 0, 1)
-shader_parameter/COLOR_1 = Vector4(1, 1, 1, 1)
-shader_parameter/COLOR_2 = Vector4(0, 0, 0, 1)
+shader_parameter/FADE_COLOR = Vector4(0, 1, 0.5, 1)
+shader_parameter/FADE_AMOUNT = 0.04
 
 [sub_resource type="Theme" id="Theme_wdf0f"]
 MarginContainer/constants/margin_bottom = 10
@@ -933,7 +932,7 @@ render_target_update_mode = 4
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2
-texture = ExtResource("2_a7dol")
+texture = ExtResource("4_xk5gj")
 expand_mode = 1
 
 [node name="OverlayFull" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]

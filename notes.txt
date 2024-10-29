@@ -18,3 +18,19 @@ wheres waldo - vision improvement test
 occupational therapy; try to find something paper-based
 book: persistence of vision in table of contents
 what it's like to see as an animal
+
+
+change color a little bit rather than flipping, start darkening on full white
+
+look for cel shade shader / toon shader
+
+maya student license
+
+Shaders:
+    pov_incremental
+        -best with linear noise
+        -variable for increment amount (change speed)
+    
+    pov_fade
+        -noise irrelevant
+        -variables for color and fade speed
