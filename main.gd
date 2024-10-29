@@ -1,6 +1,8 @@
 extends Node3D
 
-@export var resolution_scale : int = 1
+@export var resolution_scale : int = 2
+@export var shader : SHADER_TYPE
+@export var noise : NOISE_TYPE
 
 @onready var rod : MeshInstance3D = $RodMesh
 @onready var cube : Node3D = $Cube
@@ -11,6 +13,9 @@ extends Node3D
 @onready var renderViewContainer : SubViewportContainer = $Character/UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
 @onready var spawnPos : Vector3 = $Character.position
+
+@onready var noiseRect : TextureRect = $Character/UserInterface/RenderVPContainer/RenderViewport/BG
+@onready var shaderRect : TextureRect = $Character/UserInterface/RenderVPContainer/RenderViewport/OverlayFull
 
 var time_elapsed = 0.0
 var frame_time = 2.0
@@ -28,14 +33,57 @@ var objects = ["fish", "lily pad", "cat tails", "cube"]
 var to_find = ""
 var last_click = "none"
 
+var noise_img
+var shader_mat
+enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR}
+enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN}
+
 
 func _init():
-	RenderingServer.set_debug_generate_wireframes(true)
+	#RenderingServer.set_debug_generate_wireframes(true)
+	# Match statement not working for some reason. Defaults to invert shader + binary noise
+	# https://www.reddit.com/r/godot/comments/10epb3l/accessing_exported_properties_in_init/
+	print("Shader should be: ", shader)
+	print("Noise should be: ", noise)
+	match shader:
+		SHADER_TYPE.INVERT:
+			print("loading invert shader")
+			shader_mat = load("res://materials/pov.tres")
+		SHADER_TYPE.BINARY:
+			print("loading binary shader")
+			shader_mat = load("res://shaders/pov_binary.tres")
+		SHADER_TYPE.INCREMENTAL:
+			print("loading incremental shader")
+			shader_mat = load("res://shaders/pov_incremental.tres")
+		SHADER_TYPE.FADE:
+			print("loading fade shader")
+			shader_mat = load("res://shaders/pov_fade.tres")
+		SHADER_TYPE.FADE_FULL_COLOR:
+			print("loading fade full color shader")
+			shader_mat = load("res://materials/pov_fade_fullcolor.tres")
+	match noise:
+		NOISE_TYPE.BINARY:
+			print("loading binary noise")
+			noise_img = load("res://images/binary_noise-1152x648.png")
+		NOISE_TYPE.LINEAR:
+			print("loading linear noise")
+			noise_img = load("res://images/linear_noise-1152x648.png")
+		NOISE_TYPE.FULL_COLOR:
+			print("loading full color noise")
+			noise_img = load("res://images/rand_img_full-1152x648.png")
+		NOISE_TYPE.PERLIN:
+			print("loading perlin noise")
+			noise_img = load("res://images/perlin_s21-c4-l5-a0.4.png")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	## Initialize RNG
 	randomize()
+	
+	## Set noise and shader
+	noiseRect.texture = noise_img
+	shaderRect.material = shader_mat
+	
 	## Apply resolution scale factor
 	set_res_scale()
 	## Take initial render snapshots

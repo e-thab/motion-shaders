@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://fpc/character.gd" id="1_0t4e8"]
 [ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="2_36t3m"]
-[ext_resource type="Shader" path="res://shaders/pov.gdshader" id="3_2j3b0"]
+[ext_resource type="Shader" path="res://shaders/pov_binary.gdshader" id="3_2j3b0"]
 [ext_resource type="Texture2D" uid="uid://8lbmefneed5e" path="res://images/binary_noise-1152x648.png" id="3_sgcyd"]
 [ext_resource type="Script" path="res://fpc/EditorModule.gd" id="3_v3ckk"]
 [ext_resource type="Script" path="res://fpc/debug.gd" id="3_x1wcc"]

@@ -24,13 +24,26 @@ change color a little bit rather than flipping, start darkening on full white
 
 look for cel shade shader / toon shader
 
-maya student license
+Maya student license
+
+Noise:
+    random black/white (binary)
+    random monochrome (linear)
+    random full-color
+    *perlin
 
 Shaders:
+    pov
+        -
+	
     pov_incremental
         -best with linear noise
         -variable for increment amount (change speed)
     
     pov_fade
         -noise irrelevant
-        -variables for color and fade speed
+        -variables for color, difference threshold, and fade speed
+
+    pov_fade_color
+        -noise irrelevant
+        -variables for difference threshold and fade speed

@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b0s1kdslp74oy"]
+
+[ext_resource type="Shader" path="res://shaders/pov_fade.gdshader" id="1_r1hn2"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_r1hn2")
+shader_parameter/BLACK = Vector4(0, 0, 0, 1)
+shader_parameter/FADE_COLOR = Vector4(0, 1, 0.5, 1)
+shader_parameter/FADE_AMOUNT = 0.06
+shader_parameter/DIFF_THRESHOLD = 0.25
