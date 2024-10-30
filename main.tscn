@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://sbkmfpvldlga" path="res://images/linear_noise-1152x648.png" id="4_xk5gj"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://materials/flat_material.tres" id="5_2nx5s"]
 [ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://materials/vantablack.tres" id="5_27n1h"]
-[ext_resource type="Material" uid="uid://dv1e34agacljp" path="res://materials/pov_binary.tres" id="5_prs0j"]
 [ext_resource type="Environment" uid="uid://bm8q134u8ih5q" path="res://binary_environment.tres" id="6_eemhp"]
 [ext_resource type="Texture2D" uid="uid://kk0ggrfyakdw" path="res://images/vignette-invert-2.png" id="7_2d7hi"]
 [ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
@@ -358,6 +357,8 @@ _data = {
 "land_left": SubResource("Animation_l1rph"),
 "land_right": SubResource("Animation_vsknp")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qgrgo"]
 
 [sub_resource type="Theme" id="Theme_wdf0f"]
 MarginContainer/constants/margin_bottom = 10
@@ -825,7 +826,7 @@ radius = 1.95495
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
-shader = 2
+noise = 4
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03989, 0, 10.8299)
@@ -929,7 +930,7 @@ texture = ExtResource("4_xk5gj")
 expand_mode = 1
 
 [node name="OverlayFull" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
-material = ExtResource("5_prs0j")
+material = SubResource("ShaderMaterial_qgrgo")
 offset_right = 1152.0
 offset_bottom = 648.0
 mouse_filter = 2

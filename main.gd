@@ -33,10 +33,10 @@ var objects = ["fish", "lily pad", "cat tails", "cube"]
 var to_find = ""
 var last_click = "none"
 
-var noise_img
-var shader_mat
-enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR}
-enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN}
+#var noise_img
+#var shader_mat
+enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, NONE}
+enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_WHITE}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -44,36 +44,43 @@ func _ready() -> void:
 	## Initialize shader and noise vars from export
 	match shader:
 		SHADER_TYPE.INVERT:
-			print("loading invert shader")
-			shader_mat = load("res://materials/pov.tres")
+			print("using shader: invert")
+			shaderRect.material = load("res://materials/pov.tres")
 		SHADER_TYPE.BINARY:
-			print("loading binary shader")
-			shader_mat = load("res://materials/pov_binary.tres")
+			print("using shader: binary")
+			shaderRect.material = load("res://materials/pov_binary.tres")
 		SHADER_TYPE.INCREMENTAL:
-			print("loading incremental shader")
-			shader_mat = load("res://materials/pov_incremental.tres")
+			print("using shader: incremental")
+			shaderRect.material = load("res://materials/pov_incremental.tres")
 		SHADER_TYPE.FADE:
-			print("loading fade shader")
-			shader_mat = load("res://materials/pov_fade.tres")
+			print("using shader: fade")
+			shaderRect.material = load("res://materials/pov_fade.tres")
 		SHADER_TYPE.FADE_FULL_COLOR:
-			print("loading fade full color shader")
-			shader_mat = load("res://materials/pov_fade_fullcolor.tres")
+			print("using shader: fade (full color)")
+			shaderRect.material = load("res://materials/pov_fade_fullcolor.tres")
+		SHADER_TYPE.NONE:
+			print("using shader: none")
+			renderViewContainer.hide()
 	match noise:
 		NOISE_TYPE.BINARY:
-			print("loading binary noise")
-			noise_img = load("res://images/binary_noise-1152x648.png")
+			print("using noise: binary")
+			noiseRect.texture = load("res://images/binary_noise-1152x648.png")
 		NOISE_TYPE.LINEAR:
-			print("loading linear noise")
-			noise_img = load("res://images/linear_noise-1152x648.png")
+			print("using noise: linear")
+			noiseRect.texture = load("res://images/linear_noise-1152x648.png")
 		NOISE_TYPE.FULL_COLOR:
-			print("loading full color noise")
-			noise_img = load("res://images/rand_img_full-1152x648.png")
+			print("using noise: full color")
+			noiseRect.texture = load("res://images/rand_img_full-1152x648.png")
 		NOISE_TYPE.PERLIN:
-			print("loading perlin noise")
-			noise_img = load("res://images/perlin_s21-c4-l5-a0.4.png")
+			print("using noise: perlin")
+			noiseRect.texture = load("res://images/perlin_s21-c4-l5-a0.4.png")
+		NOISE_TYPE.FILL_WHITE:
+			print("using noise: fill white")
+			noiseRect.texture = load("res://images/white-1152x648.png")
+	print()
 	## Set shader and noise
-	shaderRect.material = shader_mat
-	noiseRect.texture = noise_img
+	#shaderRect.material = shader_mat
+	#noiseRect.texture = noise_img
 	
 	## Initialize RNG
 	randomize()

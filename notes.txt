@@ -33,17 +33,21 @@ Noise:
     *perlin
 
 Shaders:
-    pov
-        -
+    Invert (pov.gshader): 
+	-best with binary noise
 	
-    pov_incremental
+    Binary: Original implementation. On c
+        
+	
+    Incremental
         -best with linear noise
+	-strange gray effect with binary noise
         -variable for increment amount (change speed)
     
-    pov_fade
+    Fade:
         -noise irrelevant
         -variables for color, difference threshold, and fade speed
 
-    pov_fade_color
+    Fade full color:
         -noise irrelevant
         -variables for difference threshold and fade speed
