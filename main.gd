@@ -1,8 +1,8 @@
 extends Node3D
 
 @export var resolution_scale : int = 2
-@export var shader : SHADER_TYPE
-@export var noise : NOISE_TYPE
+@export var shader : SHADER_TYPE = SHADER_TYPE.INVERT
+@export var noise : NOISE_TYPE = NOISE_TYPE.BINARY
 
 @onready var rod : MeshInstance3D = $RodMesh
 @onready var cube : Node3D = $Cube
@@ -39,25 +39,22 @@ enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR}
 enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN}
 
 
-func _init():
-	#RenderingServer.set_debug_generate_wireframes(true)
-	# Match statement not working for some reason. Defaults to invert shader + binary noise
-	# https://www.reddit.com/r/godot/comments/10epb3l/accessing_exported_properties_in_init/
-	print("Shader should be: ", shader)
-	print("Noise should be: ", noise)
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	## Initialize shader and noise vars from export
 	match shader:
 		SHADER_TYPE.INVERT:
 			print("loading invert shader")
 			shader_mat = load("res://materials/pov.tres")
 		SHADER_TYPE.BINARY:
 			print("loading binary shader")
-			shader_mat = load("res://shaders/pov_binary.tres")
+			shader_mat = load("res://materials/pov_binary.tres")
 		SHADER_TYPE.INCREMENTAL:
 			print("loading incremental shader")
-			shader_mat = load("res://shaders/pov_incremental.tres")
+			shader_mat = load("res://materials/pov_incremental.tres")
 		SHADER_TYPE.FADE:
 			print("loading fade shader")
-			shader_mat = load("res://shaders/pov_fade.tres")
+			shader_mat = load("res://materials/pov_fade.tres")
 		SHADER_TYPE.FADE_FULL_COLOR:
 			print("loading fade full color shader")
 			shader_mat = load("res://materials/pov_fade_fullcolor.tres")
@@ -74,15 +71,12 @@ func _init():
 		NOISE_TYPE.PERLIN:
 			print("loading perlin noise")
 			noise_img = load("res://images/perlin_s21-c4-l5-a0.4.png")
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+	## Set shader and noise
+	shaderRect.material = shader_mat
+	noiseRect.texture = noise_img
+	
 	## Initialize RNG
 	randomize()
-	
-	## Set noise and shader
-	noiseRect.texture = noise_img
-	shaderRect.material = shader_mat
 	
 	## Apply resolution scale factor
 	set_res_scale()

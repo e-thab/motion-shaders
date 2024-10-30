@@ -826,7 +826,6 @@ radius = 1.95495
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
 shader = 2
-noise = 3
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03989, 0, 10.8299)
