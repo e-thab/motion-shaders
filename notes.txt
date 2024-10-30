@@ -27,14 +27,20 @@ look for cel shade shader / toon shader
 Maya student license
 
 Noise:
-    random black/white (binary)
-    random monochrome (linear)
-    random full-color
-    *perlin
+    Binary:
+    	each pixel is either black or white
+	Linear:
+		each pixel has a random monochrome value (R=G=B)
+	Full color:
+		each pixel has a randomized color value
+    Perlin:
+    	perlin noise
+	Fill white:
+		all pixels are white
 
 Shaders:
-    Invert (pov.gshader): 
-	-best with binary noise
+    Invert (pov.gshader): Any pixel that changed from black to some color this frame, invert 
+    	-best with binary noise
 	
     Binary: Original implementation. On c
         
