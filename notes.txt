@@ -26,6 +26,28 @@ look for cel shade shader / toon shader
 
 Maya student license
 
+11.6 Qs:
+    -Optic flow for 'small movement'... less than a pixel??
+    -Necessary assumptions / avoidable assumptions
+    -What's displayed? What values do the pixels actually need to take on from the motion vectors?
+
+    -Aperture problem?
+    -Finding corners in a shader?
+    -Defining windows in a shader?
+
+-Only calculate pixels known to be moving
+-Calculate gradients, then plug into equations
+-Convert pix to grayscale
+-Combingin 3 typesof gradients: temporal horizontal and vertical (same pixel locs), spatial (l/r and u/d neighbors), 
+
+Calculating gradients:
+    temporal: diff between this and last frame
+    spatial: diff between neighbors: Ix(x,y) = I(x-1,y) - I(x+1,y)
+
+Display:
+    vector mapped to 2-color channel representing vector
+
+
 Noise:
     Binary:
     	each pixel is either black or white
