@@ -35,10 +35,11 @@ Maya student license
     -Finding corners in a shader?
     -Defining windows in a shader?
 
--Only calculate pixels known to be moving
--Calculate gradients, then plug into equations
--Convert pix to grayscale
--Combingin 3 typesof gradients: temporal horizontal and vertical (same pixel locs), spatial (l/r and u/d neighbors), 
+Optic flow:
+	-Only calculate pixels known to be moving
+	-Calculate gradients, then plug into equations
+	-Convert pix to grayscale
+	-Combining 3 types of gradients: temporal horizontal and vertical (same pixel locs), spatial (l/r and u/d neighbors), 
 
 Calculating gradients:
     temporal: diff between this and last frame

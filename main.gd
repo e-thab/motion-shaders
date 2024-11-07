@@ -35,7 +35,7 @@ var last_click = "none"
 
 #var noise_img
 #var shader_mat
-enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, NONE}
+enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, TEST, NONE}
 enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_WHITE}
 
 
@@ -58,6 +58,9 @@ func _ready() -> void:
 		SHADER_TYPE.FADE_FULL_COLOR:
 			print("using shader: fade (full color)")
 			shaderRect.material = load("res://materials/pov_fade_fullcolor.tres")
+		SHADER_TYPE.TEST:
+			print("using shader: test")
+			shaderRect.material = load("res://materials/test.tres")
 		SHADER_TYPE.NONE:
 			print("using shader: none")
 			renderViewContainer.hide()
