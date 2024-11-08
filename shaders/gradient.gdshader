@@ -8,7 +8,6 @@ global uniform sampler2D second_last_stage;
 
 //uniform vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
-
 uniform vec2 winSize = vec2(1152.0, 648.0);
 
 float g(sampler2D tex, float x, float y) {
@@ -24,38 +23,45 @@ void fragment() {
 		// https://forum.godotengine.org/t/how-to-check-color-of-adjacent-pixels-in-fragment-shader/27296/2
 		float x = SCREEN_UV.x;
 		float y = SCREEN_UV.y;
-		
+
+		// Pixel size
+		vec2 ps = 2.0 / vec2(textureSize(TEXTURE, 0));
+
 		// Intensity value of the grayscale pixel at (x,y) in current and previous stage textures
 		float grayIm2 = g(last_stage, x, y);
 		float grayIm = g(second_last_stage, x, y);
-		
+
 		// Gradient values
-		float gradImX = (g(last_stage, x+1.0, y) + g(last_stage, x-1.0, y)) / 2.0;
-		float gradImY = (g(last_stage, x, y+1.0) + g(last_stage, x, y-1.0)) / 2.0;
-		
+		float gradImX = (g(last_stage, x+ps.x, y) + g(last_stage, x-ps.x, y)) / 2.0;
+		float gradImY = (g(last_stage, x, y+ps.y) + g(last_stage, x, y-ps.y)) / 2.0;
+
 		float matIx = gradImX * gradImX;
 		float matIxy = gradImX * gradImY;
 		float matIy = gradImY * gradImY;
 		float matIt = grayIm2 - grayIm;
 		float matIxIt = gradImX * matIt;
 		float matIyIt = gradImY * matIt;
-		
-		float tg = g(last_stage, UV.x + 1.0, y);
-		
-		COLOR = vec4(tg, tg, tg, 1.0);
-		
+
+		//float tg = g(last_stage, SCREEN_UV.x + 2.0 * ps.x, y);
+		COLOR = vec4(matIxy, matIxy, matIxy, 1.0);
+
 		// Color ranges for visualizing flow angle
 		float th1 = 2.0 * PI / 3.0;
 		float th2 = 4.0 * PI / 3.0;
 		float th3 = 2.0 * PI;
 		float thSize = 2.0 * PI / 3.0;
-		
+
 		// Window size
 		int wS = 10;
 		int wS1 = wS + 1;
-		
+
 		float maxMag = -1.0;
-		
+		for (int i=0; i<int(winSize.x); i++) {
+			for (int j=0; j<int(winSize.y); j++) {
+
+			}
+		}
+
 	//}
 
 	//if (stage_color != BLACK && last_stage_color == BLACK) {
