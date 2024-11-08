@@ -35,13 +35,13 @@ var last_click = "none"
 
 #var noise_img
 #var shader_mat
-enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, TEST, NONE}
+enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, OPTIC_FLOW, TEST, NONE}
 enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_WHITE}
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	## Initialize shader and noise vars from export
+	## Set shader and noise from export vars
 	match shader:
 		SHADER_TYPE.INVERT:
 			print("using shader: invert")
@@ -58,9 +58,13 @@ func _ready() -> void:
 		SHADER_TYPE.FADE_FULL_COLOR:
 			print("using shader: fade (full color)")
 			shaderRect.material = load("res://materials/pov_fade_fullcolor.tres")
+		SHADER_TYPE.OPTIC_FLOW:
+			print("using shader: optic flow")
+			shaderRect.material = load("res://materials/optic_flow.tres")
 		SHADER_TYPE.TEST:
-			print("using shader: test")
-			shaderRect.material = load("res://materials/test.tres")
+			var testMaterial:ShaderMaterial = load("res://materials/test.tres")
+			print("using shader: ", testMaterial.shader.resource_path)
+			shaderRect.material = testMaterial
 		SHADER_TYPE.NONE:
 			print("using shader: none")
 			renderViewContainer.hide()
@@ -81,9 +85,6 @@ func _ready() -> void:
 			print("using noise: fill white")
 			noiseRect.texture = load("res://images/white-1152x648.png")
 	print()
-	## Set shader and noise
-	#shaderRect.material = shader_mat
-	#noiseRect.texture = noise_img
 	
 	## Initialize RNG
 	randomize()

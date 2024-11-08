@@ -1,12 +1,10 @@
-// This shader: Optic flow applied only to pixels changing outside a given threshold
+// This shader: Optic flow applied only to pixels changing from black to some color (silhoutte movement)
 shader_type canvas_item;
 global uniform sampler2D last_stage;
 global uniform sampler2D second_last_stage;
 
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
-uniform float resScale = 2.0;
 uniform float winSize = 5.0;
-uniform float DIFF_THRESHOLD = 0.25;
 
 float g(sampler2D tex, float x, float y) {
 	// Return grayscale intensity value of texture at pixel (x,y)
@@ -16,14 +14,14 @@ float g(sampler2D tex, float x, float y) {
 
 
 void fragment() {
+	// Accessing neighbor pixels needs tinkering
+	// https://forum.godotengine.org/t/how-to-check-color-of-adjacent-pixels-in-fragment-shader/27296/2
 	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0).rgba;
 	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0).rgba;
 	
-	if (abs(stage_color.r - last_stage_color.r) > DIFF_THRESHOLD ||
-		abs(stage_color.g - last_stage_color.g) > DIFF_THRESHOLD ||
-		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD) {
-		// Pixel size based on resolution scale
-		vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
+	if (stage_color != BLACK && last_stage_color == BLACK) {
+		// Pixel size (statically set to match default resolution scale of 2)
+		vec2 ps = 2.0 / vec2(textureSize(TEXTURE, 0));
 		
 		// Color ranges for visualizing flow angle
 		float th1 = 2.0 * PI / 3.0;
@@ -39,33 +37,8 @@ void fragment() {
 		float winIyT = 0.0;
 		
 		//float maxMag = -1.0;
-		
-		// Trying to clamp neighborhoods
-		float start_x = SCREEN_UV.x - ps.x * winSize;
-		if (start_x > SCREEN_UV.x)
-			start_x = 0.0;
-		
-		float end_x = SCREEN_UV.x + ps.x * winSize;
-		if (end_x < SCREEN_UV.x)
-			end_x = 1.0;
-		
-		float start_y = SCREEN_UV.y - ps.y * winSize;
-		if (start_y > SCREEN_UV.y)
-			start_y = 0.0;
-		
-		float end_y = SCREEN_UV.y + ps.y * winSize;
-		if (end_y < SCREEN_UV.y)
-			end_y = 1.0;
-		
-		//float start_x = SCREEN_UV.x - ps.x * winSize;
-		//float end_x = SCREEN_UV.x + ps.x * winSize;
-		//float start_y = SCREEN_UV.y - ps.y * winSize;
-		//float end_y = SCREEN_UV.y + ps.y * winSize;
-		
-		//for (float x=SCREEN_UV.x - ps.x * winSize; x < SCREEN_UV.x + ps.x * winSize; x=x+ps.x) {
-			//for (float y=SCREEN_UV.y - ps.y * winSize; y < SCREEN_UV.y + ps.y * winSize; y=y+ps.y) {
-		for (float x=start_x; x < end_x; x=x+ps.x) {
-			for (float y=start_y; y < end_y; y=y+ps.y) {
+		for (float x=SCREEN_UV.x - ps.x * winSize; x < SCREEN_UV.x + ps.x * winSize; x=x+ps.x) {
+			for (float y=SCREEN_UV.y - ps.y * winSize; y < SCREEN_UV.y + ps.y * winSize; y=y+ps.y) {
 				// Intensity value of the grayscale pixel at (x,y) in current and previous stage textures
 				float grayIm2 = g(last_stage, x, y);
 				float grayIm = g(second_last_stage, x, y);
@@ -122,4 +95,6 @@ void fragment() {
 	} else {
 		COLOR = BLACK;
 	}
+	
+	
 }
