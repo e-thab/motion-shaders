@@ -36,7 +36,7 @@ var last_click = "none"
 #var noise_img
 #var shader_mat
 enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, OPTIC_FLOW, TEST, NONE}
-enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_WHITE}
+enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_BLACK, FILL_WHITE}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -81,6 +81,10 @@ func _ready() -> void:
 		NOISE_TYPE.PERLIN:
 			print("using noise: perlin")
 			noiseRect.texture = load("res://images/perlin_s21-c4-l5-a0.4.png")
+		NOISE_TYPE.FILL_BLACK:
+			print("using noise: fill black")
+			noiseRect.texture = load("res://images/white-1152x648.png")
+			noiseRect.self_modulate = Color(0.0, 0.0, 0.0)
 		NOISE_TYPE.FILL_WHITE:
 			print("using noise: fill white")
 			noiseRect.texture = load("res://images/white-1152x648.png")
@@ -89,6 +93,12 @@ func _ready() -> void:
 	## Initialize RNG
 	randomize()
 	
+	##
+	RenderingServer.global_shader_parameter_set("last_stage", charView.get_texture())
+	#RenderingServer.global_shader_parameter_set("second_last_stage", charView.get_texture())
+	RenderingServer.global_shader_parameter_set("last_render", renderView.get_texture())
+	
+	
 	## Apply resolution scale factor
 	set_res_scale()
 	## Take initial render snapshots
@@ -96,6 +106,9 @@ func _ready() -> void:
 	charCam.make_current()
 	## Set initial object to find
 	new_object()
+	
+	RenderingServer.connect("frame_pre_draw", pre_draw)
+	RenderingServer.connect("frame_post_draw", post_draw)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -145,8 +158,17 @@ func _process(delta: float) -> void:
 	if character.position.y < -50.0:
 		character.position = spawnPos
 	
-	frame_time += delta
-	get_snapshots()
+	#get_snapshots()
+
+
+func pre_draw():
+	#print('draw')
+	#get_snapshots()
+	pass
+
+func post_draw():
+	var snap = charView.get_texture().get_image()
+	RenderingServer.global_shader_parameter_set("second_last_stage", ImageTexture.create_from_image(snap))
 
 
 func set_res_scale():
@@ -169,27 +191,27 @@ func set_res_scale():
 
 func get_snapshots():
 	## Take a snapshot of the current 'stage' frame, assign to global shader param
-	var staging_snapshot = charView.get_texture().get_image()
+	#var staging_snapshot = charView.get_texture().get_image()
 	#var staging_snapshot = get_tree().root.get_viewport().get_texture().get_image()
 	## Store last and second-to-last stage textures
-	last_stage_tex = stage_tex
-	stage_tex = ImageTexture.create_from_image(staging_snapshot)
-	RenderingServer.global_shader_parameter_set(
-		"last_stage",
-		stage_tex
-	)
-	RenderingServer.global_shader_parameter_set(
-		"second_last_stage",
-		last_stage_tex
-	)
+	#last_stage_tex = stage_tex
+	#stage_tex = ImageTexture.create_from_image(staging_snapshot)
+	#RenderingServer.global_shader_parameter_set(
+		#"last_stage",
+		#stage_tex
+	#)
+	#RenderingServer.global_shader_parameter_set(
+		#"second_last_stage",
+		#last_stage_tex
+	#)
 	
 	## Take a snapshot of the current 'render' frame, assign to global shader param
-	var render_snapshot = renderView.get_texture().get_image()
-	var render_tex = ImageTexture.create_from_image(render_snapshot)
-	RenderingServer.global_shader_parameter_set(
-		"last_render",
-		render_tex
-	)
+	#var render_snapshot = renderView.get_texture().get_image()
+	#var render_tex = ImageTexture.create_from_image(render_snapshot)
+	#RenderingServer.global_shader_parameter_set(
+		#"last_render",
+		#render_tex
+	#)
 	
 	#if frame_time >= 2.0:
 		#print('Snapshot ' + str(snap))
@@ -197,6 +219,8 @@ func get_snapshots():
 		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
 		#frame_time = 0.0
 		#snap += 1
+	#frame_time += delta
+	pass
 
 
 func new_object():
