@@ -1,7 +1,7 @@
 // This shader: Optic flow applied to every pixel
 shader_type canvas_item;
-global uniform sampler2D last_stage;
-global uniform sampler2D second_last_stage;
+global uniform sampler2D current_frame;
+global uniform sampler2D last_frame;
 
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float winSize = 5.0;
@@ -34,12 +34,12 @@ void fragment() {
 	for (float x=SCREEN_UV.x - ps.x * winSize; x < SCREEN_UV.x + ps.x * winSize; x=x+ps.x) {
 		for (float y=SCREEN_UV.y - ps.y * winSize; y < SCREEN_UV.y + ps.y * winSize; y=y+ps.y) {
 			// Intensity value of the grayscale pixel at (x,y) in current and previous stage textures
-			float grayIm2 = g(last_stage, x, y);
-			float grayIm = g(second_last_stage, x, y);
+			float grayIm2 = g(current_frame, x, y);
+			float grayIm = g(last_frame, x, y);
 
 			// Gradient values
-			float gradImX = (g(last_stage, x+ps.x, y) + g(last_stage, x-ps.x, y)) / 2.0;
-			float gradImY = (g(last_stage, x, y+ps.y) + g(last_stage, x, y-ps.y)) / 2.0;
+			float gradImX = (g(current_frame, x+ps.x, y) + g(current_frame, x-ps.x, y)) / 2.0;
+			float gradImY = (g(current_frame, x, y+ps.y) + g(current_frame, x, y-ps.y)) / 2.0;
 
 			float matIx = gradImX * gradImX;
 			float matIxy = gradImX * gradImY;
@@ -63,12 +63,10 @@ void fragment() {
 	} else {
 		float trace = winX + winY;
 
-		float uX = (-winY*winIxT + winXY*winIyT)/det;
-		float uY = (winXY*winIxT - winX*winIyT)/det;
+		float uX = (-winY*winIxT + winXY*winIyT) / det;
+		float uY = (winXY*winIxT - winX*winIyT) / det;
 
 		float mag = sqrt(uX*uX + uY*uY);
-		//maxMag?
-		//uMag?
 		float angle = atan(uY, uX) + PI;
 
 		float uB = mag * angle / (2.0*PI);

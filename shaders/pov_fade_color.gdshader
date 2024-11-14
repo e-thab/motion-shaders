@@ -19,7 +19,7 @@ void fragment() {
 		COLOR = stage_color;
 	} else {
 		vec4 render_color = textureLod(last_render, SCREEN_UV, 0.0).rgba;
-		
+
 		COLOR = vec4(
 			render_color.r - FADE_AMOUNT,
 			render_color.g - FADE_AMOUNT,
@@ -27,7 +27,7 @@ void fragment() {
 			1.0
 		);
 	}
-	
+
 	//if (abs(stage_color.r - last_stage_color.r) > 0.25) {
 		//COLOR.r = 1.0;
 	//}

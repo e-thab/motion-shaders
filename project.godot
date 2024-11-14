@@ -118,3 +118,11 @@ vignette={
 "type": "sampler2D",
 "value": "res://images/vignette-invert-2.png"
 }
+current_frame={
+"type": "sampler2D",
+"value": ""
+}
+last_frame={
+"type": "sampler2D",
+"value": ""
+}

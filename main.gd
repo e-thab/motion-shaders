@@ -94,9 +94,9 @@ func _ready() -> void:
 	randomize()
 	
 	##
-	RenderingServer.global_shader_parameter_set("last_stage", charView.get_texture())
-	#RenderingServer.global_shader_parameter_set("second_last_stage", charView.get_texture())
-	RenderingServer.global_shader_parameter_set("last_render", renderView.get_texture())
+	RenderingServer.global_shader_parameter_set("current_frame", charView.get_texture())
+	#RenderingServer.global_shader_parameter_set("last_frame", charView.get_texture())
+	#RenderingServer.global_shader_parameter_set("last_render", renderView.get_texture())
 	
 	
 	## Apply resolution scale factor
@@ -107,7 +107,7 @@ func _ready() -> void:
 	## Set initial object to find
 	new_object()
 	
-	RenderingServer.connect("frame_pre_draw", pre_draw)
+	#RenderingServer.connect("frame_pre_draw", pre_draw)
 	RenderingServer.connect("frame_post_draw", post_draw)
 
 
@@ -167,8 +167,9 @@ func pre_draw():
 	pass
 
 func post_draw():
-	var snap = charView.get_texture().get_image()
-	RenderingServer.global_shader_parameter_set("second_last_stage", ImageTexture.create_from_image(snap))
+	#var snap = charView.get_texture().get_image()
+	#RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
+	pass
 
 
 func set_res_scale():
@@ -187,6 +188,10 @@ func set_res_scale():
 	$Character/UserInterface/Overlay.scale = Vector2(1.0 / resolution_scale, 1.0 / resolution_scale)
 	#$Character/UserInterface/Overlay.position.x = (init_width / resolution_scale) - (renderView.size.x / 2)
 	#$Character/UserInterface/Overlay.position.y = (init_height / resolution_scale) - (renderView.size.y / 2)
+	
+	#RenderingServer.viewport_get_texture(renderView.get_viewport_rid())
+	renderView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	charView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
 
 
 func get_snapshots():
