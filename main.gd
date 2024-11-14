@@ -14,14 +14,15 @@ extends Node3D
 @onready var renderView : SubViewport = $Character/UserInterface/RenderVPContainer/RenderViewport
 @onready var spawnPos : Vector3 = $Character.position
 
-@onready var noiseRect : TextureRect = $Character/UserInterface/RenderVPContainer/RenderViewport/BG
-@onready var shaderRect : TextureRect = $Character/UserInterface/RenderVPContainer/RenderViewport/OverlayFull
+@onready var noiseRect : Sprite2D = $Character/UserInterface/RenderVPContainer/RenderViewport/BG
+@onready var shaderRect : Sprite2D = $Character/UserInterface/RenderVPContainer/RenderViewport/OverlayFull
 
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
 var occluding = true
+var using_noise = true  # If the shader being used relies on the noise texture
 
 var init_width = 1152
 var init_height = 648
@@ -35,8 +36,15 @@ var last_click = "none"
 
 #var noise_img
 #var shader_mat
-enum SHADER_TYPE {INVERT, BINARY, INCREMENTAL, FADE, FADE_FULL_COLOR, OPTIC_FLOW, TEST, NONE}
-enum NOISE_TYPE {BINARY, LINEAR, FULL_COLOR, PERLIN, FILL_BLACK, FILL_WHITE}
+enum SHADER_TYPE {
+	INVERT, BINARY, INCREMENTAL,
+	FADE, FADE_FULL_COLOR, OPTIC_FLOW,
+	OPTIC_FLOW_ALL, TEST, NONE
+}
+enum NOISE_TYPE {
+	BINARY, LINEAR, FULL_COLOR,
+	PERLIN, FILL_BLACK, FILL_WHITE
+}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -49,18 +57,26 @@ func _ready() -> void:
 		SHADER_TYPE.BINARY:
 			print("using shader: binary")
 			shaderRect.material = load("res://materials/pov_binary.tres")
+			using_noise = false
 		SHADER_TYPE.INCREMENTAL:
 			print("using shader: incremental")
 			shaderRect.material = load("res://materials/pov_incremental.tres")
 		SHADER_TYPE.FADE:
 			print("using shader: fade")
 			shaderRect.material = load("res://materials/pov_fade.tres")
+			using_noise = false
 		SHADER_TYPE.FADE_FULL_COLOR:
 			print("using shader: fade (full color)")
 			shaderRect.material = load("res://materials/pov_fade_fullcolor.tres")
+			using_noise = false
 		SHADER_TYPE.OPTIC_FLOW:
 			print("using shader: optic flow")
 			shaderRect.material = load("res://materials/optic_flow.tres")
+			using_noise = false
+		SHADER_TYPE.OPTIC_FLOW_ALL:
+			print("using shader: optic flow all")
+			shaderRect.material = load("res://materials/optic_flow_all.tres")
+			using_noise = false
 		SHADER_TYPE.TEST:
 			var testMaterial:ShaderMaterial = load("res://materials/test.tres")
 			print("using shader: ", testMaterial.shader.resource_path)
@@ -107,6 +123,9 @@ func _ready() -> void:
 	## Set initial object to find
 	new_object()
 	
+	if not using_noise:
+		noiseRect.hide()
+	
 	#RenderingServer.connect("frame_pre_draw", pre_draw)
 	RenderingServer.connect("frame_post_draw", post_draw)
 
@@ -126,6 +145,8 @@ func _process(delta: float) -> void:
 			renderViewContainer.hide()
 		else:
 			renderViewContainer.show()
+			if using_noise:
+				noiseRect.show()
 	
 	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
@@ -167,9 +188,11 @@ func pre_draw():
 	pass
 
 func post_draw():
-	#var snap = charView.get_texture().get_image()
-	#RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
-	pass
+	var snap = charView.get_texture().get_image()
+	RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
+	
+	if noiseRect.visible:
+		noiseRect.hide()
 
 
 func set_res_scale():
@@ -191,7 +214,10 @@ func set_res_scale():
 	
 	#RenderingServer.viewport_get_texture(renderView.get_viewport_rid())
 	renderView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
-	charView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	#charView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	if using_noise:
+		noiseRect.show()
+	# Maybe set last_frame param to full black in an else here?
 
 
 func get_snapshots():

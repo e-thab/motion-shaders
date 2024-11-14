@@ -16,8 +16,8 @@ float g(sampler2D tex, float x, float y) {
 void fragment() {
 	// Accessing neighbor pixels needs tinkering
 	// https://forum.godotengine.org/t/how-to-check-color-of-adjacent-pixels-in-fragment-shader/27296/2
-	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0).rgba;
-	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0).rgba;
+	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0);
+	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0);
 	
 	if (stage_color != BLACK && last_stage_color == BLACK) {
 		// Pixel size (statically set to match default resolution scale of 2)

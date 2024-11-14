@@ -826,7 +826,8 @@ radius = 1.95495
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
-shader = 3
+resolution_scale = 1
+shader = 4
 noise = 4
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
@@ -900,7 +901,6 @@ handle_input_locally = false
 physics_object_picking = true
 physics_object_picking_first_only = true
 size = Vector2i(1152, 648)
-render_target_clear_mode = 2
 render_target_update_mode = 4
 
 [node name="Camera" type="Camera3D" parent="Character/UserInterface/HeadcamVPContainer/HeadcamViewport"]
@@ -925,23 +925,14 @@ size = Vector2i(1152, 648)
 render_target_clear_mode = 2
 render_target_update_mode = 4
 
-[node name="BG" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
-visible = false
-offset_right = 1152.0
-offset_bottom = 648.0
-mouse_filter = 2
+[node name="BG" type="Sprite2D" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 texture = ExtResource("4_xk5gj")
-expand_mode = 1
+centered = false
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
-
-[node name="OverlayFull" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport/BackBufferCopy"]
+[node name="OverlayFull" type="Sprite2D" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 material = SubResource("ShaderMaterial_qgrgo")
-offset_right = 1152.0
-offset_bottom = 648.0
-mouse_filter = 2
 texture = ExtResource("4_2egnp")
-expand_mode = 1
+centered = false
 
 [node name="OverlayVignette" type="TextureRect" parent="Character/UserInterface/RenderVPContainer/RenderViewport"]
 visible = false
@@ -1047,26 +1038,27 @@ text = "Match!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DebugPanel" type="PanelContainer" parent="Character/UserInterface"]
-visible = false
+[node name="DebugPanel" type="PanelContainer" parent="Character/UserInterface/Overlay"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 65.0
-offset_top = 65.0
-offset_right = -644.0
-offset_bottom = -525.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 309.0
+offset_top = -309.0
+offset_right = 559.0
+offset_bottom = -149.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme = SubResource("Theme_wdf0f")
 script = ExtResource("7_y7c8x")
 
-[node name="MarginContainer" type="MarginContainer" parent="Character/UserInterface/DebugPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="Character/UserInterface/Overlay/DebugPanel"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Character/UserInterface/DebugPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Character/UserInterface/Overlay/DebugPanel/MarginContainer"]
 layout_mode = 2
 
 [node name="CrouchCeilingDetection" type="ShapeCast3D" parent="Character"]
