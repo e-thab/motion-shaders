@@ -11,7 +11,7 @@ uniform float DIFF_THRESHOLD = 0.25;
 void fragment() {
 	vec4 stage_color = textureLod(current_frame, SCREEN_UV, 0.0);
 	vec4 last_stage_color = textureLod(last_frame, SCREEN_UV, 0.0);
-	
+
 	if (stage_color != BLACK && (
 		abs(stage_color.r - last_stage_color.r) > DIFF_THRESHOLD ||
 		abs(stage_color.g - last_stage_color.g) > DIFF_THRESHOLD ||

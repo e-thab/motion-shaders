@@ -24,7 +24,7 @@ void fragment() {
 		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD) {
 	//if (stage_color != BLACK && last_stage_color == BLACK) {
 		// Pixel size based on resolution scale
-		vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
+		vec2 ps = 3.0 / vec2(textureSize(TEXTURE, 0));
 
 		// Color ranges for visualizing flow angle
 		float th1 = 2.0 * PI / 3.0;
@@ -39,29 +39,10 @@ void fragment() {
 		float winIxT = 0.0;
 		float winIyT = 0.0;
 
-		//float maxMag = -1.0;
-
-		// Trying to clamp neighborhoods
-		//float start_x = SCREEN_UV.x - ps.x * winSize;
-		//if (start_x > SCREEN_UV.x)
-			//start_x = 0.0;
-//
-		//float end_x = SCREEN_UV.x + ps.x * winSize;
-		//if (end_x < SCREEN_UV.x)
-			//end_x = 1.0;
-//
-		//float start_y = SCREEN_UV.y - ps.y * winSize;
-		//if (start_y > SCREEN_UV.y)
-			//start_y = 0.0;
-//
-		//float end_y = SCREEN_UV.y + ps.y * winSize;
-		//if (end_y < SCREEN_UV.y)
-			//end_y = 1.0;
-
-		float start_x = SCREEN_UV.x - ps.x * winSize;
-		float end_x = SCREEN_UV.x + ps.x * winSize;
-		float start_y = SCREEN_UV.y - ps.y * winSize;
-		float end_y = SCREEN_UV.y + ps.y * winSize;
+		float start_x = clamp(SCREEN_UV.x - ps.x * winSize, 0.0, 1.0);
+		float end_x = clamp(SCREEN_UV.x + ps.x * winSize, 0.0, 1.0);
+		float start_y = clamp(SCREEN_UV.y - ps.y * winSize, 0.0, 1.0);
+		float end_y = clamp(SCREEN_UV.y + ps.y * winSize, 0.0, 1.0);
 
 		//for (float x=SCREEN_UV.x - ps.x * winSize; x < SCREEN_UV.x + ps.x * winSize; x=x+ps.x) {
 			//for (float y=SCREEN_UV.y - ps.y * winSize; y < SCREEN_UV.y + ps.y * winSize; y=y+ps.y) {
