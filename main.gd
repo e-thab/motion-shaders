@@ -30,8 +30,8 @@ var noise_name
 var init_width = 1152
 var init_height = 648
 
-var stage_tex
-var last_stage_tex
+#var stage_tex
+#var last_stage_tex
 
 var objects = ["fish", "lily pad", "cat tails", "cube"]
 var to_find = ""
@@ -73,6 +73,8 @@ func _ready() -> void:
 	
 	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
 	RenderingServer.connect("frame_post_draw", post_draw)
+	
+	Window.new()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -145,6 +147,7 @@ func post_draw():
 	## shader parameter so shaders can read from the previous frame
 	var snap = charView.get_texture().get_image()
 	RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
+	#RenderingServer.global_shader_parameter_set("last_frame", charView.get_texture().get_image())
 	
 	if noiseRect.visible:
 		noiseRect.hide()

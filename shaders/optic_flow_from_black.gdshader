@@ -1,7 +1,7 @@
 // This shader: Optic flow applied only to pixels changing from black to some color (silhoutte movement)
 shader_type canvas_item;
-global uniform sampler2D last_stage;
-global uniform sampler2D second_last_stage;
+global uniform sampler2D last_frame;
+global uniform sampler2D current_frame;
 
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float winSize = 5.0;
@@ -16,8 +16,8 @@ float g(sampler2D tex, float x, float y) {
 void fragment() {
 	// Accessing neighbor pixels needs tinkering
 	// https://forum.godotengine.org/t/how-to-check-color-of-adjacent-pixels-in-fragment-shader/27296/2
-	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0);
-	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0);
+	vec4 stage_color = textureLod(current_frame, SCREEN_UV, 0.0);
+	vec4 last_stage_color = textureLod(last_frame, SCREEN_UV, 0.0);
 
 	if (stage_color != BLACK && last_stage_color == BLACK) {
 		// Pixel size (statically set to match default resolution scale of 2)
@@ -40,12 +40,12 @@ void fragment() {
 		for (float x=SCREEN_UV.x - ps.x * winSize; x < SCREEN_UV.x + ps.x * winSize; x=x+ps.x) {
 			for (float y=SCREEN_UV.y - ps.y * winSize; y < SCREEN_UV.y + ps.y * winSize; y=y+ps.y) {
 				// Intensity value of the grayscale pixel at (x,y) in current and previous stage textures
-				float grayIm2 = g(last_stage, x, y);
-				float grayIm = g(second_last_stage, x, y);
+				float grayIm2 = g(current_frame, x, y);
+				float grayIm = g(last_frame, x, y);
 
 				// Gradient values
-				float gradImX = (g(last_stage, x+ps.x, y) + g(last_stage, x-ps.x, y)) / 2.0;
-				float gradImY = (g(last_stage, x, y+ps.y) + g(last_stage, x, y-ps.y)) / 2.0;
+				float gradImX = (g(current_frame, x+ps.x, y) + g(current_frame, x-ps.x, y)) / 2.0;
+				float gradImY = (g(current_frame, x, y+ps.y) + g(current_frame, x, y-ps.y)) / 2.0;
 
 				float matIx = gradImX * gradImX;
 				float matIxy = gradImX * gradImY;
