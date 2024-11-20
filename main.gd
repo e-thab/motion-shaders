@@ -1,7 +1,7 @@
 extends Node3D
 
 @export var resolution_scale : int = 2
-@export var shader : SHADER_TYPE = SHADER_TYPE.INVERT
+@export var shader_type : CShader.SHADER_TYPE = CShader.SHADER_TYPE.INVERT
 @export var noise : NOISE_TYPE = NOISE_TYPE.BINARY
 
 @onready var rod : MeshInstance3D = $RodMesh
@@ -9,6 +9,7 @@ extends Node3D
 
 @onready var character : CharacterBody3D = $Character
 @onready var debugPanel : PanelContainer = $UserInterface/Overlay/DebugPanel
+@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
 @onready var charView : SubViewport = $UserInterface/HeadcamVPContainer/HeadcamViewport
 @onready var charCam : Camera3D = $Character.CAMERA
 @onready var renderViewContainer : SubViewportContainer = $UserInterface/RenderVPContainer
@@ -18,13 +19,15 @@ extends Node3D
 @onready var noiseRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/BG
 @onready var shaderRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/OverlayFull
 
+@onready var shader : CShader = CShader.new(shader_type)
+
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
 var occluding = true
-var using_noise = true  # If the shader being used relies on the noise texture
-var shader_name
+#var using_noise = true  # If the shader being used relies on the noise texture
+#var shader_name
 var noise_name
 
 var init_width = 1152
@@ -37,11 +40,11 @@ var objects = ["fish", "lily pad", "cat tails", "cube"]
 var to_find = ""
 var last_click = "none"
 
-enum SHADER_TYPE {
-	INVERT, BINARY, INCREMENTAL,
-	FADE, FADE_FULL_COLOR, OPTIC_FLOW,
-	OPTIC_FLOW_ALL, TEST, NONE
-}
+#enum SHADER_TYPE {
+	#INVERT, BINARY, INCREMENTAL,
+	#FADE, FADE_FULL_COLOR, OPTIC_FLOW,
+	#OPTIC_FLOW_ALL, TEST, NONE
+#}
 enum NOISE_TYPE {
 	BINARY, LINEAR, FULL_COLOR,
 	PERLIN, FILL_BLACK, FILL_WHITE
@@ -68,7 +71,7 @@ func _ready() -> void:
 	## Set initial object to find
 	new_object()
 	
-	if not using_noise:
+	if not shader.uses_noise:
 		noiseRect.hide()
 	
 	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
@@ -99,8 +102,11 @@ func _process(delta: float) -> void:
 			renderViewContainer.hide()
 		else:
 			renderViewContainer.show()
-			if using_noise:
+			if shader.uses_noise:
 				noiseRect.show()
+	
+	if Input.is_action_just_pressed("toggle_menu"):
+		shaderMenu.visible = !shaderMenu.visible
 	
 	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
@@ -154,44 +160,18 @@ func post_draw():
 
 
 func set_shader():
-	## Set shader from export var
-	match shader:
-		SHADER_TYPE.INVERT:
-			shader_name = "Invert"
-			shaderRect.material = load("res://materials/pov.tres")
-		SHADER_TYPE.BINARY:
-			shader_name = "Binary"
-			shaderRect.material = load("res://materials/pov_binary.tres")
-			using_noise = false
-		SHADER_TYPE.INCREMENTAL:
-			shader_name = "Incremental"
-			shaderRect.material = load("res://materials/pov_incremental.tres")
-		SHADER_TYPE.FADE:
-			shader_name = "Fade"
-			shaderRect.material = load("res://materials/pov_fade.tres")
-			using_noise = false
-		SHADER_TYPE.FADE_FULL_COLOR:
-			shader_name = "Fade (full color)"
-			shaderRect.material = load("res://materials/pov_fade_fullcolor.tres")
-			using_noise = false
-		SHADER_TYPE.OPTIC_FLOW:
-			shader_name = "Optic flow (constrained)"
-			shaderRect.material = load("res://materials/optic_flow.tres")
-			using_noise = false
-		SHADER_TYPE.OPTIC_FLOW_ALL:
-			shader_name = "Optic flow (every pixel)"
-			shaderRect.material = load("res://materials/optic_flow_all.tres")
-			using_noise = false
-		SHADER_TYPE.TEST:
-			var testMaterial:ShaderMaterial = load("res://materials/test.tres")
-			shader_name = testMaterial.shader.resource_path
-			shaderRect.material = testMaterial
-		SHADER_TYPE.NONE:
-			shader_name = "None"
-			print("using shader: none")
-			renderViewContainer.hide()
-	print("using shader: ", shader_name)
-	debugPanel.add_property("Shader", shader_name, Debug.SHADER)
+	## Create/set shader to a CShader instance based on current shader_type
+	shader.set_shader(shader_type)
+	print("using shader: ", shader.title)
+	debugPanel.add_property("Shader", shader.title, Debug.SHADER)
+	
+	if shader_type == CShader.SHADER_TYPE.NONE:
+		renderViewContainer.hide()
+	else:
+		shaderRect.material = shader.material
+		if shader.menu:
+			var menu = shader.menu.instantiate()
+			shaderMenu.add_child(menu)
 
 
 func set_noise():
@@ -250,46 +230,12 @@ func set_res_scale():
 	debugPanel.add_property("Resolution", str(scale_width) + " x " + str(scale_height), Debug.RES)
 	
 	renderView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
-	if using_noise:
+	if shader.uses_noise:
 		noiseRect.show()
 		# Maybe set last_frame param to full black in an else here? vvvv
 	#else:
 		#await RenderingServer.frame_pre_draw
 		#RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.new())
-
-
-#func get_snapshots():
-	## Take a snapshot of the current 'stage' frame, assign to global shader param
-	#var staging_snapshot = charView.get_texture().get_image()
-	#var staging_snapshot = get_tree().root.get_viewport().get_texture().get_image()
-	## Store last and second-to-last stage textures
-	#last_stage_tex = stage_tex
-	#stage_tex = ImageTexture.create_from_image(staging_snapshot)
-	#RenderingServer.global_shader_parameter_set(
-		#"last_stage",
-		#stage_tex
-	#)
-	#RenderingServer.global_shader_parameter_set(
-		#"second_last_stage",
-		#last_stage_tex
-	#)
-	#
-	## Take a snapshot of the current 'render' frame, assign to global shader param
-	#var render_snapshot = renderView.get_texture().get_image()
-	#var render_tex = ImageTexture.create_from_image(render_snapshot)
-	#RenderingServer.global_shader_parameter_set(
-		#"last_render",
-		#render_tex
-	#)
-	#
-	#if frame_time >= 2.0:
-		#print('Snapshot ' + str(snap))
-		#render_snapshot.save_png("./out/snap-" + str(snap) + "-R.png")
-		#staging_snapshot.save_png("./out/snap-" + str(snap) + "-S.png")
-		#frame_time = 0.0
-		#snap += 1
-	#frame_time += delta
-
 
 func new_object():
 	var r = randi() % len(objects)
@@ -316,20 +262,33 @@ func object_click(id):
 
 
 func _on_cube_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click"):
+	if event.is_action("click"):
+	#if Input.is_action_just_pressed("click"):
 		object_click('cube')
 
-
 func _on_fish_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	#print('fish event')
 	if Input.is_action_just_pressed("click"):
 		object_click('fish')
 
-
 func _on_cattails_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	#print('cat tails event')
 	if Input.is_action_just_pressed("click"):
 		object_click('cat tails')
 
-
 func _on_lilypad_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click"):
+	#print('lily pad event')
+	print(event)
+	if event is InputEventMouseButton:
+	#if Input.is_action_just_pressed("click"):
 		object_click('lily pad')
+
+## Temp shader param signals
+func _on_res_scale_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter("resScale", value)
+
+func _on_diff_thresh_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter("DIFF_THRESHOLD", value)
+
+func _on_neigh_size_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter("winSize", value)

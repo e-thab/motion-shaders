@@ -6,6 +6,7 @@ global uniform sampler2D last_frame;
 //uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float resScale = 2.0;
 uniform float winSize = 5.0;
 
 float g(sampler2D tex, float x, float y) {

@@ -24,7 +24,7 @@ void fragment() {
 		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD) {
 	//if (stage_color != BLACK && last_stage_color == BLACK) {
 		// Pixel size based on resolution scale
-		vec2 ps = 3.0 / vec2(textureSize(TEXTURE, 0));
+		vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
 
 		// Color ranges for visualizing flow angle
 		float th1 = 2.0 * PI / 3.0;

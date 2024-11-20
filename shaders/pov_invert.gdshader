@@ -2,9 +2,6 @@ shader_type canvas_item;
 
 global uniform sampler2D current_frame;
 global uniform sampler2D last_frame;
-//global uniform sampler2D second_last_stage;
-//global uniform sampler2D last_render;
-//global uniform sampler2D vignette;
 uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
 //uniform vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
