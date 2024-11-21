@@ -3,11 +3,11 @@ shader_type canvas_item;
 
 global uniform sampler2D current_frame;
 global uniform sampler2D last_frame;
-//uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
-uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
-uniform float resScale = 2.0;
-uniform float winSize = 5.0;
+uniform float res_scale = 1.0;
+uniform float win_size = 5.0;
+
+const vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
 float g(sampler2D tex, float x, float y) {
 	// Return grayscale intensity value of texture at pixel (x,y)
@@ -18,13 +18,13 @@ float g(sampler2D tex, float x, float y) {
 
 void fragment() {
 	// Pixel size (statically set to match default resolution scale of 2)
-	vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
+	vec2 ps = res_scale / vec2(textureSize(TEXTURE, 0));
 
 	// Color ranges for visualizing flow angle
-	float th1 = 2.0 * PI / 3.0;
-	float th2 = 4.0 * PI / 3.0;
-	float th3 = 2.0 * PI;
-	float thSize = 2.0 * PI / 3.0;
+	//float th1 = 2.0 * PI / 3.0;
+	//float th2 = 4.0 * PI / 3.0;
+	//float th3 = 2.0 * PI;
+	//float thSize = 2.0 * PI / 3.0;
 
 	// Window sum variables
 	float winX = 0.0;
@@ -33,18 +33,18 @@ void fragment() {
 	float winIxT = 0.0;
 	float winIyT = 0.0;
 
-	float start_x = clamp(SCREEN_UV.x - ps.x * winSize, 0.0, 1.0);
-	float start_y = clamp(SCREEN_UV.y - ps.y * winSize, 0.0, 1.0);
+	float start_x = clamp(SCREEN_UV.x - ps.x * win_size, 0.0, 1.0);
+	float start_y = clamp(SCREEN_UV.y - ps.y * win_size, 0.0, 1.0);
 
 	// Loop approach 1: use floats directly as the iteration variables
-	//float end_x = clamp(SCREEN_UV.x + ps.x * winSize, 0.0, 1.0);
-	//float end_y = clamp(SCREEN_UV.y + ps.y * winSize, 0.0, 1.0);
+	//float end_x = clamp(SCREEN_UV.x + ps.x * win_size, 0.0, 1.0);
+	//float end_y = clamp(SCREEN_UV.y + ps.y * win_size, 0.0, 1.0);
 	//for (float x=start_x; x < end_x; x=x+ps.x) {
 		//for (float y=start_y; y < end_y; y=y+ps.y) {
 
 	// Loop approach 2: use ints for iteration, multiply by pixel size and add start each iteration
-	for (int ix=0; ix < int(winSize * 2.0); ix++) {
-		for (int iy=0; iy < int(winSize * 2.0); iy++) {
+	for (int ix=0; ix < int(win_size * 2.0); ix++) {
+		for (int iy=0; iy < int(win_size * 2.0); iy++) {
 			float x = start_x + float(ix) * ps.x;
 			float y = start_y + float(iy) * ps.y;
 

@@ -48,6 +48,11 @@ Calculating gradients:
 Display:
 	vector mapped to 2-color channel representing vector
 
+Meeting 11/22:
+	1. Optic flow (all) pixels sticking?
+	2. Using flow test sprite
+	3. Color ranges in shaders not being used?
+
 
 Noise:
 	Binary:

@@ -5,7 +5,7 @@ global uniform sampler2D last_frame;
 uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
 //uniform vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
-uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
+const vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
 
 void fragment() {

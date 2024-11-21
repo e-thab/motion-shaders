@@ -2,11 +2,12 @@ extends PanelContainer
 class_name Debug
 
 ## Debug panel indices
-const FPS = 0
-const RES_SCALE = 1
-const RES = 2
-const SHADER = 3
-const NOISE = 4
+const TITLE = 0
+const FPS = 1
+const RES_SCALE = 2
+const RES = 3
+const SHADER = 4
+const NOISE = 5
 
 func _process(delta):
 	if visible:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=4 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=96 format=4 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Script" path="res://fpc/character.gd" id="2_fjshf"]
@@ -30,6 +30,22 @@ MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10
 MarginContainer/constants/margin_top = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2xm2"]
+bg_color = Color(0, 0, 0, 0.831373)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_677wd"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00og8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
 albedo_color = Color(0.909804, 0.596078, 0, 1)
@@ -914,8 +930,7 @@ height = 3.0
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
 resolution_scale = 1
-shader_type = 2
-noise = 1
+shader_type = 5
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -1115,20 +1130,27 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/Overlay/DebugPanel/MarginContainer"]
 layout_mode = 2
 
+[node name="Label" type="Label" parent="UserInterface/Overlay/DebugPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Debug Menu"
+horizontal_alignment = 1
+
 [node name="ShaderMenu" type="PanelContainer" parent="UserInterface/Overlay"]
-custom_minimum_size = Vector2(250, 160)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 309.0
-offset_top = -128.0
-offset_right = 559.0
-offset_bottom = 32.0
+offset_left = -559.0
+offset_top = -234.0
+offset_right = -309.0
+offset_bottom = 217.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g2xm2")
+metadata/_edit_group_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu"]
 layout_mode = 2
@@ -1142,47 +1164,172 @@ script = ExtResource("9_8f4ik")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="DescriptionHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="DescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+text = " ▲ "
+
+[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer"]
+layout_mode = 2
+text = "Shader: Invert"
+
+[node name="DescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_677wd")
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer/MarginContainer"]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+text = "{Description}"
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ParametersHeader" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Parameters"
+horizontal_alignment = 1
+
+[node name="Color1" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
 layout_mode = 2
-text = "Neigh. Size (1/2)"
+text = "Color 1"
 
-[node name="NeighSizeSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Color1Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
 layout_mode = 2
-max_value = 20.0
-value = 5.0
+text = "              "
+color = Color(0, 1, 0.498039, 1)
+edit_alpha = false
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
+layout_mode = 2
+theme_override_constants/separation = 12
+theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
+
+[node name="Color2" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+layout_mode = 2
+text = "Color 2"
+
+[node name="Color2Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+layout_mode = 2
+text = "              "
+color = Color(0, 0.498039, 1, 1)
+edit_alpha = false
+
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+layout_mode = 2
+theme_override_constants/separation = 12
+theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
+
+[node name="FadeColor" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+layout_mode = 2
+text = "Fade Color"
+
+[node name="FadeColorPicker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+layout_mode = 2
+text = "              "
+color = Color(0, 1, 0.498039, 1)
+edit_alpha = false
+
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+layout_mode = 2
+theme_override_constants/separation = 12
+theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
+
+[node name="FadeSpeed" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed"]
+layout_mode = 2
+text = "Fade Speed"
+
+[node name="FadeSpeedSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.06
+
+[node name="DiffThreshold" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold"]
 layout_mode = 2
 text = "Diff Threshold"
 
-[node name="DiffThreshSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="DiffThreshSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold"]
 layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 0.25
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="WinSize" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize"]
+layout_mode = 2
+text = "Win Size (x2)"
+
+[node name="WinSizeSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize"]
+layout_mode = 2
+max_value = 50.0
+value = 5.0
+
+[node name="ResScale" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale"]
 layout_mode = 2
 text = "Res Scale"
 
-[node name="ResScaleSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="ResScaleSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale"]
 layout_mode = 2
-max_value = 8.0
+max_value = 20.0
 step = 0.1
-value = 2.0
-custom_arrow_step = 1.0
+value = 1.0
+custom_arrow_step = 0.5
+
+[node name="Increment" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment"]
+layout_mode = 2
+text = "Increment"
+
+[node name="IncSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.15
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03989, 0, 10.8299)
@@ -1437,7 +1584,7 @@ shape = SubResource("BoxShape3D_0sx5h")
 transform = Transform3D(0.998327, 0, 0, 0, 0.998327, 0, 0, 0, 0.998327, -4.52115, -0.00164417, 0)
 metadata/_edit_group_ = true
 
-[node name="Fill" type="MeshInstance3D" parent="Sphere"]
+[node name="Fill" type="MeshInstance3D" parent="Sphere" groups=["fill"]]
 mesh = SubResource("SphereMesh_r4rul")
 surface_material_override/0 = ExtResource("5_27n1h")
 
@@ -1700,9 +1847,12 @@ visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
 
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer/NeighSizeSpinBox" to="." method="_on_neigh_size_spin_box_value_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer2/DiffThreshSpinBox" to="." method="_on_diff_thresh_spin_box_value_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/HBoxContainer3/ResScaleSpinBox" to="." method="_on_res_scale_spin_box_value_changed"]
-[connection signal="input_event" from="Fish/Area3D" to="." method="_on_fish_area_3d_input_event"]
+[connection signal="toggled" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/DescriptionButton" to="." method="_on_description_button_toggled"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed/FadeSpeedSpinBox" to="." method="_on_fade_speed_spin_box_value_changed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold/DiffThreshSpinBox" to="." method="_on_diff_thresh_spin_box_value_changed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize/WinSizeSpinBox" to="." method="_on_win_size_spin_box_value_changed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale/ResScaleSpinBox" to="." method="_on_res_scale_spin_box_value_changed"]
 [connection signal="animation_finished" from="Fish/AnimationPlayer" to="Fish" method="_on_animation_player_animation_finished"]
-[connection signal="input_event" from="Cube/Area3D" to="." method="_on_cube_area_3d_input_event"]

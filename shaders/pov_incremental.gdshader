@@ -4,10 +4,10 @@ global uniform sampler2D current_frame;
 global uniform sampler2D last_frame;
 uniform sampler2D screen_texture: hint_screen_texture, filter_nearest;
 
-uniform vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
-uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float inc = 0.15;
 
+const vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
+const vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 
 void fragment() {
 	vec4 stage_color = textureLod(current_frame, SCREEN_UV, 0.0);

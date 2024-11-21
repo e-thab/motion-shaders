@@ -9,19 +9,37 @@ extends Node3D
 
 @onready var character : CharacterBody3D = $Character
 @onready var debugPanel : PanelContainer = $UserInterface/Overlay/DebugPanel
-@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
 @onready var charView : SubViewport = $UserInterface/HeadcamVPContainer/HeadcamViewport
 @onready var charCam : Camera3D = $Character.CAMERA
 @onready var renderViewContainer : SubViewportContainer = $UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $UserInterface/RenderVPContainer/RenderViewport
 @onready var spawnPos : Vector3 = $Character.position
 
+## Menu nodes
+@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
+@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/TitleLabel
+@onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer
+@onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer/MarginContainer/DescriptionLabel
+@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/DescriptionButton
+## Param submenu nodes
+@onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1
+@onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2
+@onready var paramFadeColor : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor
+@onready var paramFadeSpeed : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed
+@onready var paramDiffThresh : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold
+@onready var paramWinSize : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize
+@onready var paramResScale : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale
+@onready var paramInc : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment
+
 @onready var noiseRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/BG
 @onready var shaderRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/OverlayFull
 
 @onready var shader : CShader = CShader.new(shader_type)
 
-const RAY_LENGTH = 1000.0
+## Strings to use for collapse/expand description button
+const SHOW_DESC = " ▼ "
+const HIDE_DESC = " ▲ "
+
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
@@ -79,8 +97,6 @@ func _ready() -> void:
 	
 	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
 	RenderingServer.connect("frame_post_draw", post_draw)
-	
-	Window.new()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -182,14 +198,29 @@ func set_shader():
 	shader.set_shader(shader_type)
 	print("using shader: ", shader.title)
 	debugPanel.add_property("Shader", shader.title, Debug.SHADER)
+	#shaderInfo.text = "Shader: " + shader.title + "\n" + shader.description
+	shaderTitle.text = "Shader: " + shader.title
+	shaderDesc.text = shader.description
 	
 	if shader_type == CShader.SHADER_TYPE.NONE:
 		renderViewContainer.hide()
-	else:
-		shaderRect.material = shader.material
-		if shader.menu:
-			var menu = shader.menu.instantiate()
-			shaderMenu.add_child(menu)
+		return
+	
+	shaderRect.material = shader.material
+	#if shader.menu:
+		#var menu = shader.menu.instantiate()
+		#shaderMenu.add_child(menu)
+	
+	## Show param menu options according to shader params
+	var params = shader.params
+	paramColor1.visible = CShader.COLOR_1 in params
+	paramColor2.visible = CShader.COLOR_2 in params
+	paramDiffThresh.visible = CShader.DIFF_THRESH in params
+	paramFadeColor.visible = CShader.FADE_COLOR in params
+	paramFadeSpeed.visible = CShader.FADE_SPEED in params
+	paramResScale.visible = CShader.RES_SCALE in params
+	paramInc.visible = CShader.INCREMENT in params
+	paramWinSize.visible = CShader.WIN_SIZE in params
 
 
 func set_noise():
@@ -307,32 +338,33 @@ func object_click(id):
 		update_label()
 
 
-func _on_cube_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#if Input.is_action_just_pressed("click"):
-		#object_click('cube')
-	pass
+func _on_description_button_toggled(toggled_on: bool) -> void:
+	print('button: ', toggled_on)
+	shaderDescContainer.visible = !toggled_on
+	if toggled_on:
+		shaderDescBtn.text = SHOW_DESC
+	else:
+		shaderDescBtn.text = HIDE_DESC
 
-func _on_fish_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#if Input.is_action_just_pressed("click"):
-		#object_click('fish')
-	pass
 
-func _on_cattails_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#if Input.is_action_just_pressed("click"):
-		#object_click('cat tails')
-	pass
-
-func _on_lilypad_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#if Input.is_action_just_pressed("click"):
-		#object_click('lily pad')
-	pass
-
-## Temp shader param signals
+## Shader param signals from menu value changes
 func _on_res_scale_spin_box_value_changed(value: float) -> void:
-	shader.material.set_shader_parameter("resScale", value)
+	shader.material.set_shader_parameter(CShader.RES_SCALE, value)
 
 func _on_diff_thresh_spin_box_value_changed(value: float) -> void:
-	shader.material.set_shader_parameter("diffThreshold", value)
+	shader.material.set_shader_parameter(CShader.DIFF_THRESH, value)
 
-func _on_neigh_size_spin_box_value_changed(value: float) -> void:
-	shader.material.set_shader_parameter("winSize", value)
+func _on_win_size_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter(CShader.WIN_SIZE, value)
+
+func _on_color_1_picker_color_changed(color: Color) -> void:
+	shader.material.set_shader_parameter(CShader.COLOR_1, color)
+
+func _on_color_2_picker_color_changed(color: Color) -> void:
+	shader.material.set_shader_parameter(CShader.COLOR_2, color)
+
+func _on_fade_color_picker_color_changed(color: Color) -> void:
+	shader.material.set_shader_parameter(CShader.FADE_COLOR, color)
+
+func _on_fade_speed_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter(CShader.FADE_SPEED, value)
