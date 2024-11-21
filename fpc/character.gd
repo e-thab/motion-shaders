@@ -81,7 +81,6 @@ extends CharacterBody3D
 ## Use with caution.
 @export var gravity_enabled : bool = true
 
-
 # Member variables
 var speed : float = base_speed
 var current_speed : float = 0.0
@@ -159,16 +158,16 @@ func change_reticle(reticle): # Yup, this function is kinda strange
 func _physics_process(delta):
 	# Big thanks to github.com/LorenzoAncora for the concept of the improved debug values
 	current_speed = Vector3.ZERO.distance_to(get_real_velocity())
-	$UserInterface/DebugPanel.add_property("Speed", snappedf(current_speed, 0.001), 1)
-	$UserInterface/DebugPanel.add_property("Target speed", speed, 2)
-	var cv : Vector3 = get_real_velocity()
-	var vd : Array[float] = [
-		snappedf(cv.x, 0.001),
-		snappedf(cv.y, 0.001),
-		snappedf(cv.z, 0.001)
-	]
-	var readable_velocity : String = "X: " + str(vd[0]) + " Y: " + str(vd[1]) + " Z: " + str(vd[2])
-	$UserInterface/DebugPanel.add_property("Velocity", readable_velocity, 3)
+	#debugPanel.add_property("Speed", snappedf(current_speed, 0.001), 4)
+	#debugPanel.add_property("Target speed", speed, 2)
+	#var cv : Vector3 = get_real_velocity()
+	#var vd : Array[float] = [
+		#snappedf(cv.x, 0.001),
+		#snappedf(cv.y, 0.001),
+		#snappedf(cv.z, 0.001)
+	#]
+	#var readable_velocity : String = "X: " + str(vd[0]) + " Y: " + str(vd[1]) + " Z: " + str(vd[2])
+	#debugPanel.add_property("Velocity", readable_velocity, 3)
 	
 	# Gravity
 	#gravity = ProjectSettings.get_setting("physics/3d/default_gravity") # If the gravity changes during your game, uncomment this code
@@ -365,11 +364,12 @@ func headbob_animation(moving):
 
 
 func _process(delta):
-	$UserInterface/DebugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
-	var status : String = state
-	if !is_on_floor():
-		status += " in the air"
-	$UserInterface/DebugPanel.add_property("State", status, 4)
+	# Moved to main.gd  vvv
+	#debugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
+	#var status : String = state
+	#if !is_on_floor():
+		#status += " in the air"
+	#debugPanel.add_property("State", status, 5)
 	
 	if pausing_enabled:
 		if Input.is_action_just_pressed(PAUSE):
@@ -382,14 +382,14 @@ func _process(delta):
 					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 					#get_tree().paused = false
 
-
+## Click handling issues lie here:
 func _unhandled_input(event : InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		mouseInput.x += event.relative.x * res_scale
 		mouseInput.y += event.relative.y * res_scale
 	# Toggle debug menu
-	elif event is InputEventKey:
-		if event.is_released():
-			# Where we're going, we don't need InputMap
-			if event.keycode == 4194338: # F7
-				$UserInterface/DebugPanel.visible = !$UserInterface/DebugPanel.visible
+	#elif event is InputEventKey:
+		#if event.is_released():
+			## Where we're going, we don't need InputMap
+			#if event.keycode == 4194338: # F7
+				#debugPanel.visible = !debugPanel.visible

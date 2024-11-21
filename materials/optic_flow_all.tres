@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://p4mj2fn5yiuf"]
+
+[ext_resource type="Shader" path="res://shaders/optic_flow_all.gdshader" id="1_5iey6"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_5iey6")
+shader_parameter/BLACK = Vector4(0, 0, 0, 1)
+shader_parameter/winSize = 5.0

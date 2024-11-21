@@ -27,13 +27,13 @@ look for cel shade shader / toon shader
 Maya student license
 
 11.6 Qs:
-    -Optic flow for 'small movement'... less than a pixel??
-    -Necessary assumptions / avoidable assumptions
-    -What's displayed? What values do the pixels actually need to take on from the motion vectors?
+	-Optic flow for 'small movement'... less than a pixel??
+	-Necessary assumptions / avoidable assumptions
+	-What's displayed? What values do the pixels actually need to take on from the motion vectors?
 
-    -Aperture problem?
-    -Finding corners in a shader?
-    -Defining windows in a shader?
+	-Aperture problem?
+	-Finding corners in a shader?
+	-Defining windows in a shader?
 
 Optic flow:
 	-Only calculate pixels known to be moving
@@ -42,41 +42,41 @@ Optic flow:
 	-Combining 3 types of gradients: temporal horizontal and vertical (same pixel locs), spatial (l/r and u/d neighbors), 
 
 Calculating gradients:
-    temporal: diff between this and last frame
-    spatial: diff between neighbors: Ix(x,y) = I(x-1,y) - I(x+1,y)
+	temporal: diff between this and last frame
+	spatial: diff between neighbors: Ix(x,y) = I(x-1,y) - I(x+1,y)
 
 Display:
-    vector mapped to 2-color channel representing vector
+	vector mapped to 2-color channel representing vector
 
 
 Noise:
-    Binary:
-    	each pixel is either black or white
+	Binary:
+		each pixel is either black or white
 	Linear:
 		each pixel has a random monochrome value (R=G=B)
 	Full color:
 		each pixel has a randomized color value
-    Perlin:
-    	perlin noise
+	Perlin:
+		perlin noise
 	Fill white:
 		all pixels are white
 
 Shaders:
-    Invert (pov.gshader): Any pixel that changed from black to some color this frame, invert 
-    	-best with binary noise
+	Invert (pov.gshader): Any pixel that changed from black to some color this frame, invert 
+		-best with binary noise
 	
-    Binary: Original implementation. On c
-        
+	Binary: Original implementation. On c
+		
 	
-    Incremental
-        -best with linear noise
+	Incremental
+		-best with linear noise
 	-strange gray effect with binary noise
-        -variable for increment amount (change speed)
-    
-    Fade:
-        -noise irrelevant
-        -variables for color, difference threshold, and fade speed
+		-variable for increment amount (change speed)
+	
+	Fade:
+		-noise irrelevant
+		-variables for color, difference threshold, and fade speed
 
-    Fade full color:
-        -noise irrelevant
-        -variables for difference threshold and fade speed
+	Fade full color:
+		-noise irrelevant
+		-variables for difference threshold and fade speed

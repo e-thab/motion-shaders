@@ -1,25 +1,26 @@
 shader_type canvas_item;
 
-global uniform sampler2D last_stage;
-global uniform sampler2D second_last_stage;
-global uniform sampler2D last_render;
-global uniform sampler2D vignette;
+global uniform sampler2D current_frame;
+global uniform sampler2D last_frame;
+uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float FADE_AMOUNT = 0.08;
-uniform float DIFF_THRESHOLD = 0.2;
+uniform float DIFF_THRESHOLD = 0.25;
 
 void fragment() {
-	vec4 stage_color = textureLod(last_stage, SCREEN_UV, 0.0).rgba;
-	vec4 last_stage_color = textureLod(second_last_stage, SCREEN_UV, 0.0).rgba;
+	vec4 stage_color = textureLod(current_frame, SCREEN_UV, 0.0);
+	vec4 last_stage_color = textureLod(last_frame, SCREEN_UV, 0.0);
 
-	if (abs(stage_color.r - last_stage_color.r) > DIFF_THRESHOLD ||
+	if (stage_color != BLACK && (
+		abs(stage_color.r - last_stage_color.r) > DIFF_THRESHOLD ||
 		abs(stage_color.g - last_stage_color.g) > DIFF_THRESHOLD ||
-		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD) {
+		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD)
+	) {
+		// As long as the stage pixel isn't black and the color diff is outside the threshold
 		COLOR = stage_color;
 	} else {
-		vec4 render_color = textureLod(last_render, SCREEN_UV, 0.0).rgba;
-		
+		vec4 render_color = textureLod(screen_texture, SCREEN_UV, 0.0);
 		COLOR = vec4(
 			render_color.r - FADE_AMOUNT,
 			render_color.g - FADE_AMOUNT,
@@ -27,7 +28,7 @@ void fragment() {
 			1.0
 		);
 	}
-	
+
 	//if (abs(stage_color.r - last_stage_color.r) > 0.25) {
 		//COLOR.r = 1.0;
 	//}
