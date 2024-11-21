@@ -8,4 +8,4 @@ shader = ExtResource("1_3jt4k")
 shader_parameter/BLACK = Vector4(0, 0, 0, 1)
 shader_parameter/resScale = 2.0
 shader_parameter/winSize = 5.0
-shader_parameter/DIFF_THRESHOLD = 0.25
+shader_parameter/diffThreshold = 0.25

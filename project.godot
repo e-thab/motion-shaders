@@ -25,6 +25,7 @@ window/vsync/vsync_mode=3
 [global_group]
 
 fill="Filler mesh within a frame mesh"
+clickable=""
 
 [input]
 

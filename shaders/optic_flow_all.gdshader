@@ -18,7 +18,7 @@ float g(sampler2D tex, float x, float y) {
 
 void fragment() {
 	// Pixel size (statically set to match default resolution scale of 2)
-	vec2 ps = 1.0 / vec2(textureSize(TEXTURE, 0));
+	vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
 
 	// Color ranges for visualizing flow angle
 	float th1 = 2.0 * PI / 3.0;

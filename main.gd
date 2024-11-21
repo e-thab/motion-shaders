@@ -21,10 +21,12 @@ extends Node3D
 
 @onready var shader : CShader = CShader.new(shader_type)
 
+const RAY_LENGTH = 1000.0
 var time_elapsed = 0.0
 var frame_time = 2.0
 var snap = 0
 var paused = false
+var capturing = true
 var occluding = true
 #var using_noise = true  # If the shader being used relies on the noise texture
 #var shader_name
@@ -36,9 +38,10 @@ var init_height = 648
 #var stage_tex
 #var last_stage_tex
 
-var objects = ["fish", "lily pad", "cat tails", "cube"]
+var objects = ["fish", "lily pad", "flower", "cat tails", "cube", "sphere"]
 var to_find = ""
 var last_click = "none"
+@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
 
 #enum SHADER_TYPE {
 	#INVERT, BINARY, INCREMENTAL,
@@ -89,12 +92,13 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("toggle_debug"):
 		debugPanel.visible = !debugPanel.visible
 	
-	## Toggle pause state
+	## Toggle pause time state
 	if Input.is_action_just_pressed("pause"):
-		if paused:
-			paused = false
-		else:
-			paused = true
+		paused = !paused
+	
+	## Toggle capture input state (only raycast while true)
+	if Input.is_action_just_pressed("ui_cancel"):
+		capturing = !capturing
 	
 	## Show/hide shader overlay
 	if Input.is_action_just_pressed("shader_toggle"):
@@ -133,11 +137,24 @@ func _process(delta: float) -> void:
 			get_tree().call_group("fill", "show")
 			print("occlusion on")
 	
+	## Register object click
+	if Input.is_action_just_pressed("click") and capturing:
+		var coll = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/RayCast3D.get_collider()
+		if coll != null and coll.is_in_group("clickable"):
+			for group in coll.get_groups():
+				if group in objects:
+					object_click(group)
+					break
+	
 	if !paused:
 		## Oscillate the rod & rotate the cube
 		rod.position.x = 3 * cos(time_elapsed*PI/6)
 		time_elapsed += delta
 		cube.rotate(Vector3.UP, delta*PI/4)
+		
+		## Move the flow testing sprite
+		if flow_sprite.visible:
+			move_flow_sprite(delta)
 	
 	## Respawn if char has fallen some distance
 	if character.position.y < -50.0:
@@ -147,6 +164,7 @@ func _process(delta: float) -> void:
 #func pre_draw():
 	#print('draw')
 	#get_snapshots()
+
 
 func post_draw():
 	## After frame draw: get a snapshot of the current stage view and apply the
@@ -237,6 +255,34 @@ func set_res_scale():
 		#await RenderingServer.frame_pre_draw
 		#RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.new())
 
+func move_flow_sprite(delta):
+	## Move sprite attached to camera for optic flow testing
+	var speed = 250
+	var leftX = 1152*(1.0/4.0)
+	var rightX = 1152*(3.0/4.0)
+	var topY = 648*(1.0/4.0)
+	var botY = 648*(3.0/4.0)
+	var x = flow_sprite.position.x
+	var y = flow_sprite.position.y
+	##TL -> TR
+	if x < rightX and y == topY:
+		flow_sprite.position.x = clamp(x + delta*speed, leftX, rightX)
+	##TR -> BR
+	elif x == rightX and y < botY:
+		flow_sprite.position.y = clamp(y + delta*speed, topY, botY)
+		#print(y, ", ", botY, ", ", delta, ", ", clamp(y + delta*speed, topY, botY))
+	###BR -> BL
+	#elif x > leftX and y == botY:
+		#flow_sprite.position.x = clamp(flow_sprite.position.x - delta*speed, leftX, rightX)
+	###BL -> TL
+	#elif x == leftX and y > topY:
+		#flow_sprite.position.y = clamp(flow_sprite.position.y - delta*speed, topY, botY)
+	##BR -> TL (diagonal)
+	else:
+		flow_sprite.position.x = clamp(x - delta*speed, leftX, rightX)
+		flow_sprite.position.y = clamp(y - delta*speed, topY, botY)
+
+
 func new_object():
 	var r = randi() % len(objects)
 	while objects[r] == to_find:
@@ -262,33 +308,31 @@ func object_click(id):
 
 
 func _on_cube_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if event.is_action("click"):
 	#if Input.is_action_just_pressed("click"):
-		object_click('cube')
+		#object_click('cube')
+	pass
 
 func _on_fish_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#print('fish event')
-	if Input.is_action_just_pressed("click"):
-		object_click('fish')
+	#if Input.is_action_just_pressed("click"):
+		#object_click('fish')
+	pass
 
 func _on_cattails_static_body_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#print('cat tails event')
-	if Input.is_action_just_pressed("click"):
-		object_click('cat tails')
+	#if Input.is_action_just_pressed("click"):
+		#object_click('cat tails')
+	pass
 
 func _on_lilypad_area_3d_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	#print('lily pad event')
-	print(event)
-	if event is InputEventMouseButton:
 	#if Input.is_action_just_pressed("click"):
-		object_click('lily pad')
+		#object_click('lily pad')
+	pass
 
 ## Temp shader param signals
 func _on_res_scale_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter("resScale", value)
 
 func _on_diff_thresh_spin_box_value_changed(value: float) -> void:
-	shader.material.set_shader_parameter("DIFF_THRESHOLD", value)
+	shader.material.set_shader_parameter("diffThreshold", value)
 
 func _on_neigh_size_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter("winSize", value)

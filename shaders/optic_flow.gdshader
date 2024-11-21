@@ -6,7 +6,7 @@ global uniform sampler2D last_frame;
 uniform vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float resScale = 2.0;
 uniform float winSize = 5.0;
-uniform float DIFF_THRESHOLD = 0.25;
+uniform float diffThreshold = 0.25;
 
 float g(sampler2D tex, float x, float y) {
 	// Return grayscale intensity value of texture at pixel (x,y)
@@ -14,15 +14,17 @@ float g(sampler2D tex, float x, float y) {
 	return col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
 }
 
-
 void fragment() {
 	vec4 stage_color = textureLod(current_frame, SCREEN_UV, 0.0).rgba;
 	vec4 last_stage_color = textureLod(last_frame, SCREEN_UV, 0.0).rgba;
 
-	if (abs(stage_color.r - last_stage_color.r) > DIFF_THRESHOLD ||
-		abs(stage_color.g - last_stage_color.g) > DIFF_THRESHOLD ||
-		abs(stage_color.b - last_stage_color.b) > DIFF_THRESHOLD) {
-	//if (stage_color != BLACK && last_stage_color == BLACK) {
+	//if (abs(stage_color.r - last_stage_color.r) > diffThreshold ||
+		//abs(stage_color.g - last_stage_color.g) > diffThreshold ||
+		//abs(stage_color.b - last_stage_color.b) > diffThreshold) {
+
+	float current_g = g(current_frame, SCREEN_UV.x, SCREEN_UV.y);
+	float last_g = g(last_frame, SCREEN_UV.x, SCREEN_UV.y);
+	if (abs(current_g - last_g) > diffThreshold) {
 		// Pixel size based on resolution scale
 		vec2 ps = resScale / vec2(textureSize(TEXTURE, 0));
 
