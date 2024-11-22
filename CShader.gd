@@ -12,6 +12,17 @@ enum SHADER_TYPE {
 	#PERLIN, FILL_BLACK, FILL_WHITE
 #}
 
+## Dropdown index
+var index = [
+	SHADER_TYPE.INVERT,
+	SHADER_TYPE.BINARY,
+	SHADER_TYPE.INCREMENTAL,
+	SHADER_TYPE.FADE,
+	SHADER_TYPE.FADE_FULL_COLOR,
+	SHADER_TYPE.OPTIC_FLOW,
+	SHADER_TYPE.OPTIC_FLOW_ALL
+]
+
 ## Shader parameters
 const COLOR_1 = "color_1"
 const COLOR_2 = "color_2"
@@ -29,6 +40,7 @@ var description : String
 var uses_noise : bool
 var material : ShaderMaterial
 var params : Array
+
 
 func _init(shader_type : SHADER_TYPE):
 	set_shader(shader_type)

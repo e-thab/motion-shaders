@@ -5,6 +5,5 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_f3h8s")
-shader_parameter/BLACK = Vector4(0, 0, 0, 1)
-shader_parameter/FADE_AMOUNT = 0.08
-shader_parameter/DIFF_THRESHOLD = 0.2
+shader_parameter/fade_speed = 0.08
+shader_parameter/diff_threshold = 0.25

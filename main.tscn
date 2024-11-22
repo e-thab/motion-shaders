@@ -1143,9 +1143,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -559.0
+offset_left = -557.0
 offset_top = -234.0
-offset_right = -309.0
+offset_right = -222.0
 offset_bottom = 217.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -1164,19 +1164,38 @@ script = ExtResource("9_8f4ik")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="DescriptionHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ShaderHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="DescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer"]
+[node name="DescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
 toggle_mode = true
 text = " ▲ "
 
-[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer"]
+[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
-text = "Shader: Invert"
+text = "Shader:"
+
+[node name="ShaderOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+layout_mode = 2
+selected = 5
+fit_to_longest_item = false
+item_count = 7
+popup/item_0/text = "Invert"
+popup/item_1/text = "Binary"
+popup/item_1/id = 1
+popup/item_2/text = "Incremental"
+popup/item_2/id = 2
+popup/item_3/text = "Fade"
+popup/item_3/id = 3
+popup/item_4/text = "Fade (full color)"
+popup/item_4/id = 4
+popup/item_5/text = "Optic flow (constrained)"
+popup/item_5/id = 5
+popup/item_6/text = "Optic flow (every pixel)"
+popup/item_6/id = 6
 
 [node name="DescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -1847,7 +1866,8 @@ visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
 
-[connection signal="toggled" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/DescriptionButton" to="." method="_on_description_button_toggled"]
+[connection signal="toggled" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/DescriptionButton" to="." method="_on_description_button_toggled"]
+[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]

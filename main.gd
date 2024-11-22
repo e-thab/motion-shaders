@@ -17,10 +17,10 @@ extends Node3D
 
 ## Menu nodes
 @onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
-@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/TitleLabel
+#@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
 @onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer
 @onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer/MarginContainer/DescriptionLabel
-@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionHBoxContainer/DescriptionButton
+@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/DescriptionButton
 ## Param submenu nodes
 @onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1
 @onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2
@@ -199,7 +199,7 @@ func set_shader():
 	print("using shader: ", shader.title)
 	debugPanel.add_property("Shader", shader.title, Debug.SHADER)
 	#shaderInfo.text = "Shader: " + shader.title + "\n" + shader.description
-	shaderTitle.text = "Shader: " + shader.title
+	#shaderTitle.text = "Shader: " + shader.title
 	shaderDesc.text = shader.description
 	
 	if shader_type == CShader.SHADER_TYPE.NONE:
@@ -368,3 +368,17 @@ func _on_fade_color_picker_color_changed(color: Color) -> void:
 
 func _on_fade_speed_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter(CShader.FADE_SPEED, value)
+
+
+func _on_shader_option_button_item_selected(index: int) -> void:
+	var last_shader = shader_type
+	match index:
+		0: shader_type = CShader.SHADER_TYPE.INVERT
+		1: shader_type = CShader.SHADER_TYPE.BINARY
+		2: shader_type = CShader.SHADER_TYPE.INCREMENTAL
+		3: shader_type = CShader.SHADER_TYPE.FADE
+		4: shader_type = CShader.SHADER_TYPE.FADE_FULL_COLOR
+		5: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW
+		6: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW_ALL
+	if shader_type != last_shader:
+		set_shader()
