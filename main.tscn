@@ -930,7 +930,6 @@ height = 3.0
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
 resolution_scale = 1
-shader_type = 5
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -1143,10 +1142,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -557.0
-offset_top = -234.0
-offset_right = -222.0
-offset_bottom = 217.0
+offset_left = -560.0
+offset_top = -224.0
+offset_right = -225.0
+offset_bottom = 305.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_g2xm2")
@@ -1162,16 +1161,15 @@ script = ExtResource("9_8f4ik")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/separation = 10
 
 [node name="ShaderHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
-alignment = 1
 
-[node name="DescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+[node name="ShaderDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
-toggle_mode = true
 text = " ▲ "
 
 [node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
@@ -1180,6 +1178,7 @@ text = "Shader:"
 
 [node name="ShaderOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 selected = 5
 fit_to_longest_item = false
 item_count = 7
@@ -1197,18 +1196,65 @@ popup/item_5/id = 5
 popup/item_6/text = "Optic flow (every pixel)"
 popup/item_6/id = 6
 
-[node name="DescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ShaderDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_677wd")
 
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 2
 
-[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer/MarginContainer"]
+[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer"]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+text = "{Description}"
+autowrap_mode = 3
+
+[node name="NoiseHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NoiseDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+layout_mode = 2
+text = " ▲ "
+
+[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+layout_mode = 2
+text = " Noise:"
+
+[node name="NoiseOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+fit_to_longest_item = false
+item_count = 6
+popup/item_0/text = "Black & White"
+popup/item_1/text = "Grayscale"
+popup/item_1/id = 1
+popup/item_2/text = "Full Color"
+popup/item_2/id = 2
+popup/item_3/text = "Perlin"
+popup/item_3/id = 3
+popup/item_4/text = "Solid Black"
+popup/item_4/id = 4
+popup/item_5/text = "Solid White"
+popup/item_5/id = 5
+
+[node name="NoiseDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_677wd")
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer"]
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 text = "{Description}"
@@ -1866,8 +1912,9 @@ visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
 
-[connection signal="toggled" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/DescriptionButton" to="." method="_on_description_button_toggled"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton" to="." method="_on_shader_description_button_pressed"]
 [connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton" to="." method="_on_noise_description_button_pressed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]

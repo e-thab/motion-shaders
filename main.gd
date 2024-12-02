@@ -18,9 +18,12 @@ extends Node3D
 ## Menu nodes
 @onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
 #@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
-@onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer
-@onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DescriptionContainer/MarginContainer/DescriptionLabel
-@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/DescriptionButton
+@onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer
+@onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer/DescriptionLabel
+@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton
+@onready var noiseDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer
+@onready var noiseDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer/DescriptionLabel
+@onready var noiseDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton
 ## Param submenu nodes
 @onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1
 @onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2
@@ -47,8 +50,9 @@ var paused = false
 var capturing = true
 var occluding = true
 #var using_noise = true  # If the shader being used relies on the noise texture
-#var shader_name
 var noise_name
+var showing_shader_desc = true
+var showing_noise_desc = true
 
 var init_width = 1152
 var init_height = 648
@@ -104,6 +108,13 @@ func _process(delta: float) -> void:
 	## Add FPS to debug panel
 	#debugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
 	
+	if Input.is_action_just_pressed("screenshot"):
+		var r_img = renderView.get_texture().get_image()
+		var c_img = charView.get_texture().get_image()
+		var time = Time.get_datetime_string_from_system(false, true).replace(":", "-")
+		r_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-r.png")
+		c_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-c.png")
+	
 	## Toggle debug menu
 	if Input.is_action_just_pressed("toggle_debug"):
 		debugPanel.visible = !debugPanel.visible
@@ -125,6 +136,7 @@ func _process(delta: float) -> void:
 			if shader.uses_noise:
 				noiseRect.show()
 	
+	## Show/hide shader menu
 	if Input.is_action_just_pressed("toggle_menu"):
 		shaderMenu.visible = !shaderMenu.visible
 	
@@ -338,14 +350,34 @@ func object_click(id):
 		update_label()
 
 
-func _on_description_button_toggled(toggled_on: bool) -> void:
-	print('button: ', toggled_on)
-	shaderDescContainer.visible = !toggled_on
-	if toggled_on:
-		shaderDescBtn.text = SHOW_DESC
-	else:
+func _on_shader_description_button_pressed() -> void:
+	showing_shader_desc = !showing_shader_desc
+	shaderDescContainer.visible = showing_shader_desc
+	if showing_shader_desc:
 		shaderDescBtn.text = HIDE_DESC
+	else:
+		shaderDescBtn.text = SHOW_DESC
 
+func _on_noise_description_button_pressed() -> void:
+	showing_noise_desc = !showing_noise_desc
+	noiseDescContainer.visible = showing_noise_desc
+	if showing_noise_desc:
+		noiseDescBtn.text = HIDE_DESC
+	else:
+		noiseDescBtn.text = SHOW_DESC
+
+func _on_shader_option_button_item_selected(index: int) -> void:
+	var last_shader = shader_type
+	match index:
+		0: shader_type = CShader.SHADER_TYPE.INVERT
+		1: shader_type = CShader.SHADER_TYPE.BINARY
+		2: shader_type = CShader.SHADER_TYPE.INCREMENTAL
+		3: shader_type = CShader.SHADER_TYPE.FADE
+		4: shader_type = CShader.SHADER_TYPE.FADE_FULL_COLOR
+		5: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW
+		6: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW_ALL
+	if shader_type != last_shader:
+		set_shader()
 
 ## Shader param signals from menu value changes
 func _on_res_scale_spin_box_value_changed(value: float) -> void:
@@ -368,17 +400,3 @@ func _on_fade_color_picker_color_changed(color: Color) -> void:
 
 func _on_fade_speed_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter(CShader.FADE_SPEED, value)
-
-
-func _on_shader_option_button_item_selected(index: int) -> void:
-	var last_shader = shader_type
-	match index:
-		0: shader_type = CShader.SHADER_TYPE.INVERT
-		1: shader_type = CShader.SHADER_TYPE.BINARY
-		2: shader_type = CShader.SHADER_TYPE.INCREMENTAL
-		3: shader_type = CShader.SHADER_TYPE.FADE
-		4: shader_type = CShader.SHADER_TYPE.FADE_FULL_COLOR
-		5: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW
-		6: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW_ALL
-	if shader_type != last_shader:
-		set_shader()
