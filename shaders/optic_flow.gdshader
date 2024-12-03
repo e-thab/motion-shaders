@@ -24,7 +24,7 @@ void fragment() {
 
 	float current_g = g(current_frame, SCREEN_UV.x, SCREEN_UV.y);
 	float last_g = g(last_frame, SCREEN_UV.x, SCREEN_UV.y);
-	
+
 	if (abs(current_g - last_g) < diff_threshold) {
 		COLOR = BLACK;
 	} else {
@@ -53,13 +53,13 @@ void fragment() {
 			//for (float y=SCREEN_UV.y - ps.y * win_size; y < SCREEN_UV.y + ps.y * win_size; y=y+ps.y) {
 		//for (float x=start_x; x < end_x; x=x+ps.x) {
 			//for (float y=start_y; y < end_y; y=y+ps.y) {
-		
+
 		// Loop approach 2: use ints for iteration, multiply by pixel size and add start each iteration
 		for (int ix=0; ix < int(win_size * 2.0); ix++) {
 			for (int iy=0; iy < int(win_size * 2.0); iy++) {
 				float x = start_x + float(ix) * ps.x;
 				float y = start_y + float(iy) * ps.y;
-				
+
 				// Intensity value of the grayscale pixel at (x,y) in current and previous stage textures
 				float grayIm2 = g(current_frame, x, y);
 				float grayIm = g(last_frame, x, y);

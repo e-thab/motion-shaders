@@ -1135,7 +1135,7 @@ text = "Debug Menu"
 horizontal_alignment = 1
 
 [node name="ShaderMenu" type="PanelContainer" parent="UserInterface/Overlay"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(250, 20)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1153,6 +1153,7 @@ metadata/_edit_group_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 6
@@ -1915,6 +1916,7 @@ surface_material_override/0 = ExtResource("5_2nx5s")
 [connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton" to="." method="_on_shader_description_button_pressed"]
 [connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
 [connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton" to="." method="_on_noise_description_button_pressed"]
+[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseOptionButton" to="." method="_on_noise_option_button_item_selected"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
 [connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]

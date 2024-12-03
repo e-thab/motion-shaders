@@ -379,6 +379,18 @@ func _on_shader_option_button_item_selected(index: int) -> void:
 	if shader_type != last_shader:
 		set_shader()
 
+func _on_noise_option_button_item_selected(index: int) -> void:
+	var last_noise = noise
+	match index:
+		0: noise = NOISE_TYPE.BINARY
+		1: noise = NOISE_TYPE.LINEAR
+		2: noise = NOISE_TYPE.FULL_COLOR
+		3: noise = NOISE_TYPE.PERLIN
+		4: noise = NOISE_TYPE.FILL_BLACK
+		5: noise = NOISE_TYPE.FILL_WHITE
+	if noise != last_noise:
+		set_noise()
+
 ## Shader param signals from menu value changes
 func _on_res_scale_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter(CShader.RES_SCALE, value)
