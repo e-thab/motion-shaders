@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://buhn7ty8bgyns"]
 
-[ext_resource type="Shader" path="res://shaders/pov_incremental.gdshader" id="1_kfdf1"]
+[ext_resource type="Shader" path="res://shaders/pov_increment.gdshader" id="1_kfdf1"]
 
 [resource]
 resource_local_to_scene = true

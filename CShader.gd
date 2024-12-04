@@ -9,15 +9,15 @@ enum SHADER_TYPE {
 }
 
 ## Dropdown index
-var index = [
-	SHADER_TYPE.INVERT,
-	SHADER_TYPE.BINARY,
-	SHADER_TYPE.INCREMENTAL,
-	SHADER_TYPE.FADE,
-	SHADER_TYPE.FADE_FULL_COLOR,
-	SHADER_TYPE.OPTIC_FLOW,
-	SHADER_TYPE.OPTIC_FLOW_ALL
-]
+#var index = [
+	#SHADER_TYPE.INVERT,
+	#SHADER_TYPE.BINARY,
+	#SHADER_TYPE.INCREMENTAL,
+	#SHADER_TYPE.FADE,
+	#SHADER_TYPE.FADE_FULL_COLOR,
+	#SHADER_TYPE.OPTIC_FLOW,
+	#SHADER_TYPE.OPTIC_FLOW_ALL
+#]
 
 ## Shader parameters
 const COLOR_1 = "color_1"
@@ -28,6 +28,18 @@ const DIFF_THRESH = "diff_threshold"
 const INCREMENT = "inc"
 const RES_SCALE = "res_scale"
 const WIN_SIZE = "win_size"
+
+## Default param values
+const default = {
+	COLOR_1: Color(0.0, 1.0, 0.5, 1.0),
+	COLOR_2: Color(0.0, 0.5, 1.0, 1.0),
+	FADE_COLOR: Color(0.0, 1.0, 0.5, 1.0),
+	FADE_SPEED: 0.06,
+	DIFF_THRESH: 0.25,
+	INCREMENT: 0.15,
+	RES_SCALE: 1.0,
+	WIN_SIZE: 5.0
+}
 
 ## Instance properties
 var type : SHADER_TYPE
@@ -60,7 +72,7 @@ func set_shader(shader_type : SHADER_TYPE):
 			title = "Incremental"
 			description = "{Description}"
 			uses_noise = true
-			material = preload("res://materials/pov_incremental.tres")
+			material = preload("res://materials/pov_increment.tres")
 			params = [INCREMENT]
 		SHADER_TYPE.FADE:
 			title = "Fade"

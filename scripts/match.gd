@@ -1,4 +1,4 @@
-extends TextureRect
+extends PanelContainer
 
 var showing = false
 var elapsed = 0.0

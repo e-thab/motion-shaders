@@ -1,4 +1,4 @@
-[gd_scene load_steps=96 format=4 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=98 format=4 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Script" path="res://fpc/character.gd" id="2_fjshf"]
@@ -10,8 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://kk0ggrfyakdw" path="res://images/vignette-invert-2.png" id="7_2d7hi"]
 [ext_resource type="Texture2D" uid="uid://vxnop2gv25b1" path="res://images/square_2x2.png" id="7_sfkqm"]
 [ext_resource type="Script" path="res://scripts/debug.gd" id="7_y7c8x"]
+[ext_resource type="StyleBox" uid="uid://dxweyrs2e6utn" path="res://materials/menu_style_box.tres" id="8_3xeme"]
 [ext_resource type="Script" path="res://fpc/EditorModule.gd" id="8_260n1"]
-[ext_resource type="Script" path="res://scenes/menu_optic_flow_all.gd" id="9_8f4ik"]
 [ext_resource type="Script" path="res://scripts/match.gd" id="9_mc7qx"]
 [ext_resource type="Texture2D" uid="uid://cui3g8whohiu4" path="res://3d/pond_pack-frankesalgado87/textures/0_Universal_baseColor.png" id="16_7xj4g"]
 [ext_resource type="Texture2D" uid="uid://c1cuj6w4mnsg7" path="res://3d/cartoon_pond-iDiteMD/waterless_pond_Scene_-_Root_baseColor.png" id="16_28x73"]
@@ -31,19 +31,12 @@ MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10
 MarginContainer/constants/margin_top = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2xm2"]
-bg_color = Color(0, 0, 0, 0.831373)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_677wd"]
+bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_677wd"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00og8"]
 
@@ -923,6 +916,18 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_62hga")
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_b7gax"]
+top_radius = 20.0
+bottom_radius = 20.0
+height = 0.001
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5d0gi"]
+transparency = 1
+albedo_color = Color(0, 0.760784, 0.647059, 0.729412)
+metallic_specular = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ethvw"]
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
 radius = 0.01
 height = 3.0
@@ -930,6 +935,8 @@ height = 3.0
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
 resolution_scale = 1
+metadata/_edit_vertical_guides_ = [576.0]
+metadata/_edit_horizontal_guides_ = [324.0]
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -1035,8 +1042,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("7_sfkqm")
 
-[node name="TextBG" type="TextureRect" parent="UserInterface/Overlay"]
-self_modulate = Color(0, 0, 0, 0.72549)
+[node name="TextBG" type="PanelContainer" parent="UserInterface/Overlay"]
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 1
 anchors_preset = 8
@@ -1044,40 +1050,36 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -566.0
+offset_left = -78.0
 offset_top = -314.0
-offset_right = -409.0
+offset_right = 79.0
 offset_bottom = -260.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("7_sfkqm")
+theme_override_styles/panel = ExtResource("8_3xeme")
 
 [node name="StaticLabel" type="Label" parent="UserInterface/Overlay/TextBG"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 79.0
-grow_vertical = 2
+visible = false
+layout_mode = 2
 text = "Find:
 Last click:"
 horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="UserInterface/Overlay/TextBG"]
-layout_mode = 1
-anchors_preset = -1
-anchor_bottom = 1.0
-offset_left = 85.0
-offset_right = 221.0
-grow_horizontal = 2
-grow_vertical = 2
+visible = false
+layout_mode = 2
 text = "cat tails
 cat tails"
 vertical_alignment = 1
 
-[node name="Match" type="TextureRect" parent="UserInterface/Overlay"]
-self_modulate = Color(0, 0, 0, 0.72549)
+[node name="Label2" type="Label" parent="UserInterface/Overlay/TextBG"]
+layout_mode = 2
+text = "Find:"
+horizontal_alignment = 1
+
+[node name="Match" type="PanelContainer" parent="UserInterface/Overlay"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1091,21 +1093,17 @@ offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("7_sfkqm")
+theme_override_styles/panel = ExtResource("8_3xeme")
 script = ExtResource("9_mc7qx")
 
 [node name="MatchLabel" type="Label" parent="UserInterface/Overlay/Match"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 text = "Match!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DebugPanel" type="PanelContainer" parent="UserInterface/Overlay"]
+visible = false
 custom_minimum_size = Vector2(250, 160)
 layout_mode = 1
 anchors_preset = 8
@@ -1121,6 +1119,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme = SubResource("Theme_wdf0f")
+theme_override_styles/panel = ExtResource("8_3xeme")
 script = ExtResource("7_y7c8x")
 
 [node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/DebugPanel"]
@@ -1134,59 +1133,64 @@ layout_mode = 2
 text = "Debug Menu"
 horizontal_alignment = 1
 
-[node name="ShaderMenu" type="PanelContainer" parent="UserInterface/Overlay"]
-custom_minimum_size = Vector2(250, 20)
+[node name="ShaderMenu" type="BoxContainer" parent="UserInterface/Overlay"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -560.0
-offset_top = -224.0
-offset_right = -225.0
-offset_bottom = 305.0
+offset_left = -556.0
+offset_top = -304.0
+offset_right = -220.0
+offset_bottom = 225.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_g2xm2")
+vertical = true
 metadata/_edit_group_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu"]
+[node name="PanelContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu"]
+custom_minimum_size = Vector2(250, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_3xeme")
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
-script = ExtResource("9_8f4ik")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 10
 
-[node name="ShaderHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ShaderHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ShaderDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+[node name="ShaderDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
 text = " ▲ "
 
-[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Shader:"
+horizontal_alignment = 2
 
-[node name="ShaderOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
+[node name="ShaderOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-selected = 5
-fit_to_longest_item = false
+selected = 0
 item_count = 7
 popup/item_0/text = "Invert"
 popup/item_1/text = "Binary"
 popup/item_1/id = 1
-popup/item_2/text = "Incremental"
+popup/item_2/text = "Increment"
 popup/item_2/id = 2
 popup/item_3/text = "Fade"
 popup/item_3/id = 3
@@ -1197,40 +1201,41 @@ popup/item_5/id = 5
 popup/item_6/text = "Optic flow (every pixel)"
 popup/item_6/id = 6
 
-[node name="ShaderDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ShaderDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_677wd")
 
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 2
 
-[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer"]
+[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer"]
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 text = "{Description}"
 autowrap_mode = 3
 
-[node name="NoiseHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="NoiseHBoxContainer" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="NoiseDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+[node name="NoiseDescriptionButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
 layout_mode = 2
 text = " ▲ "
 
-[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+[node name="TitleLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-text = " Noise:"
+text = "Noise:"
+horizontal_alignment = 2
 
-[node name="NoiseOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
+[node name="NoiseOptionButton" type="OptionButton" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
-fit_to_longest_item = false
 item_count = 6
 popup/item_0/text = "Black & White"
 popup/item_1/text = "Grayscale"
@@ -1244,154 +1249,202 @@ popup/item_4/id = 4
 popup/item_5/text = "Solid White"
 popup/item_5/id = 5
 
-[node name="NoiseDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="NoiseDescriptionContainer" type="PanelContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_677wd")
 
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 2
 
-[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer"]
+[node name="DescriptionLabel" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer"]
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 text = "{Description}"
 autowrap_mode = 3
 
-[node name="HSeparator" type="HSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="ParametersHeader" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ParametersHeader" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Parameters"
 horizontal_alignment = 1
 
-[node name="Color1" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="Color1" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
+[node name="Color1ResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Color 1"
+horizontal_alignment = 2
 
-[node name="Color1Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
+[node name="Color1Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1"]
 layout_mode = 2
 text = "              "
 color = Color(0, 1, 0.498039, 1)
 edit_alpha = false
 
-[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1"]
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1"]
 layout_mode = 2
 theme_override_constants/separation = 12
 theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
 
-[node name="Color2" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="Color2" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+[node name="Color2ResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Color 2"
+horizontal_alignment = 2
 
-[node name="Color2Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+[node name="Color2Picker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2"]
 layout_mode = 2
 text = "              "
 color = Color(0, 0.498039, 1, 1)
 edit_alpha = false
 
-[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2"]
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2"]
 layout_mode = 2
 theme_override_constants/separation = 12
 theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
 
-[node name="FadeColor" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="FadeColor" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+[node name="FadeColorResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Fade Color"
+horizontal_alignment = 2
 
-[node name="FadeColorPicker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+[node name="FadeColorPicker" type="ColorPickerButton" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor"]
 layout_mode = 2
 text = "              "
 color = Color(0, 1, 0.498039, 1)
 edit_alpha = false
 
-[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor"]
+[node name="VSeparator" type="VSeparator" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor"]
 layout_mode = 2
 theme_override_constants/separation = 12
 theme_override_styles/separator = SubResource("StyleBoxFlat_00og8")
 
-[node name="FadeSpeed" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="FadeSpeed" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed"]
+[node name="FadeSpeedResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Fade Speed"
+horizontal_alignment = 2
 
-[node name="FadeSpeedSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed"]
+[node name="FadeSpeedSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed"]
 layout_mode = 2
 max_value = 1.0
 step = 0.01
 value = 0.06
 
-[node name="DiffThreshold" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="DiffThreshold" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold"]
+[node name="DiffThreshResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Diff Threshold"
+horizontal_alignment = 2
 
-[node name="DiffThreshSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold"]
+[node name="DiffThreshSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold"]
 layout_mode = 2
 max_value = 1.0
 step = 0.05
 value = 0.25
 
-[node name="WinSize" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="WinSize" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize"]
+[node name="WinSizeResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Win Size (x2)"
+horizontal_alignment = 2
 
-[node name="WinSizeSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize"]
+[node name="WinSizeSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize"]
 layout_mode = 2
 max_value = 50.0
 value = 5.0
 
-[node name="ResScale" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="ResScale" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale"]
+[node name="ResScaleResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Res Scale"
+horizontal_alignment = 2
 
-[node name="ResScaleSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale"]
+[node name="ResScaleSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale"]
 layout_mode = 2
 max_value = 20.0
 step = 0.1
 value = 1.0
 custom_arrow_step = 0.5
 
-[node name="Increment" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer"]
+[node name="Increment" type="HBoxContainer" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-alignment = 2
+alignment = 1
 
-[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment"]
+[node name="IncResetButton" type="Button" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment"]
+layout_mode = 2
+text = "Reset"
+
+[node name="Label" type="Label" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Increment"
+horizontal_alignment = 2
 
-[node name="IncSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment"]
+[node name="IncSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment"]
 layout_mode = 2
 max_value = 1.0
 step = 0.05
@@ -1751,79 +1804,79 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cattails/Grass_Cattail_006_0 Universal_0/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_ntqi8")
 
-[node name="Lilypads" type="Node3D" parent="."]
+[node name="LilypadColliders" type="Node3D" parent="."]
 
-[node name="Lilypad1" type="Area3D" parent="Lilypads" groups=["clickable", "lily pad"]]
+[node name="Lilypad1" type="Area3D" parent="LilypadColliders" groups=["clickable", "lily pad"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.147793, -1.69679, -3.81198)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lilypads/Lilypad1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LilypadColliders/Lilypad1"]
 shape = SubResource("CylinderShape3D_0blwx")
 
-[node name="Lilypad2" type="Area3D" parent="Lilypads" groups=["clickable", "lily pad"]]
+[node name="Lilypad2" type="Area3D" parent="LilypadColliders" groups=["clickable", "lily pad"]]
 transform = Transform3D(2.22, 0, 0, 0, 2.22, 0, 0, 0, 2.22, -11.3788, -1.63578, -6.38332)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lilypads/Lilypad2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LilypadColliders/Lilypad2"]
 shape = SubResource("CylinderShape3D_jk11k")
 
-[node name="Lilypad3" type="Area3D" parent="Lilypads" groups=["clickable", "lily pad"]]
+[node name="Lilypad3" type="Area3D" parent="LilypadColliders" groups=["clickable", "lily pad"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.89171, -1.61143, 10.3417)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lilypads/Lilypad3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LilypadColliders/Lilypad3"]
 shape = SubResource("CylinderShape3D_uybs7")
 
-[node name="Lilypad4" type="Area3D" parent="Lilypads" groups=["clickable", "lily pad"]]
+[node name="Lilypad4" type="Area3D" parent="LilypadColliders" groups=["clickable", "lily pad"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.67265, -1.67638, 10.0749)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lilypads/Lilypad4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LilypadColliders/Lilypad4"]
 shape = SubResource("CylinderShape3D_o85fu")
 
-[node name="Lilypad5" type="Area3D" parent="Lilypads" groups=["clickable", "lily pad"]]
+[node name="Lilypad5" type="Area3D" parent="LilypadColliders" groups=["clickable", "lily pad"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6737, -2.03599, -5.72749)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Lilypads/Lilypad5"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LilypadColliders/Lilypad5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.415323, 0)
 shape = SubResource("CylinderShape3D_mqc5o")
 
-[node name="Flowers" type="Node3D" parent="."]
+[node name="FlowerColliders" type="Node3D" parent="."]
 
-[node name="Flower1" type="StaticBody3D" parent="Flowers" groups=["clickable", "flower"]]
+[node name="Flower1" type="StaticBody3D" parent="FlowerColliders" groups=["clickable", "flower"]]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 5.56015, -1.35479, 7.7311)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Flowers/Flower1"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowerColliders/Flower1"]
 transform = Transform3D(1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_7pqet")
 
-[node name="Flower2" type="StaticBody3D" parent="Flowers" groups=["clickable", "flower"]]
+[node name="Flower2" type="StaticBody3D" parent="FlowerColliders" groups=["clickable", "flower"]]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 9.05347, -1.35479, -8.04436)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Flowers/Flower2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowerColliders/Flower2"]
 transform = Transform3D(1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_ew5um")
 
-[node name="Flower3" type="StaticBody3D" parent="Flowers" groups=["clickable", "flower"]]
+[node name="Flower3" type="StaticBody3D" parent="FlowerColliders" groups=["clickable", "flower"]]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, -12.9696, -1.35479, -1.90038)
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Flowers/Flower3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FlowerColliders/Flower3"]
 transform = Transform3D(1.02, 0, 0, 0, 1.02, 0, 0, 0, 1.02, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_1vhbf")
 
-[node name="FlowerMesh" type="MeshInstance3D" parent="Flowers"]
+[node name="FlowerMesh" type="MeshInstance3D" parent="FlowerColliders"]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
 visible = false
 mesh = SubResource("ArrayMesh_gm11d")
@@ -1907,21 +1960,240 @@ transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, -2.62718, 0)
 mesh = SubResource("ArrayMesh_1kw8f")
 skeleton = NodePath("")
 
-[node name="RodMesh" type="MeshInstance3D" parent="."]
+[node name="Water" type="MeshInstance3D" parent="Pond"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 77.1102, 0)
+visible = false
+mesh = SubResource("CylinderMesh_b7gax")
+surface_material_override/0 = SubResource("StandardMaterial3D_5d0gi")
+
+[node name="PondReflection" type="MeshInstance3D" parent="Pond/Water"]
+transform = Transform3D(0.01, 0, 0, 0, -0.01, 0, 0, 0, 0.01, 0, 0.88117, 0)
+visible = false
+mesh = SubResource("ArrayMesh_1kw8f")
+skeleton = NodePath("")
+
+[node name="Cube2" type="Node3D" parent="Pond/Water"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -1.68025, -6.23158)
+visible = false
+
+[node name="Frame" type="Node3D" parent="Pond/Water/Cube2"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, -8.9407e-08, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, -0.5, 0, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, -0.500255, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, -0.499915, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, 0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(1, 0, 0, 0, 1.35103e-07, -1, 0, 1, -2.22525e-07, -0.5, 0.500085, 0)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, 4.51996e-08, 0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, 0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.42074e-08, 0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="Pond/Water/Cube2/Frame"]
+transform = Transform3D(-4.37114e-08, -1, 1.78814e-07, 1, -4.37114e-08, 7.81621e-15, 0, -1.78814e-07, 1, -4.96057e-10, -0.5, -0.5)
+mesh = SubResource("BoxMesh_kpu5m")
+skeleton = NodePath("../../Fill")
+
+[node name="Fill" type="MeshInstance3D" parent="Pond/Water/Cube2" groups=["fill"]]
+transform = Transform3D(1, 0, 0, 0, 1, -1.78814e-07, 0, -1.78814e-07, 1, 0, -2.08167e-17, 0.000339985)
+mesh = SubResource("BoxMesh_nk3eq")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = ExtResource("5_27n1h")
+
+[node name="Area3D" type="Area3D" parent="Pond/Water/Cube2" groups=["clickable", "cube"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cube2/Area3D"]
+shape = SubResource("BoxShape3D_0sx5h")
+
+[node name="Sphere2" type="Node3D" parent="Pond/Water"]
+transform = Transform3D(0.998327, 0, 0, 0, -1, 0, 0, 0, 0.998327, -4.52115, -1.68025, 0)
+visible = false
+metadata/_edit_group_ = true
+
+[node name="Fill" type="MeshInstance3D" parent="Pond/Water/Sphere2" groups=["fill"]]
+mesh = SubResource("SphereMesh_r4rul")
+surface_material_override/0 = ExtResource("5_27n1h")
+
+[node name="Outline" type="MeshInstance3D" parent="Pond/Water/Sphere2/Fill"]
+mesh = SubResource("ArrayMesh_lvg3y")
+surface_material_override/0 = ExtResource("5_2nx5s")
+
+[node name="Area3D" type="Area3D" parent="Pond/Water/Sphere2" groups=["clickable", "sphere"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Sphere2/Area3D"]
+shape = SubResource("SphereShape3D_vb2mk")
+
+[node name="Cattails2" type="Node3D" parent="Pond/Water"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -1.68025, 0)
+visible = false
+
+[node name="Grass_Cattail_005_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(-3.4526, 2.0198, 8.82881e-08, -1.46429e-14, -1.74846e-07, 4, 2.0198, 3.4526, 1.50918e-07, 18.7777, -1.75972, -1.15422)
+mesh = SubResource("ArrayMesh_4arbj")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_005_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_005_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_b3bit")
+
+[node name="Grass_Cattail_001_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(-0.998479, -3.87338, -1.69311e-07, 1.46316e-14, -1.74846e-07, 4, -3.87338, 0.998479, 4.36449e-08, -7.56123, -1.75971, -16.7825)
+mesh = SubResource("ArrayMesh_ansxq")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_001_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_001_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_6pnta")
+
+[node name="Grass_Cattail_002_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(1.18543, -3.82031, -1.66991e-07, -7.91043e-16, -1.74846e-07, 4, -3.82031, -1.18543, -5.18169e-08, 18.3122, -1.75971, 3.74846)
+mesh = SubResource("ArrayMesh_waydh")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_002_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_002_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_1jskw")
+
+[node name="Grass_Cattail_003_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(-2.32548, -3.25456, -1.42261e-07, -1.13298e-14, -1.74846e-07, 4, -3.25456, 2.32548, 1.0165e-07, 18.5325, -1.75972, -1.53579)
+mesh = SubResource("ArrayMesh_00khs")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_003_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_003_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_hl28s")
+
+[node name="Grass_Cattail_004_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(4, 0, 0, 0, -1.74846e-07, 4, 0, -4, -1.74846e-07, -7.53742, -1.75972, -17.3617)
+mesh = SubResource("ArrayMesh_dwb5v")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_004_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_004_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_sfi4n")
+
+[node name="Grass_Cattail_007_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(4, 0, 0, 0, -1.74846e-07, 4, 0, -4, -1.74846e-07, -7.22845, -1.75971, -16.8829)
+mesh = SubResource("ArrayMesh_rwk1n")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_007_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_007_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_cpand")
+
+[node name="Grass_Cattail_006_0 Universal_0" type="MeshInstance3D" parent="Pond/Water/Cattails2"]
+transform = Transform3D(-3.94791, 0.643452, 2.81262e-08, 0, -1.74846e-07, 4, 0.643452, 3.94791, 1.72568e-07, 18.428, -1.75972, -1.8031)
+mesh = SubResource("ArrayMesh_63vi8")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Pond/Water/Cattails2/Grass_Cattail_006_0 Universal_0" groups=["cat tails", "clickable"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pond/Water/Cattails2/Grass_Cattail_006_0 Universal_0/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_ntqi8")
+
+[node name="LevelBounds" type="CSGCylinder3D" parent="."]
+visible = false
+use_collision = true
+collision_priority = 2.0
+flip_faces = true
+radius = 18.3799
+height = 10.2589
+sides = 24
+smooth_faces = false
+material = SubResource("StandardMaterial3D_ethvw")
+
+[node name="Rod" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.12999)
 visible = false
 mesh = SubResource("CapsuleMesh_07ui4")
 surface_material_override/0 = ExtResource("5_2nx5s")
 
-[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton" to="." method="_on_shader_description_button_pressed"]
-[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
-[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton" to="." method="_on_noise_description_button_pressed"]
-[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseOptionButton" to="." method="_on_noise_option_button_item_selected"]
-[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
-[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
-[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed/FadeSpeedSpinBox" to="." method="_on_fade_speed_spin_box_value_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold/DiffThreshSpinBox" to="." method="_on_diff_thresh_spin_box_value_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize/WinSizeSpinBox" to="." method="_on_win_size_spin_box_value_changed"]
-[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale/ResScaleSpinBox" to="." method="_on_res_scale_spin_box_value_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton" to="." method="_on_shader_description_button_pressed"]
+[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton" to="." method="_on_noise_description_button_pressed"]
+[connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseOptionButton" to="." method="_on_noise_option_button_item_selected"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1/Color1ResetButton" to="." method="_on_color_1_reset_button_pressed"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1/Color1Picker" to="." method="_on_color_1_picker_color_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2/Color2ResetButton" to="." method="_on_color_2_reset_button_pressed"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2/Color2Picker" to="." method="_on_color_2_picker_color_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor/FadeColorResetButton" to="." method="_on_fade_color_reset_button_pressed"]
+[connection signal="color_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker" to="." method="_on_fade_color_picker_color_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed/FadeSpeedResetButton" to="." method="_on_fade_speed_reset_button_pressed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed/FadeSpeedSpinBox" to="." method="_on_fade_speed_spin_box_value_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold/DiffThreshResetButton" to="." method="_on_diff_thresh_reset_button_pressed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold/DiffThreshSpinBox" to="." method="_on_diff_thresh_spin_box_value_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize/WinSizeResetButton" to="." method="_on_win_size_reset_button_pressed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize/WinSizeSpinBox" to="." method="_on_win_size_spin_box_value_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale/ResScaleResetButton" to="." method="_on_res_scale_reset_button_pressed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale/ResScaleSpinBox" to="." method="_on_res_scale_spin_box_value_changed"]
+[connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment/IncResetButton" to="." method="_on_inc_reset_button_pressed"]
+[connection signal="value_changed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment/IncSpinBox" to="." method="_on_inc_spin_box_value_changed"]
 [connection signal="animation_finished" from="Fish/AnimationPlayer" to="Fish" method="_on_animation_player_animation_finished"]

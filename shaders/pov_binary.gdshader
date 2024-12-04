@@ -4,8 +4,8 @@ global uniform sampler2D current_frame;
 global uniform sampler2D last_frame;
 uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
-uniform vec4 color_1 = vec4(0.0, 1.0, 0.5, 1.0);
-uniform vec4 color_2 = vec4(0.0, 0.5, 1.0, 1.0);
+uniform vec4 color_1: source_color;// = vec4(0.0, 1.0, 0.5, 1.0);
+uniform vec4 color_2: source_color;// = vec4(0.0, 0.5, 1.0, 1.0);
 uniform float diff_threshold = 0.25;
 
 //const vec4 WHITE = vec4(1.0, 1.0, 1.0, 1.0);
@@ -34,8 +34,7 @@ void fragment() {
 			//COLOR.r = stage_color.r + (render_color.r - stage_color.r) * v;
 			//COLOR.g = stage_color.g + (render_color.g - stage_color.g) * v;
 			//COLOR.b = stage_color.b + (render_color.b - stage_color.b) * v;
-		}
-		else {
+		} else if (render_color == color_2) {
 			COLOR = color_1;
 			//COLOR = vec4(COLOR_1.r, COLOR_1.g, COLOR_1.b, screen_color.a);
 		}

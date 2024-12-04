@@ -4,7 +4,7 @@ global uniform sampler2D current_frame;
 global uniform sampler2D last_frame;
 uniform sampler2D screen_texture: hint_screen_texture, repeat_disable, filter_nearest;
 
-uniform vec4 fade_color = vec4(0.0, 1.0, 0.5, 1.0);
+uniform vec4 fade_color: source_color;
 uniform float fade_speed = 0.06;
 uniform float diff_threshold = 0.25;
 

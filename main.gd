@@ -2,10 +2,11 @@ extends Node3D
 
 @export var resolution_scale : int = 2
 @export var shader_type : CShader.SHADER_TYPE = CShader.SHADER_TYPE.INVERT
-@export var noise : NOISE_TYPE = NOISE_TYPE.BINARY
+@export var noise_type : NOISE_TYPE = NOISE_TYPE.BINARY
 
-@onready var rod : MeshInstance3D = $RodMesh
+@onready var rod : MeshInstance3D = $Rod
 @onready var cube : Node3D = $Cube
+@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
 
 @onready var character : CharacterBody3D = $Character
 @onready var debugPanel : PanelContainer = $UserInterface/Overlay/DebugPanel
@@ -16,23 +17,37 @@ extends Node3D
 @onready var spawnPos : Vector3 = $Character.position
 
 ## Menu nodes
-@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu
-#@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
-@onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer
-@onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer/DescriptionLabel
-@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton
-@onready var noiseDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer
-@onready var noiseDesc : Label = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer/DescriptionLabel
-@onready var noiseDescBtn : Button = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton
+@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer
+#@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
+@onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer
+@onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer/DescriptionLabel
+@onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton
+@onready var noiseDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer
+@onready var noiseDesc : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer/DescriptionLabel
+@onready var noiseDescBtn : Button = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton
 ## Param submenu nodes
-@onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color1
-@onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Color2
-@onready var paramFadeColor : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeColor
-@onready var paramFadeSpeed : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/FadeSpeed
-@onready var paramDiffThresh : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/DiffThreshold
-@onready var paramWinSize : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/WinSize
-@onready var paramResScale : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/ResScale
-@onready var paramInc : HBoxContainer = $UserInterface/Overlay/ShaderMenu/MarginContainer/VBoxContainer/Increment
+@onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1
+@onready var paramColor1Input : ColorPickerButton = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1/Color1Picker
+@onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2
+@onready var paramColor2Input : ColorPickerButton = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2/Color2Picker
+@onready var paramFadeColor : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor
+@onready var paramFadeColorInput : ColorPickerButton = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeColor/FadeColorPicker
+@onready var paramFadeSpeed : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed
+@onready var paramFadeSpeedInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/FadeSpeed/FadeSpeedSpinBox
+@onready var paramDiffThresh : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold
+@onready var paramDiffThreshInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/DiffThreshold/DiffThreshSpinBox
+@onready var paramWinSize : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize
+@onready var paramWinSizeInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize/WinSizeSpinBox
+@onready var paramResScale : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale
+@onready var paramResScaleInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale/ResScaleSpinBox
+@onready var paramInc : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment
+@onready var paramIncInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment/IncSpinBox
+## Dict to hold param button nodes according to param type (populated on ready)
+@onready var param_button = {
+	CShader.COLOR_1: paramColor1Input,
+	
+	CShader.FADE_SPEED: paramFadeSpeedInput
+}
 
 @onready var noiseRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/BG
 @onready var shaderRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/OverlayFull
@@ -63,7 +78,6 @@ var init_height = 648
 var objects = ["fish", "lily pad", "flower", "cat tails", "cube", "sphere"]
 var to_find = ""
 var last_click = "none"
-@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
 
 #enum SHADER_TYPE {
 	#INVERT, BINARY, INCREMENTAL,
@@ -88,8 +102,8 @@ func _ready() -> void:
 	## Set the current_frame shader param to the texture of the viewport assigned
 	## to the character camera
 	RenderingServer.global_shader_parameter_set("current_frame", charView.get_texture())
-	#RenderingServer.global_shader_parameter_set("last_frame", charView.get_texture())
-	#RenderingServer.global_shader_parameter_set("last_render", renderView.get_texture())
+	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
+	RenderingServer.connect("frame_post_draw", post_draw)
 	
 	## Initialize RNG
 	randomize()
@@ -99,8 +113,9 @@ func _ready() -> void:
 	if not shader.uses_noise:
 		noiseRect.hide()
 	
-	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
-	RenderingServer.connect("frame_post_draw", post_draw)
+	## Hide shader/noise descriptions
+	_on_shader_description_button_pressed()
+	_on_noise_description_button_pressed()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -120,8 +135,8 @@ func _process(delta: float) -> void:
 		debugPanel.visible = !debugPanel.visible
 	
 	## Toggle pause time state
-	if Input.is_action_just_pressed("pause"):
-		paused = !paused
+	#if Input.is_action_just_pressed("pause"):
+		#paused = !paused
 	
 	## Toggle capture input state (only raycast while true)
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -155,15 +170,15 @@ func _process(delta: float) -> void:
 			print("resolution scale: ", resolution_scale)
 	
 	## Show/hide objects in 'fill' group based on toggle
-	if Input.is_action_just_pressed("toggle_occlusion"):
-		if occluding:
-			occluding = false
-			get_tree().call_group("fill", "hide")
-			print("occlusion off")
-		else:
-			occluding = true
-			get_tree().call_group("fill", "show")
-			print("occlusion on")
+	#if Input.is_action_just_pressed("toggle_occlusion"):
+		#if occluding:
+			#occluding = false
+			#get_tree().call_group("fill", "hide")
+			#print("occlusion off")
+		#else:
+			#occluding = true
+			#get_tree().call_group("fill", "show")
+			#print("occlusion on")
 	
 	## Register object click
 	if Input.is_action_just_pressed("click") and capturing:
@@ -189,17 +204,11 @@ func _process(delta: float) -> void:
 		character.position = spawnPos
 
 
-#func pre_draw():
-	#print('draw')
-	#get_snapshots()
-
-
 func post_draw():
 	## After frame draw: get a snapshot of the current stage view and apply the
 	## shader parameter so shaders can read from the previous frame
 	var snap = charView.get_texture().get_image()
 	RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
-	#RenderingServer.global_shader_parameter_set("last_frame", charView.get_texture().get_image())
 	
 	if noiseRect.visible:
 		noiseRect.hide()
@@ -210,21 +219,42 @@ func set_shader():
 	shader.set_shader(shader_type)
 	print("using shader: ", shader.title)
 	debugPanel.add_property("Shader", shader.title, Debug.SHADER)
-	#shaderInfo.text = "Shader: " + shader.title + "\n" + shader.description
-	#shaderTitle.text = "Shader: " + shader.title
 	shaderDesc.text = shader.description
 	
+	# 
 	if shader_type == CShader.SHADER_TYPE.NONE:
 		renderViewContainer.hide()
 		return
-	
 	shaderRect.material = shader.material
-	#if shader.menu:
-		#var menu = shader.menu.instantiate()
-		#shaderMenu.add_child(menu)
 	
-	## Show param menu options according to shader params
 	var params = shader.params
+	# Populate menu item values with current shader vals
+	for p_type in params:
+		var p_val = shader.material.get_shader_parameter(p_type)
+		# Convert to color value for color params
+		if p_type in [CShader.COLOR_1, CShader.COLOR_2, CShader.FADE_COLOR]:
+			p_val = Color(p_val[0], p_val[1], p_val[2])
+		
+		set_shader_param(p_type, p_val)
+		#match p_type:
+			#CShader.COLOR_1:
+				#paramColor1Input.color = Color(p_val[0], p_val[1], p_val[2])
+			#CShader.COLOR_2:
+				#paramColor2Input.color = Color(p_val[0], p_val[1], p_val[2])
+			#CShader.DIFF_THRESH:
+				#paramDiffThreshInput.value = p_val
+			#CShader.FADE_COLOR:
+				#paramFadeColorInput.color = Color(p_val[0], p_val[1], p_val[2])
+			#CShader.FADE_SPEED:
+				#paramFadeSpeedInput.value = p_val
+			#CShader.RES_SCALE:
+				#paramResScaleInput.value = p_val
+			#CShader.INCREMENT:
+				#paramIncInput.value = p_val
+			#CShader.WIN_SIZE:
+				#paramWinSizeInput.value = p_val
+	
+	# Display param menu options according to actual shader params
 	paramColor1.visible = CShader.COLOR_1 in params
 	paramColor2.visible = CShader.COLOR_2 in params
 	paramDiffThresh.visible = CShader.DIFF_THRESH in params
@@ -235,10 +265,41 @@ func set_shader():
 	paramWinSize.visible = CShader.WIN_SIZE in params
 
 
+func set_shader_param(p_type, p_val, menu_only=false):
+	## Set given shader parameter p_type to value p_val
+	# If menu_only, only update menu input vals without setting param
+	if not menu_only:
+		shader.material.set_shader_parameter(p_type, p_val)
+	
+	# Set param menu button
+	match p_type:
+		CShader.COLOR_1:
+			paramColor1Input.color = p_val
+		CShader.COLOR_2:
+			paramColor2Input.color = p_val
+		CShader.DIFF_THRESH:
+			paramDiffThreshInput.value = p_val
+		CShader.FADE_COLOR:
+			paramFadeColorInput.color = p_val
+		CShader.FADE_SPEED:
+			paramFadeSpeedInput.value = p_val
+		CShader.RES_SCALE:
+			paramResScaleInput.value = p_val
+		CShader.INCREMENT:
+			paramIncInput.value = p_val
+		CShader.WIN_SIZE:
+			paramWinSizeInput.value = p_val
+
+
+func set_shader_param_default(p_type):
+	## Set given shader parameter p_type to its default value
+	set_shader_param(p_type, CShader.default[p_type])
+
+
 func set_noise():
 	## Set noise from export var
 	noiseRect.self_modulate = Color(1.0, 1.0, 1.0, 1.0)
-	match noise:
+	match noise_type:
 		NOISE_TYPE.BINARY:
 			noise_name = "Black or white"
 			noiseRect.texture = load("res://images/binary_noise-1152x648.png")
@@ -260,6 +321,10 @@ func set_noise():
 			noiseRect.texture = load("res://images/white-1152x648.png")
 	print("using noise: ", noise_name)
 	debugPanel.add_property("Noise", noise_name, Debug.NOISE)
+	
+	## Refresh noise texture
+	noiseRect.hide()
+	noiseRect.show()
 
 
 func set_res_scale():
@@ -307,20 +372,13 @@ func move_flow_sprite(delta):
 	var botY = 648*(3.0/4.0)
 	var x = flow_sprite.position.x
 	var y = flow_sprite.position.y
-	##TL -> TR
+	##Top left -> Top right
 	if x < rightX and y == topY:
 		flow_sprite.position.x = clamp(x + delta*speed, leftX, rightX)
-	##TR -> BR
+	##Top right -> Bottom right
 	elif x == rightX and y < botY:
 		flow_sprite.position.y = clamp(y + delta*speed, topY, botY)
-		#print(y, ", ", botY, ", ", delta, ", ", clamp(y + delta*speed, topY, botY))
-	###BR -> BL
-	#elif x > leftX and y == botY:
-		#flow_sprite.position.x = clamp(flow_sprite.position.x - delta*speed, leftX, rightX)
-	###BL -> TL
-	#elif x == leftX and y > topY:
-		#flow_sprite.position.y = clamp(flow_sprite.position.y - delta*speed, topY, botY)
-	##BR -> TL (diagonal)
+	##Bottom right -> Top left (diagonal)
 	else:
 		flow_sprite.position.x = clamp(x - delta*speed, leftX, rightX)
 		flow_sprite.position.y = clamp(y - delta*speed, topY, botY)
@@ -380,15 +438,15 @@ func _on_shader_option_button_item_selected(index: int) -> void:
 		set_shader()
 
 func _on_noise_option_button_item_selected(index: int) -> void:
-	var last_noise = noise
+	var last_noise = noise_type
 	match index:
-		0: noise = NOISE_TYPE.BINARY
-		1: noise = NOISE_TYPE.LINEAR
-		2: noise = NOISE_TYPE.FULL_COLOR
-		3: noise = NOISE_TYPE.PERLIN
-		4: noise = NOISE_TYPE.FILL_BLACK
-		5: noise = NOISE_TYPE.FILL_WHITE
-	if noise != last_noise:
+		0: noise_type = NOISE_TYPE.BINARY
+		1: noise_type = NOISE_TYPE.LINEAR
+		2: noise_type = NOISE_TYPE.FULL_COLOR
+		3: noise_type = NOISE_TYPE.PERLIN
+		4: noise_type = NOISE_TYPE.FILL_BLACK
+		5: noise_type = NOISE_TYPE.FILL_WHITE
+	if noise_type != last_noise:
 		set_noise()
 
 ## Shader param signals from menu value changes
@@ -412,3 +470,30 @@ func _on_fade_color_picker_color_changed(color: Color) -> void:
 
 func _on_fade_speed_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter(CShader.FADE_SPEED, value)
+
+func _on_inc_spin_box_value_changed(value: float) -> void:
+	shader.material.set_shader_parameter(CShader.INCREMENT, value)
+
+func _on_color_1_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.COLOR_1)
+
+func _on_color_2_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.COLOR_2)
+
+func _on_fade_color_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.FADE_COLOR)
+
+func _on_fade_speed_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.FADE_SPEED)
+
+func _on_diff_thresh_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.DIFF_THRESH)
+
+func _on_win_size_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.WIN_SIZE)
+
+func _on_res_scale_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.RES_SCALE)
+
+func _on_inc_reset_button_pressed() -> void:
+	set_shader_param_default(CShader.INCREMENT)
