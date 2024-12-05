@@ -17,7 +17,7 @@ extends Node3D
 @onready var spawnPos : Vector3 = $Character.position
 
 ## Menu nodes
-@onready var shaderMenu : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer
+@onready var shaderMenu : BoxContainer = $UserInterface/Overlay/ShaderMenu
 #@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
 @onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer
 @onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer/DescriptionLabel
@@ -42,12 +42,6 @@ extends Node3D
 @onready var paramResScaleInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale/ResScaleSpinBox
 @onready var paramInc : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment
 @onready var paramIncInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment/IncSpinBox
-## Dict to hold param button nodes according to param type (populated on ready)
-@onready var param_button = {
-	CShader.COLOR_1: paramColor1Input,
-	
-	CShader.FADE_SPEED: paramFadeSpeedInput
-}
 
 @onready var noiseRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/BG
 @onready var shaderRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/OverlayFull
@@ -58,32 +52,24 @@ extends Node3D
 const SHOW_DESC = " ▼ "
 const HIDE_DESC = " ▲ "
 
+## Initial screen resolution
+const init_width = 1152
+const init_height = 648
+
+## Misc variables
 var time_elapsed = 0.0
-var frame_time = 2.0
-var snap = 0
 var paused = false
-var capturing = true
-var occluding = true
-#var using_noise = true  # If the shader being used relies on the noise texture
-var noise_name
+var capturing_mouse = true
 var showing_shader_desc = true
 var showing_noise_desc = true
+var noise_name
+#var occluding = true -- no longer used
 
-var init_width = 1152
-var init_height = 648
-
-#var stage_tex
-#var last_stage_tex
-
-var objects = ["fish", "lily pad", "flower", "cat tails", "cube", "sphere"]
+## Objects to find
+var objects = ["fish", "lily pad", "flower", "cat tails", "cube", "sphere", "foliage"]
 var to_find = ""
 var last_click = "none"
 
-#enum SHADER_TYPE {
-	#INVERT, BINARY, INCREMENTAL,
-	#FADE, FADE_FULL_COLOR, OPTIC_FLOW,
-	#OPTIC_FLOW_ALL, TEST, NONE
-#}
 enum NOISE_TYPE {
 	BINARY, LINEAR, FULL_COLOR,
 	PERLIN, FILL_BLACK, FILL_WHITE
@@ -92,28 +78,27 @@ enum NOISE_TYPE {
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	## Apply resolution scale factor
+	# Apply resolution scale factor
 	set_res_scale()
-	
-	## Set shader and noise from export vars
+	# Set shader and noise from export vars
 	set_shader()
 	set_noise()
+	#if not shader.uses_noise:
+		#noiseRect.hide()
 	
-	## Set the current_frame shader param to the texture of the viewport assigned
-	## to the character camera
+	# Set the current_frame shader param to the texture of the viewport assigned
+	# to the character camera
 	RenderingServer.global_shader_parameter_set("current_frame", charView.get_texture())
-	## Connect the frame_post_draw signal to call post_draw() after each frame is drawn
+	# Connect the frame_post_draw signal to call post_draw() after each frame is drawn
 	RenderingServer.connect("frame_post_draw", post_draw)
 	
-	## Initialize RNG
+	# Initialize RNG
 	randomize()
-	## Set initial object to find
+	# Set initial object to find
 	new_object()
 	
-	if not shader.uses_noise:
-		noiseRect.hide()
 	
-	## Hide shader/noise descriptions
+	# Hide shader/noise descriptions
 	_on_shader_description_button_pressed()
 	_on_noise_description_button_pressed()
 
@@ -138,9 +123,17 @@ func _process(delta: float) -> void:
 	#if Input.is_action_just_pressed("pause"):
 		#paused = !paused
 	
+	#if Input.is_action_just_pressed("shader_toggle"):
+		#capturing_mouse = !capturing_mouse
+		#match Input.mouse_mode:
+			#Input.MOUSE_MODE_CAPTURED:
+				#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			#Input.MOUSE_MODE_VISIBLE:
+				#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
 	## Toggle capture input state (only raycast while true)
 	if Input.is_action_just_pressed("ui_cancel"):
-		capturing = !capturing
+		capturing_mouse = !capturing_mouse
 	
 	## Show/hide shader overlay
 	if Input.is_action_just_pressed("shader_toggle"):
@@ -150,10 +143,19 @@ func _process(delta: float) -> void:
 			renderViewContainer.show()
 			if shader.uses_noise:
 				noiseRect.show()
+		$Pond/Water.visible = !renderViewContainer.visible
 	
 	## Show/hide shader menu
 	if Input.is_action_just_pressed("toggle_menu"):
 		shaderMenu.visible = !shaderMenu.visible
+		if shaderMenu.visible:
+			$UserInterface/Overlay/MenuHintPanel.hide()
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			capturing_mouse = false
+		else:
+			$UserInterface/Overlay/MenuHintPanel.show()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			capturing_mouse = true
 	
 	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
@@ -181,7 +183,7 @@ func _process(delta: float) -> void:
 			#print("occlusion on")
 	
 	## Register object click
-	if Input.is_action_just_pressed("click") and capturing:
+	if Input.is_action_just_pressed("click") and capturing_mouse:
 		var coll = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/RayCast3D.get_collider()
 		if coll != null and coll.is_in_group("clickable"):
 			for group in coll.get_groups():
@@ -199,7 +201,7 @@ func _process(delta: float) -> void:
 		if flow_sprite.visible:
 			move_flow_sprite(delta)
 	
-	## Respawn if char has fallen some distance
+	## Respawn if char has fallen some distance... just in case
 	if character.position.y < -50.0:
 		character.position = spawnPos
 
@@ -210,6 +212,7 @@ func post_draw():
 	var snap = charView.get_texture().get_image()
 	RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
 	
+	# Noise rect only needs to be visible for one frame when set.
 	if noiseRect.visible:
 		noiseRect.hide()
 
@@ -226,33 +229,17 @@ func set_shader():
 		renderViewContainer.hide()
 		return
 	shaderRect.material = shader.material
+	noiseRect.visible = shader.uses_noise
 	
 	var params = shader.params
+	print("params: ", params)
 	# Populate menu item values with current shader vals
 	for p_type in params:
 		var p_val = shader.material.get_shader_parameter(p_type)
-		# Convert to color value for color params
+		# Convert to color value for color-based params
 		if p_type in [CShader.COLOR_1, CShader.COLOR_2, CShader.FADE_COLOR]:
 			p_val = Color(p_val[0], p_val[1], p_val[2])
-		
-		set_shader_param(p_type, p_val)
-		#match p_type:
-			#CShader.COLOR_1:
-				#paramColor1Input.color = Color(p_val[0], p_val[1], p_val[2])
-			#CShader.COLOR_2:
-				#paramColor2Input.color = Color(p_val[0], p_val[1], p_val[2])
-			#CShader.DIFF_THRESH:
-				#paramDiffThreshInput.value = p_val
-			#CShader.FADE_COLOR:
-				#paramFadeColorInput.color = Color(p_val[0], p_val[1], p_val[2])
-			#CShader.FADE_SPEED:
-				#paramFadeSpeedInput.value = p_val
-			#CShader.RES_SCALE:
-				#paramResScaleInput.value = p_val
-			#CShader.INCREMENT:
-				#paramIncInput.value = p_val
-			#CShader.WIN_SIZE:
-				#paramWinSizeInput.value = p_val
+		set_shader_param(p_type, p_val, true)
 	
 	# Display param menu options according to actual shader params
 	paramColor1.visible = CShader.COLOR_1 in params
@@ -267,13 +254,13 @@ func set_shader():
 
 func set_shader_param(p_type, p_val, menu_only=false):
 	## Set given shader parameter p_type to value p_val
-	# If menu_only, only update menu input vals without setting param
-	if not menu_only:
+	if !menu_only:
 		shader.material.set_shader_parameter(p_type, p_val)
 	
 	# Set param menu button
 	match p_type:
 		CShader.COLOR_1:
+			print(p_val)
 			paramColor1Input.color = p_val
 		CShader.COLOR_2:
 			paramColor2Input.color = p_val
@@ -303,28 +290,35 @@ func set_noise():
 		NOISE_TYPE.BINARY:
 			noise_name = "Black or white"
 			noiseRect.texture = load("res://images/binary_noise-1152x648.png")
+			noiseDesc.text = "Each pixel is randomly assigned color values of either black or white."
 		NOISE_TYPE.LINEAR:
 			noise_name = "Grayscale"
 			noiseRect.texture = load("res://images/linear_noise-1152x648.png")
+			noiseDesc.text = "Each pixel is randomly assigned a value in the range from black to white."
 		NOISE_TYPE.FULL_COLOR:
 			noise_name = "Full spectrum"
 			noiseRect.texture = load("res://images/rand_img_full-1152x648.png")
+			noiseDesc.text = "Each pixel is randomly assigned any possible color value."
 		NOISE_TYPE.PERLIN:
 			noise_name = "Perlin"
 			noiseRect.texture = load("res://images/perlin_s21-c4-l5-a0.4.png")
+			noiseDesc.text = "Gray scale gradient noise that appears smoother and more natural."
 		NOISE_TYPE.FILL_BLACK:
 			noise_name = "Fill (black)"
 			noiseRect.texture = load("res://images/white-1152x648.png")
 			noiseRect.self_modulate = Color(0.0, 0.0, 0.0)
+			noiseDesc.text = "Solid black fill"
 		NOISE_TYPE.FILL_WHITE:
 			noise_name = "Fill (white)"
 			noiseRect.texture = load("res://images/white-1152x648.png")
+			noiseDesc.text = "Solid white fill"
 	print("using noise: ", noise_name)
 	debugPanel.add_property("Noise", noise_name, Debug.NOISE)
 	
-	## Refresh noise texture
-	noiseRect.hide()
-	noiseRect.show()
+	# Refresh noise texture
+	if shader.uses_noise:
+		noiseRect.hide()
+		noiseRect.show()
 
 
 func set_res_scale():
@@ -355,7 +349,11 @@ func set_res_scale():
 	debugPanel.add_property("Resolution scale", res_str, Debug.RES_SCALE)
 	debugPanel.add_property("Resolution", str(scale_width) + " x " + str(scale_height), Debug.RES)
 	
+	# Set render viewport to 'once' clear mode so that it clears next frame, but
+	# not again until manually set. Effectively refreshes viewport
 	renderView.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	
+	# Show noise rect to refresh
 	if shader.uses_noise:
 		noiseRect.show()
 		# Maybe set last_frame param to full black in an else here? vvvv
@@ -372,13 +370,13 @@ func move_flow_sprite(delta):
 	var botY = 648*(3.0/4.0)
 	var x = flow_sprite.position.x
 	var y = flow_sprite.position.y
-	##Top left -> Top right
+	# Top left -> Top right
 	if x < rightX and y == topY:
 		flow_sprite.position.x = clamp(x + delta*speed, leftX, rightX)
-	##Top right -> Bottom right
+	# Top right -> Bottom right
 	elif x == rightX and y < botY:
 		flow_sprite.position.y = clamp(y + delta*speed, topY, botY)
-	##Bottom right -> Top left (diagonal)
+	# Bottom right -> Top left (diagonal)
 	else:
 		flow_sprite.position.x = clamp(x - delta*speed, leftX, rightX)
 		flow_sprite.position.y = clamp(y - delta*speed, topY, botY)
@@ -395,7 +393,10 @@ func new_object():
 
 
 func update_label():
-	$UserInterface/Overlay/TextBG/Label.text = to_find + "\n" + last_click
+	if to_find in ["flower", "lily pad"]:
+		$UserInterface/Overlay/ObjectivePanel/MarginContainer/Label.text = "Click on a " + to_find
+	else:
+		$UserInterface/Overlay/ObjectivePanel/MarginContainer/Label.text = "Click on the " + to_find
 
 
 func object_click(id):
@@ -474,6 +475,7 @@ func _on_fade_speed_spin_box_value_changed(value: float) -> void:
 func _on_inc_spin_box_value_changed(value: float) -> void:
 	shader.material.set_shader_parameter(CShader.INCREMENT, value)
 
+## Shader param reset buttons
 func _on_color_1_reset_button_pressed() -> void:
 	set_shader_param_default(CShader.COLOR_1)
 

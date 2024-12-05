@@ -9,7 +9,7 @@ const RES = 3
 const SHADER = 4
 const NOISE = 5
 
-func _process(delta):
+func _process(_delta):
 	if visible:
 		add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), FPS)
 

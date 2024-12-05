@@ -5,7 +5,7 @@ global uniform sampler2D last_frame;
 
 uniform float res_scale = 1.0;
 uniform float win_size = 5.0;
-uniform float diff_threshold = 0.25;
+uniform float diff_threshold = 0.15;
 
 const vec4 BLACK = vec4(0.0, 0.0, 0.0, 1.0);
 

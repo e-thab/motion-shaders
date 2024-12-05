@@ -314,7 +314,7 @@ func enter_normal_state():
 
 func enter_crouch_state():
 	#print("entering crouch state")
-	var prev_state = state
+	#var prev_state = state
 	state = "crouching"
 	speed = crouch_speed
 	CROUCH_ANIMATION.play("crouch")
@@ -363,7 +363,7 @@ func headbob_animation(moving):
 			HEADBOB_ANIMATION.play("RESET", 1)
 
 
-func _process(delta):
+func _process(_delta):
 	# Moved to main.gd  vvv
 	#debugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
 	#var status : String = state
@@ -371,16 +371,17 @@ func _process(delta):
 		#status += " in the air"
 	#debugPanel.add_property("State", status, 5)
 	
-	if pausing_enabled:
-		if Input.is_action_just_pressed(PAUSE):
-			# You may want another node to handle pausing, because this player may get paused too.
-			match Input.mouse_mode:
-				Input.MOUSE_MODE_CAPTURED:
-					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-					#get_tree().paused = false
-				Input.MOUSE_MODE_VISIBLE:
-					Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-					#get_tree().paused = false
+	#if pausing_enabled:
+		#if Input.is_action_just_pressed(PAUSE):
+			## You may want another node to handle pausing, because this player may get paused too.
+			#match Input.mouse_mode:
+				#Input.MOUSE_MODE_CAPTURED:
+					#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+					##get_tree().paused = false
+				#Input.MOUSE_MODE_VISIBLE:
+					#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+					##get_tree().paused = false
+	pass
 
 ## Click handling issues lie here:
 func _unhandled_input(event : InputEvent):

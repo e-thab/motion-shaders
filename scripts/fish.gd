@@ -8,11 +8,5 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	## Rotate the fish each frame
 	rotate_y(-0.18 * delta)
-
-
-func _on_click_area_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if Input.is_action_just_pressed("click"):
-		print('click fish')
-	#else:
-		#print(event)

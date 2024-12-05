@@ -72,7 +72,7 @@ void fragment() {
 	}
 
 	float det = winX*winY - winXY*winXY;
-	if (det < 0.01 && det > -0.01) {
+	if (abs(det) < 0.02) {
 		// det near 0
 		COLOR = BLACK;
 	} else {
