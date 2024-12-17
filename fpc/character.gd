@@ -364,7 +364,7 @@ func headbob_animation(moving):
 
 
 func _process(_delta):
-	# Moved to main.gd  vvv
+	## Moved to main.gd  vvvv
 	#debugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
 	#var status : String = state
 	#if !is_on_floor():
@@ -383,14 +383,7 @@ func _process(_delta):
 					##get_tree().paused = false
 	pass
 
-## Click handling issues lie here:
 func _unhandled_input(event : InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		mouseInput.x += event.relative.x * res_scale
 		mouseInput.y += event.relative.y * res_scale
-	# Toggle debug menu
-	#elif event is InputEventKey:
-		#if event.is_released():
-			## Where we're going, we don't need InputMap
-			#if event.keycode == 4194338: # F7
-				#debugPanel.visible = !debugPanel.visible

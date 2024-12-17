@@ -1,13 +1,12 @@
 extends Node3D
 
+## Export vars to set initial options
 @export var resolution_scale : int = 2
 @export var shader_type : CShader.SHADER_TYPE = CShader.SHADER_TYPE.INVERT
 @export var noise_type : NOISE_TYPE = NOISE_TYPE.BINARY
 
-@onready var rod : MeshInstance3D = $Rod
+## Scene objects
 @onready var cube : Node3D = $Cube
-@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
-
 @onready var character : CharacterBody3D = $Character
 @onready var debugPanel : PanelContainer = $UserInterface/Overlay/DebugPanel
 @onready var charView : SubViewport = $UserInterface/HeadcamVPContainer/HeadcamViewport
@@ -15,17 +14,19 @@ extends Node3D
 @onready var renderViewContainer : SubViewportContainer = $UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $UserInterface/RenderVPContainer/RenderViewport
 @onready var spawnPos : Vector3 = $Character.position
+# Flow sprite is a sprite fixed to the camera that moves left->right, top->bottom,
+# and diagonally to test optic flow
+@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
 
-## Menu nodes
+## Menu nodes - the shader menu should probably be its own scene with a manager script
 @onready var shaderMenu : BoxContainer = $UserInterface/Overlay/ShaderMenu
-#@onready var shaderTitle : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/TitleLabel
 @onready var shaderDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer
 @onready var shaderDesc : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderDescriptionContainer/MarginContainer/DescriptionLabel
 @onready var shaderDescBtn : Button = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton
 @onready var noiseDescContainer : PanelContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer
 @onready var noiseDesc : Label = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseDescriptionContainer/MarginContainer/DescriptionLabel
 @onready var noiseDescBtn : Button = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/NoiseHBoxContainer/NoiseDescriptionButton
-## Param submenu nodes
+# Param submenu nodes
 @onready var paramColor1 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1
 @onready var paramColor1Input : ColorPickerButton = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color1/Color1Picker
 @onready var paramColor2 : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Color2
@@ -43,9 +44,9 @@ extends Node3D
 @onready var paramInc : HBoxContainer = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment
 @onready var paramIncInput : SpinBox = $UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/Increment/IncSpinBox
 
+## Shader/noise 
 @onready var noiseRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/BG
 @onready var shaderRect : Sprite2D = $UserInterface/RenderVPContainer/RenderViewport/OverlayFull
-
 @onready var shader : CShader = CShader.new(shader_type)
 
 ## Strings to use for collapse/expand description button
@@ -58,18 +59,18 @@ const init_height = 648
 
 ## Misc variables
 var time_elapsed = 0.0
-var paused = false
 var capturing_mouse = true
 var showing_shader_desc = true
 var showing_noise_desc = true
 var noise_name
-#var occluding = true -- no longer used
+#var occluding = true -- was used for toggling 'fill' objects
 
 ## Objects to find
 var objects = ["fish", "lily pad", "flower", "cat tails", "cube", "sphere", "foliage"]
 var to_find = ""
 var last_click = "none"
 
+## Enum of different possible noise types
 enum NOISE_TYPE {
 	BINARY, LINEAR, FULL_COLOR,
 	PERLIN, FILL_BLACK, FILL_WHITE
@@ -83,8 +84,6 @@ func _ready() -> void:
 	# Set shader and noise from export vars
 	set_shader()
 	set_noise()
-	#if not shader.uses_noise:
-		#noiseRect.hide()
 	
 	# Set the current_frame shader param to the texture of the viewport assigned
 	# to the character camera
@@ -97,44 +96,17 @@ func _ready() -> void:
 	# Set initial object to find
 	new_object()
 	
-	
 	# Hide shader/noise descriptions
 	_on_shader_description_button_pressed()
 	_on_noise_description_button_pressed()
+	
+	# Set water visibility to match shader overlay visibility. Water is purely cosmetic
+	# and only visible when shaders are off for simplicity
+	$Pond/Water.visible = !renderViewContainer.visible
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	## Add FPS to debug panel
-	#debugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
-	
-	if Input.is_action_just_pressed("screenshot"):
-		var r_img = renderView.get_texture().get_image()
-		var c_img = charView.get_texture().get_image()
-		var time = Time.get_datetime_string_from_system(false, true).replace(":", "-")
-		r_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-r.png")
-		c_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-c.png")
-	
-	## Toggle debug menu
-	if Input.is_action_just_pressed("toggle_debug"):
-		debugPanel.visible = !debugPanel.visible
-	
-	## Toggle pause time state
-	#if Input.is_action_just_pressed("pause"):
-		#paused = !paused
-	
-	#if Input.is_action_just_pressed("shader_toggle"):
-		#capturing_mouse = !capturing_mouse
-		#match Input.mouse_mode:
-			#Input.MOUSE_MODE_CAPTURED:
-				#Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			#Input.MOUSE_MODE_VISIBLE:
-				#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
-	## Toggle capture input state (only raycast while true)
-	if Input.is_action_just_pressed("ui_cancel"):
-		capturing_mouse = !capturing_mouse
-	
 	## Show/hide shader overlay
 	if Input.is_action_just_pressed("shader_toggle"):
 		if renderViewContainer.visible:
@@ -157,6 +129,10 @@ func _process(delta: float) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			capturing_mouse = true
 	
+	## Toggle capture input state (only raycast while true)
+	if Input.is_action_just_pressed("ui_cancel"):
+		capturing_mouse = !capturing_mouse
+	
 	## Increase/decrease resolution scale
 	if Input.is_action_just_released("res_increase"):
 		var last_scale = resolution_scale
@@ -171,6 +147,27 @@ func _process(delta: float) -> void:
 		if resolution_scale != last_scale:
 			print("resolution scale: ", resolution_scale)
 	
+	## Register object click
+	if Input.is_action_just_pressed("click") and capturing_mouse:
+		var coll = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/RayCast3D.get_collider()
+		if coll != null and coll.is_in_group("clickable"):
+			for group in coll.get_groups():
+				if group in objects:
+					object_click(group)
+					break
+	
+	## Toggle debug menu
+	if Input.is_action_just_pressed("toggle_debug"):
+		debugPanel.visible = !debugPanel.visible
+	
+	## Get debug screenshots
+	if Input.is_action_just_pressed("screenshot"):
+		var r_img = renderView.get_texture().get_image()
+		var c_img = charView.get_texture().get_image()
+		var time = Time.get_datetime_string_from_system(false, true).replace(":", "-")
+		r_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-r.png")
+		c_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-c.png")
+	
 	## Show/hide objects in 'fill' group based on toggle
 	#if Input.is_action_just_pressed("toggle_occlusion"):
 		#if occluding:
@@ -182,28 +179,11 @@ func _process(delta: float) -> void:
 			#get_tree().call_group("fill", "show")
 			#print("occlusion on")
 	
-	## Register object click
-	if Input.is_action_just_pressed("click") and capturing_mouse:
-		var coll = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/RayCast3D.get_collider()
-		if coll != null and coll.is_in_group("clickable"):
-			for group in coll.get_groups():
-				if group in objects:
-					object_click(group)
-					break
-	
-	if !paused:
-		## Oscillate the rod & rotate the cube
-		rod.position.x = 3 * cos(time_elapsed*PI/6)
-		time_elapsed += delta
-		cube.rotate(Vector3.UP, delta*PI/4)
-		
-		## Move the flow testing sprite
-		if flow_sprite.visible:
-			move_flow_sprite(delta)
-	
-	## Respawn if char has fallen some distance... just in case
+	# Respawn if char has fallen some distance... just in case
 	if character.position.y < -50.0:
 		character.position = spawnPos
+	
+	time_elapsed += delta
 
 
 func post_draw():
@@ -224,16 +204,15 @@ func set_shader():
 	debugPanel.add_property("Shader", shader.title, Debug.SHADER)
 	shaderDesc.text = shader.description
 	
-	# 
+	# For shader type none, just hide the overlay
 	if shader_type == CShader.SHADER_TYPE.NONE:
 		renderViewContainer.hide()
 		return
 	shaderRect.material = shader.material
 	noiseRect.visible = shader.uses_noise
 	
-	var params = shader.params
-	print("params: ", params)
 	# Populate menu item values with current shader vals
+	var params = shader.params
 	for p_type in params:
 		var p_val = shader.material.get_shader_parameter(p_type)
 		# Convert to color value for color-based params
@@ -356,33 +335,10 @@ func set_res_scale():
 	# Show noise rect to refresh
 	if shader.uses_noise:
 		noiseRect.show()
-		# Maybe set last_frame param to full black in an else here? vvvv
-	#else:
-		#await RenderingServer.frame_pre_draw
-		#RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.new())
-
-func move_flow_sprite(delta):
-	## Move sprite attached to camera for optic flow testing
-	var speed = 250
-	var leftX = 1152*(1.0/4.0)
-	var rightX = 1152*(3.0/4.0)
-	var topY = 648*(1.0/4.0)
-	var botY = 648*(3.0/4.0)
-	var x = flow_sprite.position.x
-	var y = flow_sprite.position.y
-	# Top left -> Top right
-	if x < rightX and y == topY:
-		flow_sprite.position.x = clamp(x + delta*speed, leftX, rightX)
-	# Top right -> Bottom right
-	elif x == rightX and y < botY:
-		flow_sprite.position.y = clamp(y + delta*speed, topY, botY)
-	# Bottom right -> Top left (diagonal)
-	else:
-		flow_sprite.position.x = clamp(x - delta*speed, leftX, rightX)
-		flow_sprite.position.y = clamp(y - delta*speed, topY, botY)
 
 
 func new_object():
+	## Assign a new random object to be clicked on
 	var r = randi() % len(objects)
 	while objects[r] == to_find:
 		r = randi() % len(objects)
@@ -393,6 +349,7 @@ func new_object():
 
 
 func update_label():
+	## Update the ObjectivePanel label
 	if to_find in ["flower", "lily pad"]:
 		$UserInterface/Overlay/ObjectivePanel/MarginContainer/Label.text = "Click on a " + to_find
 	else:
@@ -400,6 +357,7 @@ func update_label():
 
 
 func object_click(id):
+	## Register a click on an object
 	print(id + ' clicked')
 	last_click = id
 	if id == to_find:

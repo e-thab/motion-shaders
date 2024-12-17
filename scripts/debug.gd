@@ -9,12 +9,14 @@ const RES = 3
 const SHADER = 4
 const NOISE = 5
 
+
 func _process(_delta):
 	if visible:
 		add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), FPS)
 
 
-func add_property(title : String, value, order : int): # This can either be called once for a static property or called every frame for a dynamic property
+func add_property(title : String, value, order : int):
+	# This can either be called once for a static property or called every frame for a dynamic property
 	var target
 	target = $MarginContainer/VBoxContainer.find_child(title, true, false)
 	if !target:

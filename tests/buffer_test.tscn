@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://tests/buffer_test.gd" id="1_qrx0u"]
 [ext_resource type="Texture2D" uid="uid://ddh6hw3rqidiq" path="res://images/checkerboard.png" id="1_rmd5s"]
-[ext_resource type="Shader" path="res://shaders/buffer_test.gdshader" id="2_wcy1j"]
+[ext_resource type="Shader" path="res://shaders/old/buffer_test.gdshader" id="2_wcy1j"]
 [ext_resource type="Texture2D" uid="uid://n7oxyoil0pqn" path="res://images/circle.png" id="3_hctbg"]
-[ext_resource type="Shader" path="res://shaders/mouse_test.gdshader" id="3_slynh"]
+[ext_resource type="Shader" path="res://shaders/old/mouse_test.gdshader" id="3_slynh"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://images/white-1152x648.png" id="4_w1nu8"]
 [ext_resource type="Script" path="res://tests/control_drawtest.gd" id="5_jg2t8"]
 

@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c6wuuu0gvqynr"]
 
-[ext_resource type="Shader" path="res://shaders/pov_fade_color.gdshader" id="1_f3h8s"]
+[ext_resource type="Shader" path="res://shaders/fade_fullcolor.gdshader" id="1_f3h8s"]
 
 [resource]
 resource_local_to_scene = true

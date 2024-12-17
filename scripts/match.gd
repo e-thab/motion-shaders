@@ -11,6 +11,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	## Fade to transparent by lowering alpha each frame while visible
 	if showing:
 		modulate.a = 1.0 - elapsed
 	elapsed += delta * 1.0
@@ -20,5 +21,6 @@ func _process(delta: float) -> void:
 
 
 func display():
+	## Begin showing
 	showing = true
 	elapsed = 0.0

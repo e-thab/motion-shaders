@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bn2r4gjuycrry"]
 
-[ext_resource type="Shader" path="res://shaders/pov_invert.gdshader" id="1_f4yxn"]
+[ext_resource type="Shader" path="res://shaders/invert.gdshader" id="1_f4yxn"]
 
 [resource]
 resource_local_to_scene = true

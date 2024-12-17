@@ -3,11 +3,10 @@ extends Node3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	## Start animation
-	$AnimationPlayer.current_animation = "Scene"
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	## Rotate the fish each frame
-	rotate_y(-0.18 * delta)
+	## Spin the cube
+	rotate(Vector3.UP, delta*PI/4)

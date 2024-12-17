@@ -1,8 +1,9 @@
-[gd_scene load_steps=123 format=4 uid="uid://nm3boasyetbu"]
+[gd_scene load_steps=124 format=4 uid="uid://nm3boasyetbu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_oeid1"]
 [ext_resource type="Script" path="res://fpc/character.gd" id="2_fjshf"]
 [ext_resource type="Texture2D" uid="uid://msoatjej4mkl" path="res://images/white-1152x648.png" id="4_2egnp"]
+[ext_resource type="Script" path="res://scripts/flow_test_sprite.gd" id="4_164re"]
 [ext_resource type="Texture2D" uid="uid://sbkmfpvldlga" path="res://images/linear_noise-1152x648.png" id="4_xk5gj"]
 [ext_resource type="Material" uid="uid://bry5p6soxyg17" path="res://materials/flat_material.tres" id="5_2nx5s"]
 [ext_resource type="Material" uid="uid://c0xbnijvt885a" path="res://materials/vantablack.tres" id="5_27n1h"]
@@ -13,6 +14,7 @@
 [ext_resource type="StyleBox" uid="uid://dxweyrs2e6utn" path="res://materials/menu_style_box.tres" id="8_3xeme"]
 [ext_resource type="Script" path="res://fpc/EditorModule.gd" id="8_260n1"]
 [ext_resource type="Script" path="res://scripts/match.gd" id="9_mc7qx"]
+[ext_resource type="Script" path="res://scripts/cube.gd" id="12_lgjig"]
 [ext_resource type="Texture2D" uid="uid://cui3g8whohiu4" path="res://3d/pond_pack-frankesalgado87/textures/0_Universal_baseColor.png" id="16_7xj4g"]
 [ext_resource type="Texture2D" uid="uid://bh1fq3shsvqde" path="res://3d/animated_low-poly_koi_fish/textures/ocean-opaque_baseColor.png" id="17_c5vmn"]
 [ext_resource type="Script" path="res://scripts/fish.gd" id="17_ymq07"]
@@ -1096,10 +1098,6 @@ _data = {
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ethvw"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_07ui4"]
-radius = 0.01
-height = 3.0
-
 [node name="Main" type="Node3D"]
 script = ExtResource("1_oeid1")
 resolution_scale = 1
@@ -1142,6 +1140,7 @@ visible = false
 position = Vector2(576, 162)
 scale = Vector2(10, 10)
 texture = ExtResource("7_sfkqm")
+script = ExtResource("4_164re")
 
 [node name="RayCast3D" type="RayCast3D" parent="UserInterface/HeadcamVPContainer/HeadcamViewport/Camera"]
 target_position = Vector3(0, 0, -1000)
@@ -1282,10 +1281,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 309.0
-offset_top = -309.0
-offset_right = 559.0
-offset_bottom = -149.0
+offset_left = 306.0
+offset_top = -304.0
+offset_right = 556.0
+offset_bottom = -144.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -1707,6 +1706,7 @@ script = ExtResource("8_260n1")
 
 [node name="Cube" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0848402, -6.23158)
+script = ExtResource("12_lgjig")
 
 [node name="Frame" type="Node3D" parent="Cube"]
 
@@ -2437,12 +2437,6 @@ height = 10.2589
 sides = 24
 smooth_faces = false
 material = SubResource("StandardMaterial3D_ethvw")
-
-[node name="Rod" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0698, 0, 0)
-visible = false
-mesh = SubResource("CapsuleMesh_07ui4")
-surface_material_override/0 = ExtResource("5_2nx5s")
 
 [connection signal="pressed" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderDescriptionButton" to="." method="_on_shader_description_button_pressed"]
 [connection signal="item_selected" from="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ShaderHBoxContainer/ShaderOptionButton" to="." method="_on_shader_option_button_item_selected"]
