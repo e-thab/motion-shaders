@@ -1,4 +1,4 @@
-Display refresh rates beyond 60hz may cause minor flickering in optic flow shaders.
+Display refresh rates beyond 60hz may cause minor flickering in some shaders.
 
 ## Input Map
 | Key      | Action                        |
