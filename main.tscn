@@ -1115,7 +1115,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="HeadcamVPContainer" type="SubViewportContainer" parent="UserInterface"]
+[node name="StageVPContainer" type="SubViewportContainer" parent="UserInterface"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1123,26 +1123,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeadcamViewport" type="SubViewport" parent="UserInterface/HeadcamVPContainer"]
+[node name="StageViewport" type="SubViewport" parent="UserInterface/StageVPContainer"]
 handle_input_locally = false
 physics_object_picking = true
 physics_object_picking_first_only = true
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
-[node name="Camera" type="Camera3D" parent="UserInterface/HeadcamVPContainer/HeadcamViewport"]
+[node name="Camera" type="Camera3D" parent="UserInterface/StageVPContainer/StageViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03989, 1.5, 10.8299)
 environment = ExtResource("6_eemhp")
 current = true
 
-[node name="FlowTestSprite" type="Sprite2D" parent="UserInterface/HeadcamVPContainer/HeadcamViewport/Camera"]
+[node name="FlowTestSprite" type="Sprite2D" parent="UserInterface/StageVPContainer/StageViewport/Camera"]
 visible = false
 position = Vector2(576, 162)
 scale = Vector2(10, 10)
 texture = ExtResource("7_sfkqm")
 script = ExtResource("4_164re")
 
-[node name="RayCast3D" type="RayCast3D" parent="UserInterface/HeadcamVPContainer/HeadcamViewport/Camera"]
+[node name="RayCast3D" type="RayCast3D" parent="UserInterface/StageVPContainer/StageViewport/Camera"]
 target_position = Vector3(0, 0, -1000)
 collision_mask = 2
 collide_with_areas = true
@@ -1162,7 +1162,6 @@ physics_object_picking = true
 physics_object_picking_first_only = true
 size = Vector2i(1152, 648)
 render_target_clear_mode = 2
-render_target_update_mode = 4
 
 [node name="BG" type="Sprite2D" parent="UserInterface/RenderVPContainer/RenderViewport"]
 texture = ExtResource("4_xk5gj")
@@ -1274,6 +1273,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DebugPanel" type="PanelContainer" parent="UserInterface/Overlay"]
+visible = false
 custom_minimum_size = Vector2(250, 160)
 layout_mode = 1
 anchors_preset = 8
@@ -1578,6 +1578,7 @@ horizontal_alignment = 2
 
 [node name="WinSizeSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/WinSize"]
 layout_mode = 2
+min_value = 1.0
 max_value = 50.0
 value = 5.0
 
@@ -1597,7 +1598,8 @@ horizontal_alignment = 2
 
 [node name="ResScaleSpinBox" type="SpinBox" parent="UserInterface/Overlay/ShaderMenu/PanelContainer/MarginContainer/VBoxContainer/ResScale"]
 layout_mode = 2
-max_value = 20.0
+min_value = 0.1
+max_value = 10.0
 step = 0.1
 value = 1.0
 custom_arrow_step = 0.5
@@ -1654,7 +1656,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03989, 0, 10.8299)
 input_ray_pickable = false
 script = ExtResource("2_fjshf")
 HEAD = NodePath("Head")
-CAMERA = NodePath("../UserInterface/HeadcamVPContainer/HeadcamViewport/Camera")
+CAMERA = NodePath("../UserInterface/StageVPContainer/StageViewport/Camera")
 HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
 JUMP_ANIMATION = NodePath("Head/JumpAnimation")
 CROUCH_ANIMATION = NodePath("CrouchAnimation")
@@ -1682,7 +1684,7 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Character/Head"]
-remote_path = NodePath("../../../UserInterface/HeadcamVPContainer/HeadcamViewport/Camera")
+remote_path = NodePath("../../../UserInterface/StageVPContainer/StageViewport/Camera")
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Character/Head"]
 libraries = {

@@ -14,10 +14,9 @@ func _process(delta: float) -> void:
 	## Fade to transparent by lowering alpha each frame while visible
 	if showing:
 		modulate.a = 1.0 - elapsed
-	elapsed += delta * 1.0
-	
 	if elapsed >= 1.0:
 		showing = false
+	elapsed += delta
 
 
 func display():

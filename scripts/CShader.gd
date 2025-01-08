@@ -4,7 +4,7 @@ class_name CShader
 
 ## Possible shader types
 enum SHADER_TYPE {
-	INVERT, BINARY, INCREMENTAL,
+	INVERT, BINARY, INCREMENT,
 	FADE, FADE_FULL_COLOR, OPTIC_FLOW,
 	OPTIC_FLOW_ALL, TEST, NONE
 }
@@ -60,8 +60,8 @@ func set_shader(shader_type : SHADER_TYPE):
 			uses_noise = false
 			material = preload("res://materials/shader_binary.tres")
 			params = [COLOR_1, COLOR_2, DIFF_THRESH]
-		SHADER_TYPE.INCREMENTAL:
-			title = "Incremental"
+		SHADER_TYPE.INCREMENT:
+			title = "Increment"
 			description = "If the difference between current and last stage pixel is greater than the diff threshold param, nudge render pixel color a small amount toward black or white. The direction they're nudged flips whenever they reach pure black or white."
 			uses_noise = true
 			material = preload("res://materials/shader_increment.tres")

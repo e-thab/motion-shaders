@@ -6,17 +6,15 @@ extends Node3D
 @export var noise_type : NOISE_TYPE = NOISE_TYPE.BINARY
 
 ## Scene objects
-@onready var cube : Node3D = $Cube
 @onready var character : CharacterBody3D = $Character
 @onready var debugPanel : PanelContainer = $UserInterface/Overlay/DebugPanel
-@onready var charView : SubViewport = $UserInterface/HeadcamVPContainer/HeadcamViewport
-@onready var charCam : Camera3D = $Character.CAMERA
+@onready var stageView : SubViewport = $UserInterface/StageVPContainer/StageViewport
 @onready var renderViewContainer : SubViewportContainer = $UserInterface/RenderVPContainer
 @onready var renderView : SubViewport = $UserInterface/RenderVPContainer/RenderViewport
 @onready var spawnPos : Vector3 = $Character.position
 # Flow sprite is a sprite fixed to the camera that moves left->right, top->bottom,
 # and diagonally to test optic flow
-@onready var flow_sprite = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/FlowTestSprite
+#@onready var flow_sprite = $UserInterface/StageVPContainer/StageViewport/Camera/FlowTestSprite
 
 ## Menu nodes - the shader menu should probably be its own scene with a manager script
 @onready var shaderMenu : BoxContainer = $UserInterface/Overlay/ShaderMenu
@@ -87,7 +85,7 @@ func _ready() -> void:
 	
 	# Set the current_frame shader param to the texture of the viewport assigned
 	# to the character camera
-	RenderingServer.global_shader_parameter_set("current_frame", charView.get_texture())
+	RenderingServer.global_shader_parameter_set("current_frame", stageView.get_texture())
 	# Connect the frame_post_draw signal to call post_draw() after each frame is drawn
 	RenderingServer.connect("frame_post_draw", post_draw)
 	
@@ -100,8 +98,8 @@ func _ready() -> void:
 	_on_shader_description_button_pressed()
 	_on_noise_description_button_pressed()
 	
-	# Set water visibility to match shader overlay visibility. Water is purely cosmetic
-	# and only visible when shaders are off for simplicity
+	# Set water visibility to match shader overlay visibility. Water is purely
+	# cosmetic and only visible when shaders are off for simplicity
 	$Pond/Water.visible = !renderViewContainer.visible
 
 
@@ -149,7 +147,7 @@ func _process(delta: float) -> void:
 	
 	## Register object click
 	if Input.is_action_just_pressed("click") and capturing_mouse:
-		var coll = $UserInterface/HeadcamVPContainer/HeadcamViewport/Camera/RayCast3D.get_collider()
+		var coll = $UserInterface/StageVPContainer/StageViewport/Camera/RayCast3D.get_collider()
 		if coll != null and coll.is_in_group("clickable"):
 			for group in coll.get_groups():
 				if group in objects:
@@ -163,7 +161,7 @@ func _process(delta: float) -> void:
 	## Get debug screenshots
 	if Input.is_action_just_pressed("screenshot"):
 		var r_img = renderView.get_texture().get_image()
-		var c_img = charView.get_texture().get_image()
+		var c_img = stageView.get_texture().get_image()
 		var time = Time.get_datetime_string_from_system(false, true).replace(":", "-")
 		r_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-r.png")
 		c_img.save_png("res://screenshots/screen-" + time + "-" + str(time_elapsed) + "-c.png")
@@ -189,7 +187,7 @@ func _process(delta: float) -> void:
 func post_draw():
 	## After frame draw: get a snapshot of the current stage view and apply the
 	## shader parameter so shaders can read from the previous frame
-	var snap = charView.get_texture().get_image()
+	var snap = stageView.get_texture().get_image()
 	RenderingServer.global_shader_parameter_set("last_frame", ImageTexture.create_from_image(snap))
 	
 	# Noise rect only needs to be visible for one frame when set.
@@ -311,10 +309,10 @@ func set_res_scale():
 	# Investigate built-in scaling/resizing options for this....
 	renderView.size.x = scale_width
 	renderView.size.y = scale_height
-	charView.size.x = scale_width
-	charView.size.y = scale_height
+	stageView.size.x = scale_width
+	stageView.size.y = scale_height
 	$Character.res_scale = resolution_scale
-	#$UserInterface/RenderVPContainer/RenderViewport/OverlayVignette.size = charView.size
+	#$UserInterface/RenderVPContainer/RenderViewport/OverlayVignette.size = stageView.size
 	$UserInterface/Overlay.pivot_offset.x = renderView.size.x / 2.0
 	$UserInterface/Overlay.pivot_offset.y = renderView.size.y / 2.0
 	$UserInterface/Overlay.scale = Vector2(1.0 / resolution_scale, 1.0 / resolution_scale)
@@ -388,7 +386,7 @@ func _on_shader_option_button_item_selected(index: int) -> void:
 	match index:
 		0: shader_type = CShader.SHADER_TYPE.INVERT
 		1: shader_type = CShader.SHADER_TYPE.BINARY
-		2: shader_type = CShader.SHADER_TYPE.INCREMENTAL
+		2: shader_type = CShader.SHADER_TYPE.INCREMENT
 		3: shader_type = CShader.SHADER_TYPE.FADE
 		4: shader_type = CShader.SHADER_TYPE.FADE_FULL_COLOR
 		5: shader_type = CShader.SHADER_TYPE.OPTIC_FLOW
